@@ -1,0 +1,1 @@
+// App component with a demo page and sign-in functionality
