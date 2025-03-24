@@ -19,5 +19,6 @@ alembic revision --autogenerate -m "Initial migration"
 ```
 then for each db schema update, run
 ```
+alembic revision --autogenerate -m "Initial migration"
 alembic upgrade head
 ```
