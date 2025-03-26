@@ -5,3 +5,10 @@ features:
 - review book note and provide supplementary information or counter point
 - generate presentation slides, with augmented knowledge, and generate presentation audio
 */
+'use client';
+
+export default function BookNotes() {
+    return (
+        <div > book notes</div>
+    );
+}

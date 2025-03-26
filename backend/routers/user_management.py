@@ -38,9 +38,9 @@ def get_password_hash(password):
 async def has_valid_session(user: GetUserInSession):
     try:
         # Check if specific session ID exists in Redis
-        return {"has_valid_session": user is not None}
+        return {"valid": user is not None}
     except Exception as e:
-        return {"has_valid_session": False, "error": str(e)}
+        return {"valid": False, "error": str(e)}
 
 @router.post("/signin")
 async def signin(signin_user: SignInUser,
