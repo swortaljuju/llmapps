@@ -5,7 +5,7 @@ export async function middleware(request: NextRequest) {
     const sessionId = request.cookies.get('session_id')?.value;
     let valid = false;
     if (sessionId) {
-        const res = await fetch(`${process.env.DOMAIN}/hasValidSession/${sessionId}`, {
+        const res = await fetch(`${process.env.DOMAIN}/users/hasValidSession/${sessionId}`, {
             method: 'GET'
         });
 
