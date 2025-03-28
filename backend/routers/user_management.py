@@ -9,6 +9,7 @@ from utils.mailer import send_email
 import os
 from constants import ONE_WEEK_IN_SECONDS
 from fastapi.responses import HTMLResponse
+from utils.logger import logger
 
 DOMAIN = os.getenv("DOMAIN", "http://localhost:8000")
 
@@ -39,6 +40,7 @@ def get_password_hash(password):
 async def has_valid_session(user: GetUserInSession):
     try:
         # Check if specific session ID exists in Redis
+        logger.info(f"Checking session for user: {user}")
         return {"valid": user is not None}
     except Exception as e:
         return {"valid": False, "error": str(e)}
@@ -56,6 +58,7 @@ async def signin(
 
     # Check if user exists
     if not user:
+        logger.error(f"User not found: {signin_user.username}")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found",
@@ -70,6 +73,7 @@ async def signin(
         )
 
     if user.status != UserStatus.active:
+        logger.error(f"User not verified: {signin_user.username}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="email not verified",
@@ -98,11 +102,13 @@ async def signup(
 
     if existing_user:
         if existing_user.username == signup_user.username:
+            logger.error(f"Username already exists: {signup_user.username}")
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Username already exists",
             )
         else:
+            logger.error(f"Email already registered: {signup_user.email}")
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Email already registered",
@@ -149,6 +155,7 @@ async def verify(
     user_id = int(await redis_client.get(f"verification:{verification_token}"))
 
     if not user_id:
+        logger.error(f"Verification token expired or invalid: {verification_token}")
         return HTMLResponse(
             content="""
                 <html>
@@ -170,6 +177,7 @@ async def verify(
     user = db.query(User).filter(User.id == user_id).first()
 
     if not user:
+        logger.error(f"User not found for verification token: {verification_token}")
         return HTMLResponse(
             content="""
                 <html>

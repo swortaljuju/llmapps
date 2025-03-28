@@ -5,6 +5,7 @@ from pydantic import BaseModel
 import uuid
 from constants import ONE_WEEK_IN_SECONDS
 import os
+from logger import logger
 
 UNLIMITED_USER_EMAILS = os.getenv("UNLIMITED_USER_EMAILS", "").split(",")
 CALLS_PER_WEEK = os.getenv("CALLS_PER_WEEK", 500)
@@ -76,6 +77,7 @@ async def limit_usage(user: GetUserInSession, redis: db.RedisClient) -> None:
                 ex=ONE_WEEK_IN_SECONDS,
             )
         else:
+            logger.error("rate limit exceeded")
             raise HTTPException(
                 status_code=status.HTTP_429_TOO_MANY_REQUESTS,
                 headers={"WWW-Authenticate": "Bearer"},

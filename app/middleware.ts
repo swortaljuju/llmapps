@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import serverLogger from './server_logger';
 
 export async function middleware(request: NextRequest) {
     const sessionId = request.cookies.get('session_id')?.value;
@@ -14,10 +15,13 @@ export async function middleware(request: NextRequest) {
     const path = request.nextUrl.pathname
     const isRoot = path === '/'
     if (valid && isRoot) {
+        serverLogger.info('User with valid session in root page. redirecting to newssummary');
         return NextResponse.redirect(new URL('/newssummary', process.env.DOMAIN))
     } else if (!valid && !isRoot) {
+        serverLogger.info('User with invalid session not in root page. redirecting to root');
         return NextResponse.redirect(new URL('/', process.env.DOMAIN))
     }
+    serverLogger.info('no redirect needed');
 
     return NextResponse.next()
 }
