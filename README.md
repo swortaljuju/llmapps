@@ -22,4 +22,4 @@ then for each db schema update, run
 alembic revision --autogenerate -m "Initial migration"
 alembic upgrade head
 ```
-Copy gmail_token.json to related folder and update APP_MANAGER_GMAIL_CREDS_PATH environment pointing to it. 
+Copy gmail_creds.json and backend/token.json to related folder and update APP_MANAGER_GMAIL_CREDS_PATH environment pointing to it for gmail api access. 
