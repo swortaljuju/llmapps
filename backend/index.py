@@ -1,7 +1,7 @@
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 
 # Load environment variables from .env
-load_dotenv()
+load_dotenv(find_dotenv(filename='.env.local'))  # Load local environment variables if available
 
 from fastapi import FastAPI
 from routers import user_management as user

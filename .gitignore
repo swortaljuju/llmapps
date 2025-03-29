@@ -37,3 +37,7 @@ next-env.d.ts
 # python
 __pycache__/
 venv
+
+# gmail credentials
+gmail_creds.json
+token.json

@@ -5,7 +5,7 @@ from pydantic import BaseModel
 import uuid
 from constants import ONE_WEEK_IN_SECONDS
 import os
-from logger import logger
+from utils import logger
 
 UNLIMITED_USER_EMAILS = os.getenv("UNLIMITED_USER_EMAILS", "").split(",")
 CALLS_PER_WEEK = os.getenv("CALLS_PER_WEEK", 500)
@@ -18,7 +18,7 @@ class SessionUser(BaseModel):
 
 
 async def get_user_in_session(
-    session_id: Annotated[str | None, Cookie()], redis: db.RedisClient
+    redis: db.RedisClient, session_id: str | None = Cookie(default=None)
 ) -> SessionUser | None:
     user = await redis.get(f"session:{session_id}")
     if user is None:
@@ -34,7 +34,7 @@ async def cache_user_in_session(
     # Store session in Redis with 1 week expiry
     await redis_client.set(
         f"session:{session_id}",
-        SessionUser(id=user_id, email=email).model_dump_json(),
+        SessionUser(user_id=user_id, email=email).model_dump_json(),
         ex=ONE_WEEK_IN_SECONDS,
     )
 

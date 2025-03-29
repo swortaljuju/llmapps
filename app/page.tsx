@@ -6,7 +6,8 @@ import { BsGraphUp, BsBook } from 'react-icons/bs';
 import { MdOutlineRestaurant } from 'react-icons/md';
 import { AiOutlineShopping } from 'react-icons/ai';
 import { BiLoaderAlt } from 'react-icons/bi';
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
+import {getBackendApiUrl} from "./utils"
 
 enum PageState {
   AppsSummary = 'AppsSummary',
@@ -71,19 +72,19 @@ function AppsSummary({ onStateChange }: { onStateChange: (state: PageState) => v
       </div>
       <div className="flex justify-center gap-4 mb-12">
         <button
-        onClick={() => onStateChange(PageState.SignUp)}
-        className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300">
+          onClick={() => onStateChange(PageState.SignUp)}
+          className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300">
           Sign Up
         </button>
         <button onClick={() => onStateChange(PageState.SignIn)}
 
-        className="px-6 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors duration-300">
+          className="px-6 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors duration-300">
           Sign In
         </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto mb-12">
         {apps.map((app, index) => (
-          <div 
+          <div
             key={index}
             className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-all duration-300 group relative h-[120px] overflow-hidden"
           >
@@ -99,14 +100,14 @@ function AppsSummary({ onStateChange }: { onStateChange: (state: PageState) => v
           </div>
         ))}
       </div>
-    
+
     </div>
   );
 }
 
 function SignInForm({ onStateChange }: { onStateChange: (state: PageState) => void }) {
   const [formData, setFormData] = useState({
-    username: '',
+    name: '',
     password: ''
   });
   const [isLoading, setIsLoading] = useState(false);
@@ -119,7 +120,7 @@ function SignInForm({ onStateChange }: { onStateChange: (state: PageState) => vo
     setError('');
 
     try {
-      const response = await fetch('/api/users/signin', {
+      const response = await fetch( getBackendApiUrl('/users/signin'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -143,7 +144,7 @@ function SignInForm({ onStateChange }: { onStateChange: (state: PageState) => vo
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
         <h1 className="text-2xl font-bold text-center mb-6">Sign In</h1>
-        
+
         {error && (
           <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded">
             {error}
@@ -153,12 +154,12 @@ function SignInForm({ onStateChange }: { onStateChange: (state: PageState) => vo
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">
-              Username
+              User name
             </label>
             <input
               type="text"
-              value={formData.username}
-              onChange={(e) => setFormData(prev => ({ ...prev, username: e.target.value }))}
+              value={formData.name}
+              onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
               disabled={isLoading}
               className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
               required
@@ -212,7 +213,7 @@ function SignInForm({ onStateChange }: { onStateChange: (state: PageState) => vo
 
 function SignUpForm({ onStateChange }: { onStateChange: (state: PageState) => void }) {
   const [formData, setFormData] = useState({
-    username: '',
+    name: '',
     email: '',
     password: ''
   });
@@ -225,37 +226,35 @@ function SignUpForm({ onStateChange }: { onStateChange: (state: PageState) => vo
     setIsLoading(true);
     setError('');
 
-    try {
-      const response = await fetch('/api/users/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-      });
+    const response = await fetch(getBackendApiUrl('/users/signup'), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData)
+    });
 
-      if (response.ok) {
-        setIsSuccess(true);
-      } else {
-        const errorData = await response.json();
-        setError(errorData.detail || 'An error occurred. Please try again.');
-      }
-      setIsLoading(false);
+    if (response.ok) {
+      setIsSuccess(true);
+    } else {
+      const errorData = await response.json();
+      setError(errorData.detail || 'An error occurred. Please try again.');
     }
+    setIsLoading(false);
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h1 className="text-2xl font-bold text-center mb-6">Sign In</h1>
-        
+        <h1 className="text-2xl font-bold text-center mb-6">Sign Up</h1>
+
         {error && (
           <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded">
             {error}
           </div>
         )}
 
-        {isSuccess  && (
+        {isSuccess && (
           <div className="mb-4 p-3 bg-green-50 border border-green-200 text-green-700 rounded">
             A email has been sent to your email address. Please check your inbox to verify your account.
           </div>
@@ -264,12 +263,12 @@ function SignUpForm({ onStateChange }: { onStateChange: (state: PageState) => vo
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">
-              Username
+              User name
             </label>
             <input
               type="text"
-              value={formData.username}
-              onChange={(e) => setFormData(prev => ({ ...prev, username: e.target.value }))}
+              value={formData.name}
+              onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
               disabled={isLoading || isSuccess}
               className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
               required

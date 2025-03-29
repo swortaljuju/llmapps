@@ -16,6 +16,7 @@ redis_client = None
 
 # Redis client setup
 def get_redis() -> redis.Redis:
+    global redis_client
     if redis_client is None:
         redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=0, decode_responses=True)
     return redis_client
@@ -29,6 +30,7 @@ SqlSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=sql_engin
 
 sql_client = None
 def get_sql_db() -> Session:
+    global sql_client
     if sql_client is None:
         sql_client = SqlSessionLocal()
     return sql_client

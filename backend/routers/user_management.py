@@ -1,28 +1,29 @@
 from fastapi import APIRouter, HTTPException, status, Response
-from utils.manage_session import GetUserInSession, set_user_in_session
+from utils.manage_session import GetUserInSession, cache_user_in_session
 from db import db
 import uuid
 from db.models import User, UserStatus
 from passlib.context import CryptContext
-from pydantic import BaseModel, constr
+from pydantic import BaseModel, constr, Field
 from utils.mailer import send_email
 import os
 from constants import ONE_WEEK_IN_SECONDS
 from fastapi.responses import HTMLResponse
 from utils.logger import logger
+import redis.asyncio as redis
 
-DOMAIN = os.getenv("DOMAIN", "http://localhost:8000")
+DOMAIN = os.getenv("DOMAIN", "localhost:3000")
 
-router = APIRouter(prefix="/users", tags=["users"])
+router = APIRouter(prefix="/api/py/users", tags=["users"])
 
 
 class SignInUser(BaseModel):
-    username: constr(min_length=3, max_length=20)
+    name: constr(min_length=3, max_length=20)
     password: constr(min_length=4, max_length=20)
 
 
 class SignUpUser(SignInUser):
-    email: constr(regex=r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
+    email: str = Field(pattern=r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -36,11 +37,10 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 
-@router.get("/has_valid_session/{session_id}")
+@router.get("/has_valid_session")
 async def has_valid_session(user: GetUserInSession):
     try:
         # Check if specific session ID exists in Redis
-        logger.info(f"Checking session for user: {user}")
         return {"valid": user is not None}
     except Exception as e:
         return {"valid": False, "error": str(e)}
@@ -54,11 +54,11 @@ async def signin(
     redis_client: db.RedisClient,
 ):
     # Query user from postgres
-    user = db.query(User).filter(User.username == signin_user.username).first()
+    user = db.query(User).filter(User.name == signin_user.name).first()
 
     # Check if user exists
     if not user:
-        logger.error(f"User not found: {signin_user.username}")
+        logger.error(f"User not found: {signin_user.name}")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found",
@@ -73,39 +73,66 @@ async def signin(
         )
 
     if user.status != UserStatus.active:
-        logger.error(f"User not verified: {signin_user.username}")
+        logger.error(f"User not verified: {signin_user.name}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="email not verified",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    set_user_in_session(user.id, user.email, redis_client, response)
+    await cache_user_in_session(user.id, user.email, redis_client, response)
 
     return {
         "status": "success",
     }
 
+async def send_verification_email(receiver_email: str, redis_client: redis.Redis, user_id: int):
+    """
+    This function sends a verification email to the user after signing up.
+    """
+    # Create verification token
+    verification_token = str(uuid.uuid4())
+
+    # Create verification link
+    verification_link = f"http://{DOMAIN}/api/py/users/verify/{verification_token}"
+
+    # Send email using the send_email function
+    send_email(
+        receiver_email,
+        subject="Verify your llm app account",
+        content=f"Click the link to verify your account: {verification_link}",
+    )
+    
+    await redis_client.set(
+        f"verification:{verification_token}", str(user_id), ex=ONE_WEEK_IN_SECONDS
+    )
 
 @router.post("/signup")
 async def signup(
     signup_user: SignUpUser, db: db.SqlClient, redis_client: db.RedisClient
 ):
-    # Check if username or email already exists
+    # Check if user name or email already exists
     existing_user = (
         db.query(User)
         .filter(
-            (User.username == signup_user.username) | (User.email == signup_user.email)
+            (User.name == signup_user.name) | (User.email == signup_user.email)
         )
         .first()
     )
 
     if existing_user:
-        if existing_user.username == signup_user.username:
-            logger.error(f"Username already exists: {signup_user.username}")
+        if existing_user.name == signup_user.name and existing_user.email == signup_user.email:
+            # Resend verification email if the same email and name are used again
+            await send_verification_email(signup_user.email, redis_client, existing_user.id)
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Username already exists",
+                detail="User name and email already exists. A verification email has been resent.",
+            )
+        elif existing_user.name == signup_user.name:    
+            logger.error(f"User name already exists: {signup_user.name}")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="User name already exists",
             )
         else:
             logger.error(f"Email already registered: {signup_user.email}")
@@ -114,12 +141,9 @@ async def signup(
                 detail="Email already registered",
             )
 
-    # Create verification token
-    verification_token = str(uuid.uuid4())
-
     # Create new user
     new_user = User(
-        username=signup_user.username,
+        name=signup_user.name,
         email=signup_user.email,
         hashed_password=get_password_hash(signup_user.password),
         status=UserStatus.pending,
@@ -129,18 +153,8 @@ async def signup(
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-
-    # Send verification email
-    verification_link = f"http://{DOMAIN}/users/verify/{verification_token}"
-    send_email(
-        receiver_email=signup_user.email,
-        subject="Verify your llm app account",
-        content=f"Click the link to verify your account: {verification_link}",
-    )
-
-    redis_client.set(
-        f"verification:{verification_token}", str(new_user.id), ex=ONE_WEEK_IN_SECONDS
-    )
+    
+    await send_verification_email(signup_user.email, redis_client, new_user.id)
 
     return {
         "status": "success",
@@ -148,7 +162,7 @@ async def signup(
     }
 
 
-@router.post("/verify/{verification_token}")
+@router.get("/verify/{verification_token}")
 async def verify(
     verification_token: str, db: db.SqlClient, redis_client: db.RedisClient
 ):

@@ -1,17 +1,47 @@
-import smtplib, ssl
-import os
+import os.path
+import base64
+from email.message import EmailMessage
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+from utils.logger import logger
 
-ACCOUNT_MANAGER_EMAIL = os.getenv('APP_MANAGER_EMAIL','')
-ACCOUNT_MANAGER_PASSWORD = os.getenv('APP_MANAGER_PASSWORD','')
-PORT = 465  # For SSL
-SMTP_SERVER = "smtp.gmail.com"
+SCOPES = ['https://www.googleapis.com/auth/gmail.send']
+APP_MANAGER_GMAIL_CREDS_PATH = os.getenv('APP_MANAGER_GMAIL_CREDS_PATH', 'creds.json')
+def gmail_login():
+    creds = None
+    if os.path.exists('token.json'):
+        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
 
-def send_email( receiver_email: str, subject: str, content: str):
-    context = ssl.create_default_context()
-    with smtplib.SMTP_SSL(SMTP_SERVER, PORT, context=context) as server:
-        server.login(ACCOUNT_MANAGER_EMAIL, ACCOUNT_MANAGER_PASSWORD)
-        message = f"""\
-            subject: {subject}
-        
-            {content}"""
-        server.sendmail(ACCOUNT_MANAGER_EMAIL, receiver_email, message)
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                APP_MANAGER_GMAIL_CREDS_PATH, SCOPES
+            )
+            creds = flow.run_local_server(port=0)
+        with open('token.json', 'w') as token:
+            token.write(creds.to_json())
+
+    return creds
+
+def send_email(receiver_email: str, subject: str, content: str):
+    try:
+        creds = gmail_login()
+        service = build('gmail', 'v1', credentials=creds)
+
+        message = EmailMessage()
+        message.set_content(content)
+        message['To'] = receiver_email
+        message['From'] =  os.getenv('APP_MANAGER_EMAIL','')  # Sender's email address
+        message['Subject'] = subject
+
+        encoded_message = base64.urlsafe_b64encode(message.as_bytes()).decode()
+        create_message = {'raw': encoded_message}
+        service.users().messages().send(userId="me", body=create_message).execute()
+    except HttpError as error:
+        logger.error(f"Failed to send email. subject {subject}; error: {error}")
+
