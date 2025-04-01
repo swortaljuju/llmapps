@@ -256,7 +256,7 @@ function SignUpForm({ onStateChange }: { onStateChange: (state: PageState) => vo
 
         {isSuccess && (
           <div className="mb-4 p-3 bg-green-50 border border-green-200 text-green-700 rounded">
-            A email has been sent to your email address. Please check your inbox to verify your account.
+            An email has been sent to your email address. Please check your inbox to verify your account.
           </div>
         )}
 

@@ -2,10 +2,16 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export default async function middleware(request: NextRequest) {
-    // TODO: Use JWT to verify if session data is valid and not expired.
-    const valid = !!request.cookies.get('session_id')?.value;
-    const path = request.nextUrl.pathname
-    const isRoot = path === '/'
+    const response = await fetch(new URL('/api/py/users/has_valid_session', request.url), {
+        method: 'GET',
+        headers: {
+            'Cookie': request.headers.get('Cookie') || '',
+        }
+    });
+    const responseJson = await response.json();
+    const valid = responseJson.valid;
+    const path = request.nextUrl.pathname;
+    const isRoot = path === '/';
     if (valid && isRoot) {
         logInDev('User with valid session in root page. redirecting to newssummary');
         return NextResponse.redirect(new URL('/newssummary', request.url))
@@ -14,7 +20,6 @@ export default async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/', request.url))
     }
     logInDev('no redirect needed');
-
     return NextResponse.next()
 }
 
