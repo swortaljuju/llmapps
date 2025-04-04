@@ -1,13 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { BiNews } from 'react-icons/bi';
-import { BsGraphUp, BsBook } from 'react-icons/bs';
-import { MdOutlineRestaurant } from 'react-icons/md';
-import { AiOutlineShopping } from 'react-icons/ai';
+import { apps } from './common/constants';
 import { BiLoaderAlt } from 'react-icons/bi';
 import { useRouter } from "next/navigation";
-import {getBackendApiUrl} from "./utils"
+import {getBackendApiUrl} from "./common/utils"
 
 enum PageState {
   AppsSummary = 'AppsSummary',
@@ -37,33 +34,7 @@ export default function Home() {
 }
 
 function AppsSummary({ onStateChange }: { onStateChange: (state: PageState) => void }) {
-  const apps = [
-    {
-      name: "News Summary",
-      description: "Weekly news summary",
-      icon: BiNews
-    },
-    {
-      name: "Stock Summary",
-      description: "Weekly stock summary",
-      icon: BsGraphUp
-    },
-    {
-      name: "Recipe Recommendation",
-      description: "Recommend weekly recipe",
-      icon: MdOutlineRestaurant
-    },
-    {
-      name: "Shopping Guide",
-      description: "Detailed production comparison and shopping suggestion",
-      icon: AiOutlineShopping
-    },
-    {
-      name: "Book Note",
-      description: "Generate questions to review the note of a book and further expand some ideas from the book",
-      icon: BsBook
-    }
-  ];
+
   return (
     <div className="min-h-screen p-8 bg-gray-100">
       <h1 className="text-4xl font-bold text-center mb-8">LLM App Portfolio</h1>
