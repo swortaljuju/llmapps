@@ -24,6 +24,20 @@ alembic upgrade head
 ```
 Copy gmail_creds.json and backend/token.json to related folder and update APP_MANAGER_GMAIL_CREDS_PATH environment pointing to it for gmail api access. 
 
+*pgvector*
+https://dev.to/farez/installing-postgresql-pgvector-on-debian-fcf 
+https://github.com/pgvector/pgvector
+```
+psql --version #get version number
+sudo apt install postgresql-{version}-pgvector
+#Login to PostgreSQL
+psql -U db-username db-name
+#Enable pgvector
+CREATE EXTENSION vector;
+#Check that it's enabled
+\dx
+```
+
 # Design
 ## Tech Stack
 - **Frontend: NextJs + tailwind css** 
