@@ -1,67 +1,11 @@
-from sqlalchemy import Column, Integer, String, DateTime, Enum, TypeDecorator, Date
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.dialects.postgresql import JSONB, ARRAY
+from sqlalchemy import Column, Integer, String, DateTime, Enum, TypeDecorator, Date, UUID
+from sqlalchemy.dialects.postgresql import JSONB
 from datetime import datetime
 import enum
 from pydantic import BaseModel
 import json
-from uuid import UUID
-
-Base = declarative_base()
-
-
-class UserStatus(enum.Enum):
-    pending = "pending"
-    active = "active"
-
-
-class ChatMessageGeneratorRole(enum.Enum):
-    user = "user"
-    system = "system"
-
-
-class ConversationHistoryItem(BaseModel):
-    role: ChatMessageGeneratorRole
-    content: str
-    message_id: UUID
-    parent_message_id: UUID | None = None
-
-
-class ConversationHistory(BaseModel):
-    messages: list[ConversationHistoryItem]
-    thread_id: str
-
-
-class ConversationHistoryPostGreSqlWrapper(TypeDecorator):
-    impl = JSONB
-    cache_ok = True
-
-    def process_bind_param(self, value, dialect):
-        if value is not None:
-            if isinstance(value, ConversationHistory):
-                return json.loads(value.model_dump_json())
-            return value
-        return None
-
-    def process_result_value(self, value, dialect):
-        if value is not None:
-            return ConversationHistory(**value)
-        return None
-
-
-class User(Base):
-    __tablename__ = "users"
-
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    email = Column(String, unique=True, index=True)
-    name = Column(String, unique=True, index=True)
-    hashed_password = Column(String)
-    created_at = Column(DateTime, default=datetime.now())
-    status = Column(Enum(UserStatus), default=UserStatus.pending)
-    news_preference = Column(String)
-    current_news_preference_version_id = Column(Integer)
-    subscribed_rss_feeds_id = Column(ARRAY(Integer))
-
+from backend.db.models.base import Base
+import uuid
 
 class RssFeed(Base):
     __tablename__ = "rss_feeds"
@@ -140,10 +84,10 @@ class NewsPreferenceVersion(Base):
     previous_version_id = Column(Integer)  # -1 if no previous version
     content = Column(String)
     cause = Column(Enum(NewsPreferenceChangeCause))
-    causal_survey_conversation_history = Column(
-        ConversationHistoryPostGreSqlWrapper
+    causal_survey_conversation_history_thread_id = Column(
+        String, nullable=True
     )  # survey conversation history which caused the change. empty if no change.
     causal_clicked_news_summary = Column(
-        NewsSummaryListPostGreSqlWrapper
+        NewsSummaryListPostGreSqlWrapper, nullable=True
     )  # clicked news summary which caused the change. empty if no change.
     created_at = Column(DateTime, default=datetime.now())

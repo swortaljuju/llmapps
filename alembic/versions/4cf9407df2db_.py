@@ -11,7 +11,7 @@ from alembic import op
 import sqlalchemy as sa
 from sqlalchemy import Text  # Add this import
 from sqlalchemy.dialects import postgresql
-from backend.db.models import ConversationHistoryPostGreSqlWrapper, NewsSummaryListPostGreSqlWrapper, NewsPreferenceChangeCause
+from backend.db.models.newssummary import  NewsSummaryListPostGreSqlWrapper
 
 # revision identifiers, used by Alembic.
 revision: str = '4cf9407df2db'
@@ -42,7 +42,6 @@ def upgrade() -> None:
     sa.Column('previous_version_id', sa.Integer(), nullable=True),
     sa.Column('content', sa.String(), nullable=True),
     sa.Column('cause', sa.Enum('survey', 'user_edit', 'news_click', name='newspreferencechangecause'), nullable=True),
-    sa.Column('causal_survey_conversation_history', ConversationHistoryPostGreSqlWrapper(astext_type=Text()), nullable=True),
     sa.Column('causal_clicked_news_summary', NewsSummaryListPostGreSqlWrapper(astext_type=Text()), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('id')
