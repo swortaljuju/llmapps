@@ -53,7 +53,7 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     name = Column(String, unique=True, index=True)
     hashed_password = Column(String)
-    created_at = Column(DateTime, default=datetime.now(datetime.UTC))
+    created_at = Column(DateTime, default=datetime.now())
     status = Column(Enum(UserStatus), default=UserStatus.pending)
     news_preference = Column(String)
     current_news_preference_version_id = Column(Integer)
@@ -65,7 +65,7 @@ class RssFeed(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     feed_url = Column(String, unique=True, index=True)
-    last_crawl_time = Column(DateTime, default=datetime.now(datetime.UTC))
+    last_crawl_time = Column(DateTime, default=datetime.now())
     title = Column(String)
     html_url = Column(String)
     xml_url = Column(String)
@@ -78,7 +78,7 @@ class NewsEntry(Base):
     rss_feed_id = Column(Integer)
     entry_rss_guid = Column(String, unique=True, index=True)
     entry_url = Column(String)
-    crawl_time = Column(DateTime, default=datetime.now(datetime.UTC))
+    crawl_time = Column(DateTime, default=datetime.now())
     title = Column(String)
     description = Column(String)
     content = Column(String)
@@ -143,4 +143,4 @@ class NewsPreferenceVersion(Base):
     causal_clicked_news_summary = Column(
         NewsSummaryListPostGreSqlWrapper
     )  # clicked news summary which caused the change. empty if no change.
-    created_at = Column(DateTime, default=datetime.now(datetime.UTC))
+    created_at = Column(DateTime, default=datetime.now())
