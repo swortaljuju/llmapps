@@ -5,6 +5,7 @@ from datetime import datetime
 import enum
 from pydantic import BaseModel
 import json
+from uuid import UUID
 
 Base = declarative_base()
 
@@ -22,6 +23,8 @@ class ChatMessageGeneratorRole(enum.Enum):
 class ConversationHistoryItem(BaseModel):
     role: ChatMessageGeneratorRole
     content: str
+    message_id: UUID
+    parent_message_id: UUID | None = None
 
 
 class ConversationHistory(BaseModel):
