@@ -41,3 +41,5 @@ venv
 # gmail credentials
 gmail_creds.json
 token.json
+
+playground.py
