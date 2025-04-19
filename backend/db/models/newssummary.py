@@ -1,11 +1,10 @@
-from sqlalchemy import Column, Integer, String, DateTime, Enum, TypeDecorator, Date, UUID
+from sqlalchemy import Column, Integer, String, DateTime, Enum, TypeDecorator, Date
 from sqlalchemy.dialects.postgresql import JSONB
 from datetime import datetime
 import enum
 from pydantic import BaseModel
 import json
 from backend.db.models.base import Base
-import uuid
 
 class RssFeed(Base):
     __tablename__ = "rss_feeds"

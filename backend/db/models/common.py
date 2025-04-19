@@ -30,9 +30,10 @@ class User(Base):
 class ConversationHistory(Base):
     __tablename__ = "conversation_history"
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    user_id = Column(Integer)
+    user_id = Column(Integer, index=True)
     thread_id = Column(String)
     message_id = Column(String)
     parent_message_id = Column(String, nullable=True)
     role = Column(Enum(ChatMessageGeneratorRole), default=ChatMessageGeneratorRole.unknown) 
     content =  Column(String)
+    created_at = Column(DateTime, default=datetime.now())
