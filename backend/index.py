@@ -4,11 +4,12 @@ from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv(filename='.env.local'))  # Load local environment variables if available
 
 from fastapi import FastAPI
-from routers import user_management as user
+from routers import user_management, news_summary
 ### Create FastAPI instance with custom docs and openapi url
 app = FastAPI(docs_url="/api/py/docs", openapi_url="/api/py/openapi.json")
 
-app.include_router(user.router)
+app.include_router(user_management.router)
+app.include_router(news_summary.router)
 
 @app.get("/api/py/helloFastApi")
 def hello_fast_api():

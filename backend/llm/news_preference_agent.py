@@ -5,9 +5,11 @@ from sqlalchemy.orm import Session
 import redis.asyncio as redis
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from db.models.common import ConversationHistory, ConversationType
+from db.models import ApiLatencyLog
 from utils.conversation_history import ApiConversationHistoryItem, convert_to_api_conversation_history, create_thread_id, create_message_id, convert_api_conversation_history_item_to_db_row
 import json
 from enum import Enum
+import time
 
 class NewsPreferenceAgentOutput(BaseModel):
     """
@@ -79,11 +81,16 @@ async def load_preference_survey_history(user_id: int, redis: redis.Redis, sql_c
 
     return api_survey_history
 
-def next_preference_question(chat_history: list[ApiConversationHistoryItem]) -> NewsPreferenceAgentOutput:
-    return _new_preference_survey_agent.invoke({"chat_history":  [
-        item.human_message or item.ai_message or item.tool_message or item.system_message
-        for item in chat_history
-    ]})
+def next_preference_question(chat_history: list[ApiConversationHistoryItem], api_latency_log: ApiLatencyLog) -> NewsPreferenceAgentOutput:
+    llm_start_time = time.time()
+    llm_result = _new_preference_survey_agent.invoke({
+        "chat_history":  [
+            item.human_message or item.ai_message or item.tool_message or item.system_message
+            for item in chat_history
+        ]
+    })
+    api_latency_log.llm_latency += int( (time.time() - llm_start_time) * 1000)  # Convert to milliseconds
+    return llm_result
 
 def insert_preference_question_and_answer(
     user_id: int,

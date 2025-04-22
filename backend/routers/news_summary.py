@@ -1,10 +1,14 @@
-from fastapi import APIRouter, HTTPException
-from typing import Optional
+from fastapi import APIRouter, HTTPException, Request, Depends
+from fastapi.middleware.base import BaseHTTPMiddleware
+from typing import Optional, Callable
 from pydantic import BaseModel
+from starlette.responses import JSONResponse
 from db import db
-from db.models import User, NewsSummary, NewsSummaryList, NewsPreferenceChangeCause, NewsPreferenceVersion
+from db.models import User, NewsSummary, NewsSummaryList, NewsPreferenceChangeCause, NewsPreferenceVersion, ApiLatencyLog
 from utils.manage_session import GetUserInSession
+from utils.logger import logger
 import os
+import time
 from llm.news_preference_agent import (
     load_preference_survey_history,
     next_preference_question,
@@ -12,11 +16,50 @@ from llm.news_preference_agent import (
     NewsPreferenceSurveyOneRoundConversationItem
 )
 from common import ChatMessage, ChatAuthorType
+from utils.manage_session import limit_usage
 
 DOMAIN = os.getenv("DOMAIN", "localhost:3000")
 
-router = APIRouter(prefix="/api/py/news_summary", tags=["users"])
+class NewsSummaryMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        # Start timer for performance logging
+        start_time = time.time()
+        
+        # Extract the path for logging
+        path = request.url.path
+        method = request.method
+        
+        # Check for authentication session
+        try:
+            request.state.api_latency_log = ApiLatencyLog(
+                user_id=None,
+                path=path,
+                method=method
+            )
+            # Continue with the request
+            response = await call_next(request)
+            
+            # Log response time
+            process_time = time.time() - start_time
+            request.state.api_latency_log.total_elapsed_time_ms = int( process_time * 1000)
+            sql_client = db.SqlClient()
+            sql_client.add(request.state.api_latency_log)
+            sql_client.commit()
+            return response
+                    
+        except Exception as e:
+            # Log any uncaught exceptions
+            process_time = time.time() - start_time
+            logger.error(f"NewsSummary error: {method} {path} - Error: {str(e)} - Time: {process_time:.4f}s")
+            
+            # Return appropriate error response
+            return JSONResponse(
+                status_code=500,
+                content={"detail": "Internal server error"},
+            )
 
+router = APIRouter(prefix="/api/py/news_summary", tags=["news_summary"])
+router.add_middleware(NewsSummaryMiddleware)
 
 class NewsSummaryPeriod(BaseModel):
     start_date_timestamp: int  # Timestamp in seconds
@@ -32,11 +75,12 @@ class NewsSummaryInitializeResponse(BaseModel):
     next_preference_question: Optional[str] = None
 
 
-@router.get("/initialize", response_model=NewsSummaryInitializeResponse)
-async def initialize(user: GetUserInSession, sql_client: db.SqlClient, redis_client: db.RedisClient):
+@router.get("/initialize", response_model=NewsSummaryInitializeResponse, dependencies=[Depends(GetUserInSession)])
+async def initialize(request:Request, user: GetUserInSession, sql_client: db.SqlClient, redis_client: db.RedisClient):
     if not user:
         raise HTTPException(status_code=401, detail="Unauthorized")
-
+    request.state.api_latency_log.user_id = user.user_id
+    
     # Query user data
     user_data = db.query(User).filter(User.id == user.user_id).first()
     if not user_data:
@@ -66,12 +110,12 @@ async def initialize(user: GetUserInSession, sql_client: db.SqlClient, redis_cli
                             else ChatAuthorType.AI
                         ),
                     )
-                )
+                )        
         return NewsSummaryInitializeResponse(
             mode="collect_news_preference",
             preference_conversation_history=preference_conversation_history,
             next_preference_question=next_preference_question(
-                api_survey_history
+                api_survey_history, request.state.api_latency_log
             ).question,
         )
 
@@ -111,23 +155,24 @@ class PreferenceSurveyResponse(BaseModel):
 
 @router.post("/preference_survey", response_model=PreferenceSurveyResponse)
 async def preference_survey(
-    request: PreferenceSurveyRequest,
+    request: Request,
+    preference_survey_request: PreferenceSurveyRequest,
     user: GetUserInSession,
     sql_client: db.SqlClient,
     redis_client: db.RedisClient,
 ):
     if not user:
         raise HTTPException(status_code=401, detail="Unauthorized")
-
+    request.state.api_latency_log.user_id = user.user_id
     # Insert the question and answer into the chat history
     chat_history = await load_preference_survey_history(user.user_id, redis=redis_client, sql_client=sql_client)
     
     chat_history = await insert_preference_question_and_answer(
         user.user_id,
         NewsPreferenceSurveyOneRoundConversationItem(
-            question=request.question,
-            answer=request.answer,
-            parent_message_id=request.parent_message_id
+            question=preference_survey_request.question,
+            answer=preference_survey_request.answer,
+            parent_message_id=preference_survey_request.parent_message_id
         ),
         chat_history,
         redis=redis_client,
@@ -135,7 +180,7 @@ async def preference_survey(
     )
 
     # Get the next question from the agent
-    next_question = next_preference_question(chat_history)
+    next_question = next_preference_question(chat_history, request.state.api_latency_log)
     
     if next_question.news_preference_summary is not None:
         # If the agent has provided a summary, update the user's news preference
