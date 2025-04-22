@@ -13,6 +13,14 @@ class ChatMessageGeneratorRole(enum.Enum):
     system = "system"
     unknown = "unknown"
 
+class LangChainMessageType(enum.Enum):
+    HUMAN = "human"
+    AI = "ai"
+    SYSTEM = "system"
+    TOOL = "tool"
+    UNKNOWN = "unknown" # not a langchain message
+
+
 class User(Base):
     __tablename__ = "users"
 
@@ -26,7 +34,8 @@ class User(Base):
     current_news_preference_version_id = Column(Integer)
     subscribed_rss_feeds_id = Column(ARRAY(Integer))
     
-    
+class ConversationType(enum.Enum):
+    news_preference_survey = "news_preference_survey"  
 class ConversationHistory(Base):
     __tablename__ = "conversation_history"
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
@@ -35,5 +44,7 @@ class ConversationHistory(Base):
     message_id = Column(String)
     parent_message_id = Column(String, nullable=True)
     role = Column(Enum(ChatMessageGeneratorRole), default=ChatMessageGeneratorRole.unknown) 
-    content =  Column(String)
+    content =  Column(String) # serialized content of the message
+    lang_chain_message_type = Column(Enum(LangChainMessageType), default=LangChainMessageType.UNKNOWN)
     created_at = Column(DateTime, default=datetime.now())
+    conversation_type = Column(Enum(ConversationType), default=ConversationType.news_preference_survey)
