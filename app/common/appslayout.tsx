@@ -4,54 +4,68 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { BiMenu, BiX } from 'react-icons/bi';
 import { MdExpandMore, MdExpandLess } from 'react-icons/md';
-import {apps} from './constants';
+import { apps } from './constants';
 
-export interface ChatListItem {
+export interface SideSectionItem {
     label: string;
-    chatId: number;
-    onClick: (chatId: number) => void;
+    id: string;
+    selected: boolean;
+    onClick: (id: string) => void;
 }
 
-export interface ChatList {
+export interface SideSection {
     title: string;
-    items: ChatListItem[];
+    items: SideSectionItem[];
 }
 
 interface AppsLayoutProps {
     mainChat: React.ReactNode;
-    editPreference?: () => void;
-    chatList: ChatList;
+    customAction: SideSection;
+    chatList: SideSection;
 }
 
 export function AppsLayout({
     mainChat,
-    editPreference,
+    customAction,
     chatList
 }: AppsLayoutProps) {
     const [isNavOpen, setIsNavOpen] = useState(true);
     const [expandedSections, setExpandedSections] = useState({
         apps: false,
         chatList: false,
-        });
+        customAction: false
+    });
 
-    const toggleSection = (section: 'apps' | 'chatList') => {
+    const toggleSection = (section: 'apps' | 'chatList' | 'customAction') => {
         setExpandedSections(prev => ({
             ...prev,
             [section]: !prev[section]
         }));
     };
 
-    const [highLightPreference, setHighLightPreference] = useState(false);
+    const [customActionHighlights, setCustomActionHighlights] = useState<Record<string, boolean>>(
+        customAction.items.reduce((acc, item) => ({
+            ...acc,
+            [item.id]: false || item.selected
+        }), {})
+    );
 
-    const [chatHighlights, setChatHighlights] = useState<Record<number, boolean>>(
+    const [chatHighlights, setChatHighlights] = useState<Record<string, boolean>>(
         chatList.items.reduce((acc, item) => ({
             ...acc,
-            [item.chatId]: false
+            [item.id]: false || item.selected
         }), {})
     );
 
     const resetHighlights = () => {
-        setHighLightPreference(false);
+        customAction.items.forEach(item => item.selected = false);
+        setCustomActionHighlights(
+            Object.keys(customActionHighlights).reduce((acc, key) => ({
+                ...acc,
+                [key]: false
+            }), {})
+        );
+        chatList.items.forEach(item => item.selected = false);
         setChatHighlights(
             Object.keys(chatHighlights).reduce((acc, key) => ({
                 ...acc,
@@ -60,13 +74,23 @@ export function AppsLayout({
         );
     };
 
-    const onChatListItemClick = (chatListItem: ChatListItem) => {
+    const onChatListItemClick = (chatListItem: SideSectionItem) => {
         resetHighlights();
+        chatListItem.selected = true;
         setChatHighlights(prev => ({
             ...prev,
-            [chatListItem.chatId]: true
+            [chatListItem.id]: true
         }));
-        chatListItem.onClick(chatListItem.chatId);
+        chatListItem.onClick(chatListItem.id);
+    }
+    const onCustomActionItemClick = (customActionItem: SideSectionItem) => {
+        resetHighlights();
+        customActionItem.selected = true;
+        setCustomActionHighlights(prev => ({
+            ...prev,
+            [customActionItem.id]: true
+        }));
+        customActionItem.onClick(customActionItem.id);
     }
     return (
         <div className="h-screen flex flex-col">
@@ -96,55 +120,61 @@ export function AppsLayout({
                         {expandedSections.apps && (
                             <div className="px-2 pb-1">
                                 {apps.
-                                filter(app => app.launched)
-                                .map(app => (
-                                    <Link
-                                        key={app.route}
-                                        href={app.route}
-                                        className="block px-4 py-1 rounded-md hover:bg-gray-100"
-                                    >
-                                        {app.name}
-                                    </Link>
-                                ))}
+                                    filter(app => app.launched)
+                                    .map(app => (
+                                        <Link
+                                            key={app.route}
+                                            href={app.route}
+                                            className="block px-4 py-1 rounded-md hover:bg-gray-100"
+                                        >
+                                            {app.name}
+                                        </Link>
+                                    ))}
                             </div>
                         )}
                     </div>
-                    {editPreference && (
-                        <div className="border-b">
-                            <button
-                            onClick={() => {
-                                resetHighlights();
-                                setHighLightPreference(true);
-                                editPreference();
-                            }}
-                            className={`w-full p-2 flex items-center justify-between hover:bg-gray-100 ${
-                                highLightPreference ? 'bg-blue-100' : ''
-                            }`}>
-                                <span className="font-small">Edit Preference</span>
-                            </button>
-                        </div>
-                    )}
-                    
+                    <div className="border-b">
+                        <button
+                            onClick={() => toggleSection('customAction')}
+                            className="w-full p-2 flex items-center justify-between hover:bg-gray-100"
+                        >
+                            <span className="font-small">{customAction.title}</span>
+                            {expandedSections.customAction ? <MdExpandLess /> : <MdExpandMore />}
+                        </button>
+                        {expandedSections.customAction && (
+                            <div className="px-2 pb-1">
+                                {customAction.items
+                                    .map(customActionItem => (
+                                        <button
+                                            onClick={() => onCustomActionItemClick(customActionItem)}
+                                            className={`w-full p-2 flex items-center justify-between hover:bg-gray-100 ${customActionHighlights[customActionItem.id] ? 'bg-blue-100' : ''
+                                                }`}>
+                                            <span className="font-small">{customActionItem.label}</span>
+                                        </button>
+                                    ))}
+                            </div>
+                        )}
+                    </div>
+
                     <div className="border-b">
                         <button
                             onClick={() => toggleSection('chatList')}
                             className="w-full p-2 flex items-center justify-between hover:bg-gray-100"
                         >
                             <span className="font-small">{chatList.title}</span>
-                            {expandedSections.apps ? <MdExpandLess /> : <MdExpandMore />}
+                            {expandedSections.chatList ? <MdExpandLess /> : <MdExpandMore />}
                         </button>
                         {expandedSections.chatList && (
                             <div className="px-2 pb-1">
                                 {chatList.items
-                                .map(chatListItem => (
-                                    <button
-                            onClick={() => onChatListItemClick(chatListItem)}
-                            className={`w-full p-2 flex items-center justify-between hover:bg-gray-100 ${
-                                chatHighlights[chatListItem.chatId] ? 'bg-blue-100' : ''
-                            }`}>
-                                <span className="font-small">{chatListItem.label}</span>
-                            </button>
-                                ))}
+                                    .map(chatListItem => (
+                                        <button
+                                            onClick={() => onChatListItemClick(chatListItem)}
+                                            className={`w-full p-2 flex items-center justify-between hover:bg-gray-100 ${chatHighlights[chatListItem.id] ? 'bg-blue-100' : ''
+                                                }`}>
+                                            <span className="font-small">{chatListItem.label}</span>
+                                        </button>
+                                    ))}
                             </div>
                         )}
                     </div>
