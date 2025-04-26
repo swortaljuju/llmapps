@@ -4,7 +4,7 @@ from datetime import datetime
 import enum
 from pydantic import BaseModel
 import json
-from backend.db.models.base import Base
+from .base import Base
 
 class RssFeed(Base):
     __tablename__ = "rss_feeds"

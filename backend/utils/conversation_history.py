@@ -1,8 +1,6 @@
-from .db.models.common import ConversationHistory, ConversationType
-from pydantic import BaseModel, Field
-from langchain_core.messages import BaseMessage, HumanMessage, AIMessage, ToolMessage, SystemMessage
-from uuid import UUID
-from .db.models.common import ConversationHistory, ConversationType
+from db.models.common import ConversationHistory, ConversationType
+from pydantic import BaseModel
+from langchain_core.messages import  HumanMessage, AIMessage, ToolMessage, SystemMessage
 from collections import deque
 import json
 import uuid

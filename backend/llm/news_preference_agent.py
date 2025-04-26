@@ -69,7 +69,8 @@ async def load_preference_survey_history(
     redis_key = _get_news_preference_survey_history_key(user_id)
 
     # Check if survey history exists in Redis
-    if redis.exists(redis_key):
+    redis_key_exists = await redis.exists(redis_key)
+    if redis_key_exists:
         # Load survey history from Redis
         cached_history = json.loads(await redis.get(redis_key))
         await redis.expire(redis_key, 3600)  # Extend TTL to 1 hour (3600 seconds)
@@ -90,7 +91,7 @@ async def load_preference_survey_history(
         return []
     api_survey_history = convert_to_api_conversation_history(survey_history)
 
-    redis.set(
+    await redis.set(
         redis_key,
         json.dumps([item.model_dump() for item in api_survey_history]),
         ex=3600,
@@ -127,7 +128,7 @@ class NextPreferenceSurveyMessage(BaseModel):
     preference_summary: str | None = None
 
 
-def save_answer_and_generate_next_question(
+async def save_answer_and_generate_next_question(
     user_id: int,
     answer: str | None,
     parent_message_id: str | None,
@@ -189,7 +190,7 @@ def save_answer_and_generate_next_question(
 
     # Update Redis cache
     redis_key = _get_news_preference_survey_history_key(user_id)
-    redis.set(
+    await redis.set(
         redis_key, json.dumps([item.model_dump() for item in chat_history]), ex=3600
     )  # Cache for 1 hour
 

@@ -1,8 +1,6 @@
 from fastapi import APIRouter, HTTPException, Request, Depends
-from fastapi.middleware.base import BaseHTTPMiddleware
 from typing import Optional
 from pydantic import BaseModel
-from starlette.responses import JSONResponse
 from db import db
 from db.models import (
     User,
@@ -10,64 +8,21 @@ from db.models import (
     NewsSummaryList,
     NewsPreferenceChangeCause,
     NewsPreferenceVersion,
-    ApiLatencyLog,
 )
 from utils.manage_session import GetUserInSession
-from utils.logger import logger
 import os
-import time
 from llm.news_preference_agent import (
     load_preference_survey_history,
     save_answer_and_generate_next_question,
     ApiConversationHistoryItem,
 )
-from common import ChatMessage, ChatAuthorType
+from .common import ChatMessage, ChatAuthorType
 from utils.manage_session import limit_usage
 
 DOMAIN = os.getenv("DOMAIN", "localhost:3000")
 
-class NewsSummaryMiddleware(BaseHTTPMiddleware):
-    async def dispatch(self, request: Request, call_next):
-        # Start timer for performance logging
-        start_time = time.time()
-
-        # Extract the path for logging
-        path = request.url.path
-        method = request.method
-
-        # Check for authentication session
-        try:
-            request.state.api_latency_log = ApiLatencyLog(
-                user_id=None, path=path, method=method
-            )
-            # Continue with the request
-            response = await call_next(request)
-
-            # Log response time
-            process_time = time.time() - start_time
-            request.state.api_latency_log.total_elapsed_time_ms = int(
-                process_time * 1000
-            )
-            sql_client = db.SqlClient()
-            sql_client.add(request.state.api_latency_log)
-            sql_client.commit()
-            return response
-
-        except Exception as e:
-            # Log any uncaught exceptions
-            process_time = time.time() - start_time
-            logger.error(
-                f"NewsSummary error: {method} {path} - Error: {str(e)} - Time: {process_time:.4f}s"
-            )
-
-            # Return appropriate error response
-            return JSONResponse(
-                status_code=500,
-                content={"detail": "Internal server error"},
-            )
 
 router = APIRouter(prefix="/api/py/news_summary", tags=["news_summary"])
-router.add_middleware(NewsSummaryMiddleware)
 
 class NewsSummaryPeriod(BaseModel):
     start_date_timestamp: int  # Timestamp in seconds
@@ -103,7 +58,6 @@ def _from_api_conversation_history_item_to_chat_message(
 @router.get(
     "/initialize",
     response_model=NewsSummaryInitializeResponse,
-    dependencies=[Depends(GetUserInSession)],
 )
 async def initialize(
     request: Request,
@@ -114,9 +68,8 @@ async def initialize(
     if not user:
         raise HTTPException(status_code=401, detail="Unauthorized")
     request.state.api_latency_log.user_id = user.user_id
-
     # Query user data
-    user_data = db.query(User).filter(User.id == user.user_id).first()
+    user_data = sql_client.query(User).filter(User.id == user.user_id).first()
     if not user_data:
         raise HTTPException(status_code=404, detail="User not found")
 
@@ -126,7 +79,7 @@ async def initialize(
             user.user_id, redis=redis_client, sql_client=sql_client
         )
         if not api_survey_history:
-            api_survey_history = save_answer_and_generate_next_question(
+            api_survey_history = await save_answer_and_generate_next_question(
                 user.user_id,
                 answer=None,
                 parent_message_id=None,
@@ -152,7 +105,7 @@ async def initialize(
 
     # Query latest news summary
     all_summary = (
-        db.query(NewsSummary)
+        sql_client.query(NewsSummary)
         .filter(NewsSummary.user_id == user.user_id)
         .order_by(NewsSummary.end_date.desc())
         .all()
