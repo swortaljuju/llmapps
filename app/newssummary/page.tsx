@@ -3,7 +3,7 @@
 import { AppsLayout, SideSection } from "../common/appslayout";
 import { useState, useEffect } from 'react';
 import { InitializeResponse, initialize } from './store';
-import { NewsPreferenceChat } from "./preference";
+import { EditPreference, NewsPreferenceChat} from "./preference";
 import { MainUiMode } from "./common";
 
 export default function NewsSummary() {
@@ -152,7 +152,7 @@ function NewsSummaryMainUi({
         case MainUiMode.CreatePreference:
             return <NewsPreferenceChat preferenceConversationHistory={initData!.preference_conversation_history} setMainUiState={setMainUiState}></NewsPreferenceChat>;
         case MainUiMode.EditPreference:
-            return <div> Edit Preference</div>;
+            return <EditPreference/> ;
         case MainUiMode.UploadRss:
             return <div> Upload RSS</div>;
         case MainUiMode.Chat:

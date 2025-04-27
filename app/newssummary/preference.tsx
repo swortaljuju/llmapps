@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { ChatMessage, ChatAuthorType, PreferenceSurveyRequest, submitPreferenceSurvey, getPreference, savePreference } from './store';
 import { MainUiMode } from "./common";
+import {TypewriterText} from '../common/typewriter';
 
 interface NewsPreferenceChatProps {
     preferenceConversationHistory: ChatMessage[];
@@ -17,10 +18,12 @@ export function NewsPreferenceChat({
     const [userInput, setUserInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     // Scroll to bottom when messages change
     useEffect(() => {
         scrollToBottom();
+        inputRef.current?.focus();
     }, [messages]);
 
     const scrollToBottom = () => {
@@ -122,7 +125,7 @@ export function NewsPreferenceChat({
                             : 'bg-gray-100 mr-auto' // Left align AI messages
                             }`}
                     >
-                        <p>{message.content}</p>
+                        <TypewriterText text={message.content} showEffect={message.author=='ai' && index==messages.length-1}/> 
                     </div>
                 ))}
 
@@ -134,6 +137,7 @@ export function NewsPreferenceChat({
             <div className="border-t p-4 bg-white">
                 <form onSubmit={handleSubmit} className="flex space-x-2">
                     <input
+                        ref={inputRef}
                         type="text"
                         value={userInput}
                         onChange={(e) => setUserInput(e.target.value)}
@@ -237,7 +241,7 @@ export function EditPreference() {
 
     return (
         <div className="p-4 max-w-2xl mx-auto">
-            <h2 className="text-xl font-semibold mb-4">Edit Your News Preferences</h2>
+            <h2 className="text-xl font-semibold mb-4">Edit Your News Preferences And Instructions for AI to Show the News Summary</h2>
 
             {error && (
                 <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 transition-opacity duration-300 ease-in-out">
@@ -252,9 +256,6 @@ export function EditPreference() {
             )}
 
             <div className="mb-4">
-                <label htmlFor="preference" className="block mb-2 text-sm font-medium">
-                    Your news preferences:
-                </label>
                 <textarea
                     id="preference"
                     rows={6}

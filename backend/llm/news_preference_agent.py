@@ -20,16 +20,22 @@ import time
 
 class NewsPreferenceAgentOutput(BaseModel):
     """
-    Represents the output of the news preference agent.
+    Generated next survey question or summary of the user's news preferences. If the survey is not completed,
+    the `next_survey_question` field will contain the next question to ask the user. If the survey is completed,
+    the `news_preference_summary` field will contain a summary of the user's news preferences.
+    The `next_survey_question` field will be `None` if the survey is completed and no next question is generated.
+    The `news_preference_summary` field will be `None` if the survey is not completed and a next question is generated.
     """
 
-    news_preference_summary: str = Field(
+    news_preference_summary: str | None = Field(
+        default=None,
         description="""The summary of the user's news preference if the survey is completed 
-            and no next survey question is generated. It should also contain instructions to rank news 
-            based on the user's preferences."""
+            and no next survey question is generated. Write the preference summary in third-person perspective 
+            so that AI could understand how to write news summary and rank news. 
+            It should also contain instructions to rank news based on the user's preferences.""",
     )
-    next_survey_question: str = Field(
-        description="The next new preference question to ask the user"
+    next_survey_question: str | None = Field(
+        default=None, description="The next new preference question to ask the user"
     )
 
 
@@ -42,14 +48,22 @@ class NewsPreferenceAgentError(Enum):
 _llm = langchain_gemini_client.with_structured_output(NewsPreferenceAgentOutput)
 _survey_generation_system_message = SystemMessage(
     content="""You are a news preference survey agent. Your task is to ask the user questions about their news preferences.
-    You will ask one question at a time and wait for the user's response. After each response, you will determine if you have enough information
-    to summarize the user's news preferences. If you do, you will return the summary in the `news_preference_summary` field.
-    If not, you will return the next question to ask in the `next_survey_question` field. Introduce yourself as a news preference survey agent 
-    and explain the purpose of the survey to the user first."""
+    - Ask one question at a time and wait for the user's response. 
+    - After each response, Determine if you have enough information to summarize the user's news preferences. 
+    -- If you do, you will return the summary in the `news_preference_summary` field.
+    -- If not, you will return the next question to ask in the `next_survey_question` field.
+    - Ask questions to help you determine the order of importance of different news topics for the user.
+    - Since you will show user a summary of weekly news, you should ask questions which help you understand how to 
+        make the user more likely and comfortable to read the summary.
+    - Introduce yourself as a news preference survey agent and explain the purpose of the survey to the user first."""
 )
 _prompt = ChatPromptTemplate.from_messages(
     [
         _survey_generation_system_message,
+        # Workaround for Gemini. The Gemini api request must have a content
+        # field which is only from HumanMessage or AIMessage. So add a dummy
+        # AIMessage to the prompt to satisfy this requirement.
+        AIMessage(content="Let's start"),
         MessagesPlaceholder("chat_history"),
     ]
 )
@@ -75,7 +89,6 @@ async def load_preference_survey_history(
         cached_history = json.loads(await redis.get(redis_key))
         await redis.expire(redis_key, 3600)  # Extend TTL to 1 hour (3600 seconds)
         return [ApiConversationHistoryItem(**item) for item in cached_history]
-
     # If not in Redis, load from the database
     survey_history = (
         sql_client.query(ConversationHistory)
@@ -115,7 +128,11 @@ def next_preference_question(
             ]
         }
     )
-    api_latency_log.llm_latency += int(
+    api_latency_log.llm_elapsed_time_ms = (
+        api_latency_log.llm_elapsed_time_ms
+        if api_latency_log.llm_elapsed_time_ms
+        else 0
+    ) + int(
         (time.time() - llm_start_time) * 1000
     )  # Convert to milliseconds
     return llm_result
@@ -136,7 +153,7 @@ async def save_answer_and_generate_next_question(
     redis: redis.Redis,
     sql_client: Session,
     api_latency_log: ApiLatencyLog,
-) -> NextPreferenceSurveyMessage:
+) -> tuple[list[ApiConversationHistoryItem], NextPreferenceSurveyMessage]:
     """
     Save an answer and generate the next question. Defer all PostGreSQL writes to the end of the function
     so that they can be further deferred to the end of the request in the future.
@@ -167,7 +184,7 @@ async def save_answer_and_generate_next_question(
             thread_id=thread_id,
             message_id=answer_message_id,
             parent_message_id=chat_history[-1].message_id,
-            ai_message=HumanMessage(content=answer),
+            human_message=HumanMessage(content=answer),
         )
         chat_history.append(answer_conversation_item)
         message_to_save.append(answer_conversation_item)
@@ -180,11 +197,10 @@ async def save_answer_and_generate_next_question(
             user_id=user_id,
             thread_id=thread_id,
             message_id=create_message_id(),
-            parent_message_id=chat_history[-1].message_id,
-            human_message=AIMessage(
-                content=next_question_or_summary.next_survey_question
-            ),
+            ai_message=AIMessage(content=next_question_or_summary.next_survey_question),
         )
+        if chat_history:
+            question_conversation_item.parent_message_id = chat_history[-1].message_id
         chat_history.append(question_conversation_item)
         message_to_save.append(question_conversation_item)
 
@@ -196,18 +212,23 @@ async def save_answer_and_generate_next_question(
 
     sql_client.add_all(
         [
-            convert_api_conversation_history_item_to_db_row(item)
+            convert_api_conversation_history_item_to_db_row(
+                item, user_id, ConversationType.news_preference_survey
+            )
             for item in message_to_save
         ]
     )
     sql_client.commit()
-    return NextPreferenceSurveyMessage(
-        parent_message_id=answer_message_id,
-        next_survey_question=next_question_or_summary.next_survey_question,
-        next_survey_question_message_id=(
-            chat_history[-1].message_id
-            if next_question_or_summary.next_survey_question
-            else None
+    return (
+        chat_history,
+        NextPreferenceSurveyMessage(
+            parent_message_id=answer_message_id,
+            next_survey_question=next_question_or_summary.next_survey_question,
+            next_survey_question_message_id=(
+                chat_history[-1].message_id
+                if next_question_or_summary.next_survey_question
+                else None
+            ),
+            preference_summary=next_question_or_summary.news_preference_summary,
         ),
-        preference_summary=next_question_or_summary.news_preference_summary,
     )

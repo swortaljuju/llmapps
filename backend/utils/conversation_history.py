@@ -1,4 +1,4 @@
-from db.models.common import ConversationHistory, ConversationType
+from db.models.common import ConversationHistory, ConversationType, LangChainMessageType
 from pydantic import BaseModel
 from langchain_core.messages import  HumanMessage, AIMessage, ToolMessage, SystemMessage
 from collections import deque
@@ -9,7 +9,7 @@ class ApiConversationHistoryItem(BaseModel):
     user_id: int
     thread_id: str
     message_id: str
-    parent_message_id: str
+    parent_message_id: str | None = None
     human_message: HumanMessage | None = None
     ai_message: AIMessage | None = None
     tool_message: ToolMessage | None = None
@@ -30,9 +30,9 @@ def convert_to_api_conversation_history(db_conversation_history: list[Conversati
             continue
         current_message_id = item.message_id
         api_sub_conversation_history = deque()
-        while current_message_id is not None and len(api_conversation_history) > 0 and api_conversation_history[-1].message_id != current_message_id:
-            current_item = message_id_map.get(current_message_id)
-            message_id_map.remove(current_message_id)
+        while current_message_id is not None and (not api_conversation_history or len(api_conversation_history) > 0 and api_conversation_history[-1].message_id != current_message_id):
+            current_item = message_id_map[current_message_id]
+            del message_id_map[current_message_id]
             api_conversation_history_item = ApiConversationHistoryItem(
                 user_id=current_item.user_id,
                 thread_id=current_item.thread_id,
@@ -40,13 +40,13 @@ def convert_to_api_conversation_history(db_conversation_history: list[Conversati
                 parent_message_id=current_item.parent_message_id
             )
             json_content = json.loads(current_item.content)
-            if current_item.lang_chain_message_type == "human":
+            if current_item.lang_chain_message_type == LangChainMessageType.HUMAN:
                 api_conversation_history_item.human_message = HumanMessage(**json_content)
-            elif current_item.lang_chain_message_type == "ai":
+            elif current_item.lang_chain_message_type == LangChainMessageType.AI:
                 api_conversation_history_item.ai_message = AIMessage(**json_content)
-            elif current_item.lang_chain_message_type == "tool":
+            elif current_item.lang_chain_message_type == LangChainMessageType.TOOL:
                 api_conversation_history_item.tool_message = ToolMessage(**json_content)
-            elif current_item.lang_chain_message_type == "system":
+            elif current_item.lang_chain_message_type == LangChainMessageType.SYSTEM:
                 api_conversation_history_item.system_message = SystemMessage(**json_content)
             else:
                 continue
@@ -67,16 +67,16 @@ def convert_api_conversation_history_item_to_db_row(
     content = {}
     if item.human_message:
         content = item.human_message.model_dump()
-        lang_chain_message_type = "human"
+        lang_chain_message_type = LangChainMessageType.HUMAN
     elif item.ai_message:
         content = item.ai_message.model_dump()
-        lang_chain_message_type = "ai"
+        lang_chain_message_type = LangChainMessageType.AI
     elif item.tool_message:
         content = item.tool_message.model_dump()
-        lang_chain_message_type = "tool"
+        lang_chain_message_type = LangChainMessageType.TOOL
     elif item.system_message:
         content = item.system_message.model_dump()
-        lang_chain_message_type = "system"
+        lang_chain_message_type = LangChainMessageType.SYSTEM
     
     return ConversationHistory(
         user_id=user_id,

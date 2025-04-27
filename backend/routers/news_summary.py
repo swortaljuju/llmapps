@@ -33,8 +33,9 @@ class NewsSummaryPeriod(BaseModel):
 class NewsSummaryInitializeResponse(BaseModel):
     mode: str
     latest_summary: Optional[NewsSummaryList] = None
-    news_summary_periods: list[NewsSummaryPeriod]
+    news_summary_periods: list[NewsSummaryPeriod] = None
     preference_conversation_history: list[ChatMessage] = None
+    news_feeds_uploaded: bool = False
 
 
 def _from_api_conversation_history_item_to_chat_message(
@@ -79,7 +80,7 @@ async def initialize(
             user.user_id, redis=redis_client, sql_client=sql_client
         )
         if not api_survey_history:
-            api_survey_history = await save_answer_and_generate_next_question(
+            api_survey_history, next_survey_message = await save_answer_and_generate_next_question(
                 user.user_id,
                 answer=None,
                 parent_message_id=None,
@@ -151,7 +152,7 @@ async def preference_survey(
         user.user_id, redis=redis_client, sql_client=sql_client
     )
 
-    next_survey_message = await save_answer_and_generate_next_question(
+    chat_history, next_survey_message = await save_answer_and_generate_next_question(
         user.user_id,
         answer=preference_survey_request.answer,
         parent_message_id=preference_survey_request.parent_message_id,
@@ -161,12 +162,12 @@ async def preference_survey(
         api_latency_log=request.state.api_latency_log,
     )
 
-    if next_survey_message.news_preference_summary is not None:
+    if next_survey_message.preference_summary is not None:
         # If the agent has provided a summary, update the user's news preference
         await _save_preference_summary(
             user.user_id,
-            news_preference_summary=next_survey_message.news_preference_summary,
-            case=NewsPreferenceChangeCause.survey,
+            news_preference_summary=next_survey_message.preference_summary,
+            cause=NewsPreferenceChangeCause.survey,
             causal_survey_conversation_history_thread_id=chat_history[0].thread_id,
             sql_client=sql_client,
         )
@@ -175,7 +176,7 @@ async def preference_survey(
         answer_message_id=next_survey_message.parent_message_id,
         next_question=next_survey_message.next_survey_question,
         next_question_message_id=next_survey_message.next_survey_question_message_id,
-        preference_summary=next_survey_message.news_preference_summary,
+        preference_summary=next_survey_message.preference_summary,
     )
 
 
@@ -183,8 +184,8 @@ async def _save_preference_summary(
     user_id: int,
     news_preference_summary: str,
     cause: NewsPreferenceChangeCause,
-    causal_survey_conversation_history_thread_id: str | None,
     sql_client: db.SqlClient,
+    causal_survey_conversation_history_thread_id: str | None = None,
 ):
     # Save the news preference summary as a new version
     news_preference_version = NewsPreferenceVersion(
