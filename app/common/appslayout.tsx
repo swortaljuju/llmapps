@@ -146,6 +146,7 @@ export function AppsLayout({
                                 {customAction.items
                                     .map(customActionItem => (
                                         <button
+                                            key={customActionItem.id}
                                             onClick={() => onCustomActionItemClick(customActionItem)}
                                             className={`w-full p-2 flex items-center justify-between hover:bg-gray-100 ${customActionHighlights[customActionItem.id] ? 'bg-blue-100' : ''
                                                 }`}>
@@ -169,6 +170,7 @@ export function AppsLayout({
                                 {chatList.items
                                     .map(chatListItem => (
                                         <button
+                                            key={chatListItem.id}
                                             onClick={() => onChatListItemClick(chatListItem)}
                                             className={`w-full p-2 flex items-center justify-between hover:bg-gray-100 ${chatHighlights[chatListItem.id] ? 'bg-blue-100' : ''
                                                 }`}>
