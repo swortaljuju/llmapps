@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Request, Depends
+from fastapi import APIRouter, HTTPException, Request, UploadFile, Form
 from typing import Optional
 from pydantic import BaseModel
 from db import db
@@ -8,6 +8,7 @@ from db.models import (
     NewsSummaryList,
     NewsPreferenceChangeCause,
     NewsPreferenceVersion,
+    RssFeed,
 )
 from utils.manage_session import GetUserInSession
 import os
@@ -18,6 +19,9 @@ from llm.news_preference_agent import (
 )
 from .common import ChatMessage, ChatAuthorType
 from utils.manage_session import limit_usage
+from typing import Annotated
+import xml.etree.ElementTree as ET
+
 
 DOMAIN = os.getenv("DOMAIN", "localhost:3000")
 
@@ -248,3 +252,59 @@ async def save_preference(
             sql_client=sql_client,
         )
     return {}
+
+@router.post("/upload_rss_feeds")
+async def upload_rss_feeds( 
+    request: Request,
+    user: GetUserInSession,
+    sql_client: db.SqlClient,
+    opml_file: UploadFile | None,
+    use_default: Annotated[bool, Form()] = False):
+    if not user:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    request.state.api_latency_log.user_id = user.user_id
+    if not opml_file and not use_default:
+        raise HTTPException(status_code=400, detail="No OPML file provided")
+    if opml_file and use_default:
+        raise HTTPException(status_code=400, detail="Cannot provide both OPML file and use default")
+    if opml_file.filename and not opml_file.filename.endswith(".opml") and opml_file.content_type != "application/xml":
+        raise HTTPException(status_code=400, detail="Invalid file type, must be .opml") 
+
+    if opml_file:
+        # Process the uploaded OPML file
+        content = (await opml_file.read()).decode("utf-8")
+    else: 
+        with open("resources/default.opml", "r", encoding="utf-8") as f:
+            content = f.read()
+    
+    if not content:
+        raise HTTPException(status_code=400, detail="Empty OPML content")
+    
+    root = ET.fromstring(content)
+    rss_feeds = root.findall('.//outline[@type="rss"]')
+    db_feeds = {}
+    for feed in rss_feeds:
+        db_feed = RssFeed(
+            title=feed.attrib.get("title", ""),
+            html_url=feed.attrib.get("htmlUrl", ""),
+            feed_url=feed.attrib.get("xmlUrl", ""),
+        )
+        if not db_feed.feed_url or not db_feed.title:
+            raise HTTPException(status_code=400, detail="Bad RSS feed") 
+        db_feeds[db_feed.feed_url] = db_feed
+    existing_feeds = sql_client.query(RssFeed).filter(
+        RssFeed.feed_url.in_(db_feeds.keys())
+    ).all()
+    feeds_to_add = {}
+    for db_feed in existing_feeds:
+        if db_feed.feed_url not in feeds_to_add:
+            feeds_to_add[db_feed.feed_url] = db_feed
+    if feeds_to_add:
+        sql_client.add_all(feeds_to_add.values())
+        sql_client.commit()
+    subscribed_feeds = sql_client.query(RssFeed).filter(
+        RssFeed.feed_url.in_(db_feeds.keys())
+    ).all()
+    user_data = sql_client.query(User).filter(User.id == user.user_id).first()
+    user_data.subscribed_rss_feeds_id = [feed.id for feed in subscribed_feeds]
+    sql_client.commit()

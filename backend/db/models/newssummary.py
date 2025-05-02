@@ -11,10 +11,9 @@ class RssFeed(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     feed_url = Column(String, unique=True, index=True)
-    last_crawl_time = Column(DateTime, default=datetime.now())
+    last_crawl_time = Column(DateTime, default=datetime(1970, 1, 1))
     title = Column(String)
     html_url = Column(String)
-    xml_url = Column(String)
 
 
 class NewsEntry(Base):
