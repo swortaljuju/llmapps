@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { BiMenu, BiX } from 'react-icons/bi';
 import { MdExpandMore, MdExpandLess } from 'react-icons/md';
@@ -42,20 +42,35 @@ export function AppsLayout({
             [section]: !prev[section]
         }));
     };
-
-    const [customActionHighlights, setCustomActionHighlights] = useState<Record<string, boolean>>(
-        customAction.items.reduce((acc, item) => ({
+    
+    const initializeCustomActionHighlights = () => {
+        return customAction.items.reduce((acc, item) => ({
             ...acc,
             [item.id]: false || item.selected
-        }), {})
+        }), {});
+    };
+    const [customActionHighlights, setCustomActionHighlights] = useState<Record<string, boolean>>(
+        initializeCustomActionHighlights()
     );
+    useEffect(() => {
+        setCustomActionHighlights(initializeCustomActionHighlights());
+    }, [customAction.items]);
 
+    const initializeChatHighlights = () => {
+        return chatList.items.reduce((acc, item) => ({
+            ...acc,
+            [item.id]: false || item.selected
+        }), {});
+    };
     const [chatHighlights, setChatHighlights] = useState<Record<string, boolean>>(
         chatList.items.reduce((acc, item) => ({
             ...acc,
             [item.id]: false || item.selected
         }), {})
     );
+    useEffect(() => {
+        setChatHighlights(initializeChatHighlights());
+    }, [chatList.items]);
 
     const resetHighlights = () => {
         customAction.items.forEach(item => item.selected = false);

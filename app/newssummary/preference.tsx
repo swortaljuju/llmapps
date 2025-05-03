@@ -1,7 +1,9 @@
+'use client';
+
 import { useState, useRef, useEffect } from 'react';
 import { ChatMessage, ChatAuthorType, PreferenceSurveyRequest, submitPreferenceSurvey, getPreference, savePreference } from './store';
 import { MainUiMode } from "./common";
-import {TypewriterText} from '../common/typewriter';
+import { TypewriterText } from '../common/typewriter';
 
 interface NewsPreferenceChatProps {
     preferenceConversationHistory: ChatMessage[];
@@ -125,7 +127,7 @@ export function NewsPreferenceChat({
                             : 'bg-gray-100 mr-auto' // Left align AI messages
                             }`}
                     >
-                        <TypewriterText text={message.content} showEffect={message.author=='ai' && index==messages.length-1}/> 
+                        <TypewriterText text={message.content} showEffect={message.author == 'ai' && index == messages.length - 1} />
                     </div>
                 ))}
 

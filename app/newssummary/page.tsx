@@ -1,10 +1,12 @@
 // News summary app
 'use client';
+
 import { AppsLayout, SideSection } from "../common/appslayout";
 import { useState, useEffect } from 'react';
 import { InitializeResponse, initialize } from './store';
-import { EditPreference, NewsPreferenceChat} from "./preference";
+import { EditPreference, NewsPreferenceChat } from "./preference";
 import { MainUiMode } from "./common";
+import FeedUpload from './feedupload';
 
 export default function NewsSummary() {
     // State for API data
@@ -62,26 +64,24 @@ export default function NewsSummary() {
                 label: 'Chat 1',
                 id: '1',
                 onClick: onChatListItemClick,
-                selected: false
+                selected: chatId === '1' && mainUiMode === MainUiMode.Chat
             },
             {
                 label: 'Chat 2',
                 id: '2',
                 onClick: onChatListItemClick,
-                selected: false
+                selected: chatId === '2' && mainUiMode === MainUiMode.Chat
             },
             {
                 label: 'Chat 3',
                 id: '3',
                 onClick: onChatListItemClick,
-                selected: false
+                selected: chatId === '3' && mainUiMode === MainUiMode.Chat
             }
         ]
     }
-
-    const customAction: SideSection = {
-        title: 'Preference and RSS Upload',
-        items: [
+    const createCustomActionItem = () => {
+        return [
             {
                 label: 'Preference',
                 id: 'Preference',
@@ -95,7 +95,25 @@ export default function NewsSummary() {
                 selected: mainUiMode === MainUiMode.UploadRss
             }
         ]
-    }
+    };
+
+
+    const customAction: SideSection = {
+        title: 'Preference and RSS Upload',
+        items: createCustomActionItem()
+    };
+
+    // Update chatList selection when mainUiMode or chatId changes
+    useEffect(() => {
+        // Update the 'selected' property of each item in the chatList
+        chatList.items = chatList.items.map(item => ({
+            ...item,
+            selected: mainUiMode === MainUiMode.Chat && item.id === chatId
+        }));
+
+        // Update the 'selected' property of each item in the chatList
+        customAction.items = createCustomActionItem();
+    }, [mainUiMode, chatId]);
 
     let mainChat: React.ReactNode = null;
     // Loading state
@@ -124,8 +142,6 @@ export default function NewsSummary() {
         );
     }
 
-
-
     return (
         <AppsLayout
             mainChat={mainChat}
@@ -152,10 +168,11 @@ function NewsSummaryMainUi({
         case MainUiMode.CreatePreference:
             return <NewsPreferenceChat preferenceConversationHistory={initData!.preference_conversation_history} setMainUiState={setMainUiState}></NewsPreferenceChat>;
         case MainUiMode.EditPreference:
-            return <EditPreference/> ;
+            return <EditPreference />;
         case MainUiMode.UploadRss:
-            return <div> Upload RSS</div>;
+            return <FeedUpload setMainUiState={setMainUiState} />;
         case MainUiMode.Chat:
             return <div> chat </div>;
     }
 }
+

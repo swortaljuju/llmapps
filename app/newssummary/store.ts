@@ -117,3 +117,25 @@ export async function savePreference(savePreferenceRequest: SavePreferenceReques
         throw new Error(errorData.detail || 'Failed to save preference');
     }
 }
+
+export async function uploadRssFeeds(file: File | null, useDefault: boolean): Promise<void> {
+    const formData = new FormData();
+    
+    if (file) {
+        formData.append('opml_file', file);
+    }
+    formData.append('use_default', useDefault.toString());
+    
+    const response = await fetch(getBackendApiUrl('/news_summary/upload_rss_feeds'), {
+        method: 'POST',
+        credentials: 'include',
+        body: formData,
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Failed to upload RSS feeds');
+    }
+
+    return await response.json();
+}

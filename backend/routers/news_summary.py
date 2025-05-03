@@ -21,6 +21,7 @@ from .common import ChatMessage, ChatAuthorType
 from utils.manage_session import limit_usage
 from typing import Annotated
 import xml.etree.ElementTree as ET
+from utils.logger import logger
 
 
 DOMAIN = os.getenv("DOMAIN", "localhost:3000")
@@ -39,7 +40,6 @@ class NewsSummaryInitializeResponse(BaseModel):
     latest_summary: Optional[NewsSummaryList] = None
     news_summary_periods: list[NewsSummaryPeriod] = None
     preference_conversation_history: list[ChatMessage] = None
-    news_feeds_uploaded: bool = False
 
 
 def _from_api_conversation_history_item_to_chat_message(
@@ -258,7 +258,7 @@ async def upload_rss_feeds(
     request: Request,
     user: GetUserInSession,
     sql_client: db.SqlClient,
-    opml_file: UploadFile | None,
+    opml_file: UploadFile | None = None,
     use_default: Annotated[bool, Form()] = False):
     if not user:
         raise HTTPException(status_code=401, detail="Unauthorized")
@@ -267,7 +267,7 @@ async def upload_rss_feeds(
         raise HTTPException(status_code=400, detail="No OPML file provided")
     if opml_file and use_default:
         raise HTTPException(status_code=400, detail="Cannot provide both OPML file and use default")
-    if opml_file.filename and not opml_file.filename.endswith(".opml") and opml_file.content_type != "application/xml":
+    if opml_file and opml_file.filename and not opml_file.filename.endswith(".opml") and opml_file.content_type != "application/xml":
         raise HTTPException(status_code=400, detail="Invalid file type, must be .opml") 
 
     if opml_file:
@@ -282,7 +282,7 @@ async def upload_rss_feeds(
     
     root = ET.fromstring(content)
     rss_feeds = root.findall('.//outline[@type="rss"]')
-    db_feeds = {}
+    feeds_to_add = {}
     for feed in rss_feeds:
         db_feed = RssFeed(
             title=feed.attrib.get("title", ""),
@@ -290,20 +290,22 @@ async def upload_rss_feeds(
             feed_url=feed.attrib.get("xmlUrl", ""),
         )
         if not db_feed.feed_url or not db_feed.title:
-            raise HTTPException(status_code=400, detail="Bad RSS feed") 
-        db_feeds[db_feed.feed_url] = db_feed
+            logger.warning(f"Skipping invalid feed: {feed.attrib}")
+            continue
+        feeds_to_add[db_feed.feed_url] = db_feed
+    subscribed_feed_keys = list(feeds_to_add.keys())
+
     existing_feeds = sql_client.query(RssFeed).filter(
-        RssFeed.feed_url.in_(db_feeds.keys())
+        RssFeed.feed_url.in_(subscribed_feed_keys)
     ).all()
-    feeds_to_add = {}
     for db_feed in existing_feeds:
-        if db_feed.feed_url not in feeds_to_add:
-            feeds_to_add[db_feed.feed_url] = db_feed
+        if db_feed.feed_url in feeds_to_add:
+            del feeds_to_add[db_feed.feed_url]
     if feeds_to_add:
         sql_client.add_all(feeds_to_add.values())
         sql_client.commit()
     subscribed_feeds = sql_client.query(RssFeed).filter(
-        RssFeed.feed_url.in_(db_feeds.keys())
+        RssFeed.feed_url.in_(subscribed_feed_keys)
     ).all()
     user_data = sql_client.query(User).filter(User.id == user.user_id).first()
     user_data.subscribed_rss_feeds_id = [feed.id for feed in subscribed_feeds]
