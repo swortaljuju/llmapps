@@ -42,7 +42,7 @@ export function AppsLayout({
             [section]: !prev[section]
         }));
     };
-    
+
     const initializeCustomActionHighlights = () => {
         return customAction.items.reduce((acc, item) => ({
             ...acc,
@@ -54,7 +54,7 @@ export function AppsLayout({
     );
     useEffect(() => {
         setCustomActionHighlights(initializeCustomActionHighlights());
-    }, [customAction.items]);
+    }, [customAction]);
 
     const initializeChatHighlights = () => {
         return chatList.items.reduce((acc, item) => ({
@@ -70,17 +70,15 @@ export function AppsLayout({
     );
     useEffect(() => {
         setChatHighlights(initializeChatHighlights());
-    }, [chatList.items]);
+    }, [chatList]);
 
     const resetHighlights = () => {
-        customAction.items.forEach(item => item.selected = false);
         setCustomActionHighlights(
             Object.keys(customActionHighlights).reduce((acc, key) => ({
                 ...acc,
                 [key]: false
             }), {})
         );
-        chatList.items.forEach(item => item.selected = false);
         setChatHighlights(
             Object.keys(chatHighlights).reduce((acc, key) => ({
                 ...acc,
@@ -91,7 +89,6 @@ export function AppsLayout({
 
     const onChatListItemClick = (chatListItem: SideSectionItem) => {
         resetHighlights();
-        chatListItem.selected = true;
         setChatHighlights(prev => ({
             ...prev,
             [chatListItem.id]: true
@@ -100,7 +97,6 @@ export function AppsLayout({
     }
     const onCustomActionItemClick = (customActionItem: SideSectionItem) => {
         resetHighlights();
-        customActionItem.selected = true;
         setCustomActionHighlights(prev => ({
             ...prev,
             [customActionItem.id]: true

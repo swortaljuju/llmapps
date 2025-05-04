@@ -1,12 +1,15 @@
 // News summary app
 'use client';
 
-import { AppsLayout, SideSection } from "../common/appslayout";
+import { AppsLayout, SideSection, SideSectionItem } from "../common/appslayout";
 import { useState, useEffect } from 'react';
 import { InitializeResponse, initialize } from './store';
 import { EditPreference, NewsPreferenceChat } from "./preference";
 import { MainUiMode } from "./common";
 import FeedUpload from './feedupload';
+
+const EMPTY_SUMMARY_CHAT_ID = 'empty-summary';
+const PREFERENCE_ID = 'preference';
 
 export default function NewsSummary() {
     // State for API data
@@ -15,40 +18,38 @@ export default function NewsSummary() {
     const [initData, setInitData] = useState<InitializeResponse | null>(null);
 
     const [mainUiMode, setMainUiMode] = useState<MainUiMode>(MainUiMode.Chat);
-    const [chatId, setChatId] = useState<string>('1');
-    // Fetch initialization data
-    useEffect(() => {
-        const fetchInitialData = async () => {
-            setIsLoading(true);
-            setApiError(null);
-
-            try {
-                const data: InitializeResponse = await initialize();
-                setInitData(data);
-
-                // Set the UI mode based on the API response
-                if (data.mode === 'collect_news_preference') {
-                    setMainUiMode(MainUiMode.CreatePreference);
-                } else if (data.mode === 'collect_rss_feeds') {
-                    setMainUiMode(MainUiMode.UploadRss);
-                } else {
-                    setMainUiMode(MainUiMode.Chat);
-                }
-            } catch (error) {
-                console.error('Error initializing news summary:', error);
-                setApiError(error instanceof Error ? error.message : 'Unknown error');
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchInitialData();
-    }, []); // Empty dependency array means this runs once on component mount
-
+    const [chatId, setChatId] = useState<string>('');
     const onChatListItemClick = (id: string) => {
         setChatId(id);
         setMainUiMode(MainUiMode.Chat);
     }
+
+    const initializeChatListItems = (initData: InitializeResponse) => {
+        // Assuming initData has a property 'chat_threads' which is an array of chat thread objects
+        if (initData.news_summary_periods && initData.news_summary_periods.length > 0) {
+            return initData.news_summary_periods.map(newsSummaryPeriod => ({
+                label: `Summary from ${new Date(newsSummaryPeriod.start_date_timestamp * 1000).toLocaleDateString()} to ${new Date(newsSummaryPeriod.end_date_timestamp * 1000).toLocaleDateString()}`,
+                id: newsSummaryPeriod.id + '',
+                onClick: onChatListItemClick, // Placeholder for click handler
+                selected: chatId === newsSummaryPeriod.id + ''
+            }));
+        } else {
+            return [
+                {
+                    label: 'Next Summary Coming',
+                    id: EMPTY_SUMMARY_CHAT_ID,
+                    onClick: onChatListItemClick,
+                    selected: chatId === EMPTY_SUMMARY_CHAT_ID
+                }
+            ]
+        }
+
+    };
+    const [chatList, setChatList] = useState<SideSection>({
+        title: 'Chat List',
+        items: []
+    });
+
     const onPreferenceClick = () => {
         if (mainUiMode !== MainUiMode.CreatePreference && mainUiMode !== MainUiMode.EditPreference) {
             setMainUiMode(MainUiMode.EditPreference);
@@ -57,34 +58,11 @@ export default function NewsSummary() {
     const onUploadRssClick = () => {
         setMainUiMode(MainUiMode.UploadRss);
     }
-    const chatList: SideSection = {
-        title: 'Chat List',
-        items: [
-            {
-                label: 'Chat 1',
-                id: '1',
-                onClick: onChatListItemClick,
-                selected: chatId === '1' && mainUiMode === MainUiMode.Chat
-            },
-            {
-                label: 'Chat 2',
-                id: '2',
-                onClick: onChatListItemClick,
-                selected: chatId === '2' && mainUiMode === MainUiMode.Chat
-            },
-            {
-                label: 'Chat 3',
-                id: '3',
-                onClick: onChatListItemClick,
-                selected: chatId === '3' && mainUiMode === MainUiMode.Chat
-            }
-        ]
-    }
     const createCustomActionItem = () => {
         return [
             {
                 label: 'Preference',
-                id: 'Preference',
+                id: PREFERENCE_ID,
                 onClick: onPreferenceClick,
                 selected: mainUiMode === MainUiMode.EditPreference || mainUiMode === MainUiMode.CreatePreference
             },
@@ -96,23 +74,66 @@ export default function NewsSummary() {
             }
         ]
     };
-
-
-    const customAction: SideSection = {
+    const [customAction, setCustomAction] = useState<SideSection>({
         title: 'Preference and RSS Upload',
         items: createCustomActionItem()
-    };
+    });
+    // Fetch initialization data
+    useEffect(() => {
+        const fetchInitialData = async () => {
+            setIsLoading(true);
+            setApiError(null);
+
+            try {
+                const data: InitializeResponse = await initialize();
+                setInitData(data);
+                // Set the UI mode based on the API response
+                if (data.mode === 'collect_news_preference') {
+                    setMainUiMode(MainUiMode.CreatePreference);
+                } else if (data.mode === 'collect_rss_feeds') {
+                    setMainUiMode(MainUiMode.UploadRss);
+                } else {
+                    setMainUiMode(MainUiMode.Chat);
+                }
+
+                const chatListItems = initializeChatListItems(data);
+                if (chatId === '') {
+                    setChatId(chatListItems[0].id);
+                    chatListItems[0].selected = true; // Set the first item as selected
+                }
+                setChatList((prev) => {
+                    // Update the chatList with the new items
+                    return {
+                        ...prev,
+                        items: chatListItems
+                    };
+                });
+                
+            } catch (error) {
+                console.error('Error initializing news summary:', error);
+                setApiError(error instanceof Error ? error.message : 'Unknown error');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchInitialData();
+    }, []); // Empty dependency array means this runs once on component mount
+
 
     // Update chatList selection when mainUiMode or chatId changes
     useEffect(() => {
-        // Update the 'selected' property of each item in the chatList
-        chatList.items = chatList.items.map(item => ({
-            ...item,
-            selected: mainUiMode === MainUiMode.Chat && item.id === chatId
+        setChatList(prev => ({
+            ...prev,
+            items: prev.items.map(item => ({
+                ...item,
+                selected: item.id === chatId && mainUiMode === MainUiMode.Chat
+            }))
         }));
-
         // Update the 'selected' property of each item in the chatList
-        customAction.items = createCustomActionItem();
+        setCustomAction(prev => ({
+            ...prev,
+            items: createCustomActionItem()
+        }));
     }, [mainUiMode, chatId]);
 
     let mainChat: React.ReactNode = null;
@@ -138,6 +159,7 @@ export default function NewsSummary() {
                 mainUiMode={mainUiMode}
                 initData={initData}
                 setMainUiState={setMainUiMode}
+                selectedSummaryId={chatId}
             />
         );
     }
@@ -156,12 +178,14 @@ interface NewsSummaryMainUiProps {
     mainUiMode: MainUiMode;
     initData: InitializeResponse | null;
     setMainUiState: React.Dispatch<React.SetStateAction<MainUiMode>>;
+    selectedSummaryId: string;
 }
 
 function NewsSummaryMainUi({
     mainUiMode,
     initData,
-    setMainUiState
+    setMainUiState,
+    selectedSummaryId,
 }: NewsSummaryMainUiProps) {
 
     switch (mainUiMode) {
@@ -172,7 +196,9 @@ function NewsSummaryMainUi({
         case MainUiMode.UploadRss:
             return <FeedUpload setMainUiState={setMainUiState} />;
         case MainUiMode.Chat:
+            if (selectedSummaryId === EMPTY_SUMMARY_CHAT_ID) {
+                return <div className="flex items-center justify-center h-screen">No summary available yet. Please wait for the next summary.</div>;
+            }
             return <div> chat </div>;
     }
 }
-
