@@ -1,0 +1,1 @@
+0 20 * * *	cd ～/llmapps/backend/cron && python3 crawl_news.py
