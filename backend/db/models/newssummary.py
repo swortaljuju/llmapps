@@ -1,10 +1,8 @@
-from sqlalchemy import Column, Integer, String, DateTime, Enum, TypeDecorator, Date
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy import Column, Integer, String, DateTime, Enum, Boolean, Date, Index
 from datetime import datetime
 import enum
-from pydantic import BaseModel
-import json
 from .base import Base
+from sqlalchemy.dialects.postgresql import  ARRAY
 
 class RssFeed(Base):
     __tablename__ = "rss_feeds"
@@ -26,46 +24,31 @@ class NewsEntry(Base):
     crawl_time = Column(DateTime, default=datetime.now())
     title = Column(String)
     description = Column(String)
-    content = Column(String)
 
-
-class NewsSummaryItem(BaseModel):
-    title: str
-    content: str
-    reference_urls: list[str]
-    clicked: bool
-
-
-# list of news summary items. sorted by ranking from high to low
-class NewsSummaryList(BaseModel):
-    summary: list[NewsSummaryItem]
-
-
-class NewsSummaryListPostGreSqlWrapper(TypeDecorator):
-    impl = JSONB
-    cache_ok = True
-
-    def process_bind_param(self, value, dialect):
-        if value is not None:
-            if isinstance(value, NewsSummaryList):
-                return json.loads(value.model_dump_json())
-            return value
-        return None
-
-    def process_result_value(self, value, dialect):
-        if value is not None:
-            return NewsSummaryList(**value)
-        return None
-
-
-class NewsSummary(Base):
-    __tablename__ = "news_summaries"
+class NewsSummaryEntry(Base):
+    __tablename__ = "news_summary_entry"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     user_id = Column(Integer)
+    # summary start date
     start_date = Column(Date)
+    # summary end date
     end_date = Column(Date)
-    content = Column(NewsSummaryListPostGreSqlWrapper)
+    # summarized title from rss feeds title and description
+    title = Column(String)
+    # Expanded detailed summary of the news either by User or by AI
+    content = Column(String)
+    # Referenced RSS feeds URLs
+    reference_urls = Column(ARRAY(String))
+    # If user clicked the news summary
+    clicked = Column(Boolean, default=False)  # whether the user clicked this summary
+    # The order of the entry in the summary list for a given period by start_date and end_date
+    display_order_within_period = Column(Integer)
+    
+    __table_args__ = (
+        Index("logical_key", "user_id", "start_date", "end_date", "display_order_within_period", unique=True),
+    )
+    # TODO add category embeddings up to 3
 
 
 class NewsPreferenceChangeCause(enum.Enum):
@@ -85,7 +68,7 @@ class NewsPreferenceVersion(Base):
     causal_survey_conversation_history_thread_id = Column(
         String, nullable=True
     )  # survey conversation history which caused the change. empty if no change.
-    causal_clicked_news_summary = Column(
-        NewsSummaryListPostGreSqlWrapper, nullable=True
+    causal_clicked_news_summary_entry_id = Column(
+        ARRAY(Integer), nullable=True
     )  # clicked news summary which caused the change. empty if no change.
     created_at = Column(DateTime, default=datetime.now())

@@ -1,7 +1,7 @@
 from .base import Base
 from .log import ApiLatencyLog
 from .common import User, ConversationHistory, UserStatus
-from .newssummary import RssFeed, NewsEntry, NewsSummary, NewsSummaryList, NewsSummaryListPostGreSqlWrapper, NewsPreferenceVersion, NewsPreferenceChangeCause
+from .newssummary import RssFeed, NewsEntry, NewsSummaryEntry,  NewsPreferenceVersion, NewsPreferenceChangeCause
 
 __all__ = [
     'Base',
@@ -11,9 +11,7 @@ __all__ = [
     'ConversationHistory',
     'RssFeed',
     'NewsEntry',
-    'NewsSummary',
-    'NewsSummaryList',
-    'NewsSummaryListPostGreSqlWrapper',
+    'NewsSummaryEntry',
     'NewsPreferenceVersion',
     'NewsPreferenceChangeCause',
 ]
