@@ -22,7 +22,6 @@
             <outline type="rss" text="" title="" xmlUrl="http://wanqu.co/feed" htmlUrl="https://wanqu.co/issues/1370?s=rss"/>
             <outline type="rss" text="Engineering Blog – Wealthfront" title="Engineering Blog – Wealthfront" xmlUrl="http://eng.wealthfront.com/feed/" htmlUrl="https://eng.wealthfront.com"/>
             <outline type="rss" text="Etsy Engineering | Code as Craft" title="Etsy Engineering | Code as Craft" xmlUrl="http://codeascraft.etsy.com/feed/" htmlUrl="http://www.etsy.com/codeascraft/rss"/>
-            <outline type="rss" text="Uber Engineering Blog" title="Uber Engineering Blog" xmlUrl="https://eng.uber.com/feed/" htmlUrl="https://eng.uber.com/"/>
             <outline type="rss" text="DZone.com Feed" title="DZone.com Feed" xmlUrl="http://feeds.dzone.com/dzone/frontpage" htmlUrl="https://dzone.com"/>
             <outline type="rss" text="Hacker News" title="Hacker News" xmlUrl="http://news.ycombinator.com/rss" htmlUrl="https://news.ycombinator.com/"/>
             <outline type="rss" text="Airbnb Engineering &amp; Data Science" title="Airbnb Engineering &amp; Data Science" xmlUrl="https://medium.com/feed/airbnb-engineering" htmlUrl="https://medium.com/airbnb-engineering?source=rss----53c7c27702d5---4"/>
@@ -33,14 +32,11 @@
             <outline type="rss" text="The Verge" title="The Verge" xmlUrl="http://www.theverge.com/rss/full.xml" htmlUrl="https://www.theverge.com"/>
         </outline>
         <outline text="娱乐" title="娱乐">
-            <outline type="rss" text="178动漫频道" title="178动漫频道" xmlUrl="http://acg.178.com/s/rss.xml" htmlUrl="http://acg.178.com/"/>
             <outline type="rss" text="JROCK NEWS" title="JROCK NEWS" xmlUrl="https://www.jrocknews.com/feed" htmlUrl="https://jrocknews.com/"/>
             <outline type="rss" text="和邪社" title="和邪社" xmlUrl="http://feeds.feedburner.com/hexieshe" htmlUrl="https://www.hexieshe.cn/"/>
         </outline>
         <outline text="financial" title="financial">
-            <outline type="rss" text="International homepage" title="International homepage" xmlUrl="http://www.ft.com/rss/home/us" htmlUrl="https://www.ft.com"/>
             <outline type="rss" text="Barron's Streetwise" title="Barron's Streetwise" xmlUrl="https://video-api.barrons.com/podcast/rss/barrons/streetwise" htmlUrl="https://www.barrons.com/podcasts/streetwise"/>
-            <outline type="rss" text="CNBC" title="CNBC" xmlUrl="http://www.newslookup.com/rss/business/cnbc.rss" htmlUrl="http://www.cnbc.com/"/>
             <outline type="rss" text="Stock Markets Analysis &amp; Opinion" title="Stock Markets Analysis &amp; Opinion" xmlUrl="http://www.investing.com/rss/stock.rss" htmlUrl="https://www.investing.com"/>
             <outline type="rss" text="ZeroHedge News" title="ZeroHedge News" xmlUrl="https://cms.zerohedge.com/fullrss2.xml" htmlUrl="https://www.zerohedge.com"/>
             <outline type="rss" text="Forbes.com: Most popular stories" title="Forbes.com: Most popular stories" xmlUrl="http://www.forbes.com/feeds/popstories.xml" htmlUrl="http://www.forbes.com"/>
@@ -51,44 +47,26 @@
             <outline type="rss" text="Investing Insights" title="Investing Insights" xmlUrl="http://feeds.feedburner.com/morningstaraudio" htmlUrl="http://www.morningstar.com"/>
             <outline type="rss" text="Yahoo Finance" title="Yahoo Finance" xmlUrl="http://finance.yahoo.com/rss/topstories" htmlUrl="https://finance.yahoo.com/"/>
             <outline type="rss" text="News | Investor's Business Daily" title="News | Investor's Business Daily" xmlUrl="http://feeds.feedburner.com/BusinessRss" htmlUrl="https://www.investors.com/category/news/"/>
-            <outline type="rss" text="Bloomberg" title="Bloomberg" xmlUrl="http://www.newslookup.com/rss/business/bloomberg.rss" htmlUrl="http://www.bloomberg.com/"/>
             <outline type="rss" text="ZeroHedge News" title="ZeroHedge News" xmlUrl="http://feeds.feedburner.com/zerohedge/feed" htmlUrl="https://www.zerohedge.com"/>
             <outline type="rss" text="Wolf Street" title="Wolf Street" xmlUrl="http://wolfstreet.com/feed/" htmlUrl="https://wolfstreet.com"/>
-            <outline type="rss" text="Forbes - Investing" title="Forbes - Investing" xmlUrl="http://www.forbes.com/investing/feed" htmlUrl="https://www.forbes.com/investing/"/>
-            <outline type="rss" text="Morningstar Articles" title="Morningstar Articles" xmlUrl="http://news.morningstar.com/rss/feed.html?type=latest" htmlUrl="http://www.morningstar.com/?pgid=rss"/>
-            <outline type="rss" text="区块链新闻资讯 - 链闻 ChainNews" title="区块链新闻资讯 - 链闻 ChainNews" xmlUrl="https://www.chainnews.com/feeds/articles/" htmlUrl="https://www.chainnews.com/articles/"/>
-            <outline type="rss" text="Asia Top News and Analysis" title="Asia Top News and Analysis" xmlUrl="http://www.cnbc.com/id/19834788/device/rss/rss.xml" htmlUrl="https://www.cnbc.com/id/19834788"/>
-            <outline type="rss" text="This Week in Barron's" title="This Week in Barron's" xmlUrl="http://www.marketwatch.com/feeds/podcast/podcast.asp?count=10&amp;doctype=109&amp;column=This+Week+in+Barrons" htmlUrl="http://www.barrons.com"/>
-            <outline type="rss" text="Top News and Analysis (pro)" title="Top News and Analysis (pro)" xmlUrl="http://www.cnbc.com/id/19746125/device/rss/rss.xml" htmlUrl="https://www.cnbc.com/id/19746125"/>
-            <outline type="rss" text="区块链 7×24H 快讯 - 链闻 ChainNews" title="区块链 7×24H 快讯 - 链闻 ChainNews" xmlUrl="https://www.chainnews.com/feeds/news/" htmlUrl="https://www.chainnews.com/news/"/>
             <outline type="rss" text="Finance &amp; economics" title="Finance &amp; economics" xmlUrl="http://www.economist.com/rss/finance_and_economics_rss.xml" htmlUrl="https://www.economist.com/finance-and-economics"/>
             <outline type="rss" text="Technology | Investor's Business Daily" title="Technology | Investor's Business Daily" xmlUrl="http://feeds.feedburner.com/InternetTechnologyRss" htmlUrl="https://www.investors.com/category/news/technology/"/>
             <outline type="rss" text="Global Economy" title="Global Economy" xmlUrl="http://www.ft.com/rss/global-economy" htmlUrl="https://www.ft.com/stream/29e67a92-a3b8-410c-9139-15abe9b47e12"/>
-            <outline type="rss" text="The Block" title="The Block" xmlUrl="https://theblockcrypto.com/feed/" htmlUrl="https://www.theblock.co/rss.xml"/>
         </outline>
         <outline text="local news" title="local news">
             <outline type="rss" text="Bay Area News" title="Bay Area News" xmlUrl="http://www.sfgate.com/xml/rss/bayarea.xml" htmlUrl="https://www.sfgate.com/bayarea/feed/bay-area-news-429.php"/>
-            <outline type="rss" text="San Francisco Chronicle" title="San Francisco Chronicle" xmlUrl="http://library.pressdisplay.com/pressdisplay/services/rss.ashx?cid=1033&amp;type=full" htmlUrl="http://library.pressdisplay.com/pressdisplay/viewer.aspx?newspaper=san+francisco+chronicle&amp;cid=1033"/>
-            <outline type="rss" text="ABC7 RSS Feed" title="ABC7 RSS Feed" xmlUrl="http://abclocal.go.com/kgo/xml?id=3242447" htmlUrl="https://abc7news.com/feed"/>
             <outline type="rss" text="KQED News" title="KQED News" xmlUrl="http://ww2.kqed.org/news/feed" htmlUrl="https://ww2.kqed.org/news/"/>
             <outline type="rss" text="Local &amp;#8211; NBC Bay Area" title="Local &amp;#8211; NBC Bay Area" xmlUrl="http://www.nbcbayarea.com/news/local/?rss=y&amp;embedThumb=y&amp;summary=y" htmlUrl="https://www.nbcbayarea.com/local/"/>
-            <outline type="rss" text="NYT &gt; San Francisco Chronicle, The" title="NYT &gt; San Francisco Chronicle, The" xmlUrl="http://topics.nytimes.com/top/reference/timestopics/organizations/s/san_francisco_chronicle_the/?rss=1" htmlUrl="https://www.nytimes.com/topic/organization/the-san-francisco-chronicle"/>
-            <outline type="rss" text="CBS San Francisco" title="CBS San Francisco" xmlUrl="http://cbs5.com/topstories/resources_rss.xml" htmlUrl="https://sanfrancisco.cbslocal.com"/>
             <outline type="rss" text="East Bay Express | Oakland, Berkeley &amp; Alameda" title="East Bay Express | Oakland, Berkeley &amp; Alameda" xmlUrl="http://www.eastbayexpress.com/ebx/Rss.xml" htmlUrl="https://eastbayexpress.com"/>
             <outline type="rss" text="News Archives - San Francisco Public Press" title="News Archives - San Francisco Public Press" xmlUrl="http://sfpublicpress.org/news/feed" htmlUrl="https://www.sfpublicpress.org/category/news/"/>
             <outline type="rss" text="SFist - San Francisco News, Restaurants, Events, &amp; Sports" title="SFist - San Francisco News, Restaurants, Events, &amp; Sports" xmlUrl="http://www.sfist.com/index.rdf" htmlUrl="https://sfist.com/"/>
-            <outline type="rss" text="SF Weekly" title="SF Weekly" xmlUrl="http://www.sfweekly.com/feed/" htmlUrl="https://www.sfweekly.com"/>
         </outline>
         <outline text="Science" title="Science">
             <outline type="rss" text="Popular Science" title="Popular Science" xmlUrl="http://www.popsci.com/rss.xml" htmlUrl="https://www.popsci.com"/>
-            <outline type="rss" text="New Scientist " title="New Scientist " xmlUrl="http://www.newscientist.com/feed.ns?index=online-news" htmlUrl="https://www.newscientist.com/"/>
             <outline type="rss" text="Science Magazine" title="Science Magazine" xmlUrl="http://www.sciencemag.org/rss/current.xml" htmlUrl="https://www.science.org/journal/science"/>
-            <outline type="rss" text="Popular Mechanics" title="Popular Mechanics" xmlUrl="http://www.popularmechanics.co.za/feed/" htmlUrl="https://www.popularmechanics.co.za"/>
             <outline type="rss" text="Science News" title="Science News" xmlUrl="https://www.sciencenews.org/feed" htmlUrl="https://www.sciencenews.org"/>
             <outline type="rss" text="Scientific American" title="Scientific American" xmlUrl="http://rss.sciam.com/ScientificAmerican-Global" htmlUrl="https://www.scientificamerican.com"/>
             <outline type="rss" text="Wired" title="Wired" xmlUrl="http://feeds.wired.com/wired/index" htmlUrl="https://www.wired.com"/>
-            <outline type="rss" text="果壳精选 guokr.com" title="果壳精选 guokr.com" xmlUrl="http://www.guokr.com/handpick/rss/?display=rss" htmlUrl="http://www.guokr.com/"/>
-            <outline type="rss" text="National Geographic News" title="National Geographic News" xmlUrl="http://news.nationalgeographic.com/index.rss" htmlUrl="http://news.nationalgeographic.com"/>
         </outline>
         <outline text="important finance source" title="important finance source">
             <outline type="rss" text="MarketWatch.com - MarketPulse" title="MarketWatch.com - MarketPulse" xmlUrl="http://feeds.marketwatch.com/marketwatch/marketpulse/" htmlUrl="https://www.marketwatch.com/column/market-pulse"/>
@@ -102,51 +80,37 @@
         </outline>
         <outline text="health" title="health">
             <outline type="rss" text="CNN.com - RSS Channel - Health" title="CNN.com - RSS Channel - Health" xmlUrl="http://rss.cnn.com/rss/cnn_health.rss" htmlUrl="https://www.cnn.com/health/index.html"/>
-            <outline type="rss" text="Reuters: Health News" title="Reuters: Health News" xmlUrl="http://feeds.reuters.com/reuters/healthNews" htmlUrl="https://www.reuters.com"/>
             <outline type="rss" text="NYT - Health" title="NYT - Health" xmlUrl="http://www.nytimes.com/services/xml/rss/nyt/Health.xml" htmlUrl="https://www.nytimes.com/section/health"/>
             <outline type="rss" text="NPR Topics: Health Care" title="NPR Topics: Health Care" xmlUrl="http://www.npr.org/rss/rss.php?id=1027" htmlUrl="https://www.npr.org/templates/story/story.php?storyId=1027"/>
         </outline>
         <outline text="中国新闻" title="中国新闻">
             <outline type="rss" text="知乎日报" title="知乎日报" xmlUrl="http://feeds.feedburner.com/zhihu-daily" htmlUrl="https://daily.zhihu.com/api/4/stories/latest?client=0"/>
-            <outline type="rss" text="中国透视" title="中国透视" xmlUrl="http://www.rfa.org/mandarin/zhuanlan/zhongguotoushi/RSS" htmlUrl="https://www.rfa.org/mandarin/zhuanlan/zhongguotoushi"/>
             <outline type="rss" text="纽约时报中文网" title="纽约时报中文网" xmlUrl="http://feeds.feedburner.com/nytcn" htmlUrl="https://cn.nytimes.com"/>
-            <outline type="rss" text="亚太报道" title="亚太报道" xmlUrl="http://www.rfa.org/mandarin/yataibaodao/RSS" htmlUrl="https://www.rfa.org/mandarin/yataibaodao"/>
             <outline type="rss" text="News - South China Morning Post" title="News - South China Morning Post" xmlUrl="http://www.scmp.com/rss/91/feed" htmlUrl="https://www.scmp.com/rss/91/feed"/>
             <outline type="rss" text="BBC Chinese" title="BBC Chinese" xmlUrl="http://ftr.fivefilters.org/makefulltextfeed.php?url=http%3A%2F%2Fwww.bbc.com%2Fzhongwen%2Fsimp%2Findex.xml&amp;max=3" htmlUrl="http://www.bbc.com/zhongwen/simp/index.xml"/>
         </outline>
         <outline text="News" title="News">
-            <outline type="rss" text="Washington Post: Breaking News, World, US, DC News &amp; Analysis" title="Washington Post: Breaking News, World, US, DC News &amp; Analysis" xmlUrl="http://www.washingtonpost.com/rss/homepage" htmlUrl="http://www.washingtonpost.com/pb/homepage/"/>
-            <outline type="rss" text="知乎每日精选" title="知乎每日精选" xmlUrl="http://www.zhihu.com/rss" htmlUrl="http://www.zhihu.com"/>
             <outline type="rss" text="KQED News" title="KQED News" xmlUrl="http://ww2.kqed.org/news/feed" htmlUrl="https://ww2.kqed.org/news/"/>
             <outline type="rss" text="CNN.com - RSS Channel - Politics" title="CNN.com - RSS Channel - Politics" xmlUrl="http://rss.cnn.com/rss/cnn_allpolitics.rss" htmlUrl="https://www.cnn.com/politics/index.html"/>
-            <outline type="rss" text="Technology - WSJ.com" title="Technology - WSJ.com" xmlUrl="http://online.wsj.com/xml/rss/3_7455.xml" htmlUrl="https://www.wsj.com/tech"/>
             <outline type="rss" text="NPR Topics: News" title="NPR Topics: News" xmlUrl="http://www.npr.org/rss/rss.php?id=1001" htmlUrl="https://www.npr.org/templates/story/story.php?storyId=1001"/>
             <outline type="rss" text="BBC News" title="BBC News" xmlUrl="http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml" htmlUrl="https://www.bbc.co.uk/news"/>
             <outline type="rss" text="East Bay Express | Oakland, Berkeley &amp; Alameda" title="East Bay Express | Oakland, Berkeley &amp; Alameda" xmlUrl="http://www.eastbayexpress.com/ebx/Rss.xml" htmlUrl="https://eastbayexpress.com"/>
             <outline type="rss" text="Top News: US &amp; International Top News Stories Today | AP News" title="Top News: US &amp; International Top News Stories Today | AP News" xmlUrl="https://rsshub.app/apnews/topics/apf-topnews" htmlUrl="https://apnews.com/hub/apf-topnews"/>
-            <outline type="rss" text="译读" title="译读" xmlUrl="https://treadfun.com/feed/" htmlUrl="https://treadfun.com"/>
             <outline type="rss" text="NYT - Politics " title="NYT - Politics " xmlUrl="http://www.nytimes.com/services/xml/rss/nyt/Politics.xml" htmlUrl="https://www.nytimes.com/section/politics"/>
             <outline type="rss" text="CNN" title="CNN" xmlUrl="http://rss.cnn.com/rss/cnn_topstories.rss" htmlUrl="https://www.cnn.com/index.html"/>
             <outline type="rss" text="Washington Post - Politics " title="Washington Post - Politics " xmlUrl="http://www.washingtonpost.com/wp-dyn/rss/politics/index.xml" htmlUrl="https://www.washingtonpost.com"/>
             <outline type="rss" text="ProPublica" title="ProPublica" xmlUrl="http://feeds.propublica.org/propublica/main" htmlUrl="https://www.propublica.org/"/>
             <outline type="rss" text="The New York Times" title="The New York Times" xmlUrl="http://www.nytimes.com/services/xml/rss/nyt/HomePage.xml" htmlUrl="https://nytimes.com"/>
             <outline type="rss" text="SFist - San Francisco News, Restaurants, Events, &amp; Sports" title="SFist - San Francisco News, Restaurants, Events, &amp; Sports" xmlUrl="http://www.sfist.com/index.rdf" htmlUrl="https://sfist.com/"/>
-            <outline type="rss" text="Bay Area News" title="Bay Area News" xmlUrl="http://www.sfgate.com/xml/rss/bayarea.xml" htmlUrl="https://www.sfgate.com/bayarea/feed/bay-area-news-429.php"/>
             <outline type="rss" text="ABC7 RSS Feed" title="ABC7 RSS Feed" xmlUrl="http://abclocal.go.com/kgo/xml?id=3242447" htmlUrl="https://abc7news.com/feed"/>
-            <outline type="rss" text="FOX news" title="FOX news" xmlUrl="http://www.foxnews.com/xmlfeed/rss/0,4313,0,00.rss" htmlUrl="https://www.foxnews.com/"/>
             <outline type="rss" text="Axios" title="Axios" xmlUrl="https://www.axios.com/feeds/feed.rss" htmlUrl="https://www.axios.com/"/>
             <outline type="rss" text="US news | The Guardian" title="US news | The Guardian" xmlUrl="http://www.guardian.co.uk/world/usa/rss" htmlUrl="https://www.theguardian.com/us-news"/>
-            <outline type="rss" text="Politico " title="Politico " xmlUrl="http://feeds.politico.com/politico/rss/politicopicks" htmlUrl="https://www.politico.com/"/>
-            <outline type="rss" text="端传媒 - 深度" title="端传媒 - 深度" xmlUrl="https://rsshub.app/theinitium/channel/feature/zh-hans" htmlUrl="https://theinitium.com/channel/feature/"/>
             <outline type="rss" text="1 big thing" title="1 big thing" xmlUrl="https://feeds.megaphone.fm/axiostoday" htmlUrl="https://www.axios.com/podcasts/"/>
-            <outline type="rss" text="Associated Press" title="Associated Press" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UC52X5wxOL_s5yw0dQk7NtgA" htmlUrl="https://www.youtube.com/channel/UC52X5wxOL_s5yw0dQk7NtgA"/>
             <outline type="rss" text="The Economist" title="The Economist" xmlUrl="http://www.economist.com/rss/the_world_this_week_rss.xml" htmlUrl="https://www.economist.com/the-world-this-week"/>
             <outline type="rss" text="FOX News" title="FOX News" xmlUrl="http://feeds.foxnews.com/foxnews/scitech" htmlUrl="https://www.foxnews.com/tech"/>
-            <outline type="rss" text="小道消息" title="小道消息" xmlUrl="http://feedmaker.kindle4rss.com/feeds/WebNotes.weixin.xml" htmlUrl="http://weixin.sogou.com/weixin?type=1&amp;s_from=input&amp;query=%E5%B0%8F%E9%81%93%E6%B6%88%E6%81%AF"/>
             <outline type="rss" text="Harvard Business Review " title="Harvard Business Review " xmlUrl="http://feeds.harvardbusiness.org/harvardbusiness/" htmlUrl="http://hbr.org"/>
             <outline type="rss" text="Huffington Post" title="Huffington Post" xmlUrl="https://www.huffpost.com/section/front-page/feed" htmlUrl="https://www.huffpost.com/news/front-page"/>
             <outline type="rss" text="The Atlantic - Politics" title="The Atlantic - Politics" xmlUrl="http://feeds.feedburner.com/AtlanticPoliticsChannel" htmlUrl="https://www.theatlantic.com/politics/"/>
-            <outline type="rss" text="端传媒 - 最新" title="端传媒 - 最新" xmlUrl="https://rsshub.app/theinitium/channel/latest/zh-hans" htmlUrl="https://theinitium.com/channel/latest/"/>
         </outline>
     </body>
 </opml>

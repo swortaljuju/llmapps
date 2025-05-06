@@ -19,11 +19,13 @@ class NewsEntry(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     rss_feed_id = Column(Integer)
-    entry_rss_guid = Column(String, unique=True, index=True)
+    entry_rss_guid = Column(String)
+    # might be empty
     entry_url = Column(String)
     crawl_time = Column(DateTime, default=datetime.now())
     title = Column(String)
     description = Column(String)
+    content = Column(String)
 
 class NewsSummaryEntry(Base):
     __tablename__ = "news_summary_entry"
