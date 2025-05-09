@@ -26,6 +26,7 @@ class NewsEntry(Base):
     title = Column(String)
     description = Column(String)
     content = Column(String)
+    pub_time = Column(DateTime)
 
 class NewsSummaryEntry(Base):
     __tablename__ = "news_summary_entry"

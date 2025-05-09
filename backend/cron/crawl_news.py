@@ -4,7 +4,7 @@ import os
 
 # Load environment variables from .env
 load_dotenv(
-    find_dotenv(filename=".env.local")
+    find_dotenv(filename=".env.local"), override=True
 )  # Load local environment variables if available
 
 
@@ -24,6 +24,8 @@ from sqlalchemy.dialects.postgresql import insert
 import traceback
 from loguru import logger
 from constants import ( HTTP_HEADER_USER_AGENT)
+from dateutil import parser
+from enum import Enum
 
 # Clear default handlers
 logger.remove()
@@ -76,77 +78,80 @@ def _get_atom_tag(tag: str) -> str:
     if tag.startswith(ATOM_TAG_PREFIX):
         return tag
     return f"{ATOM_TAG_PREFIX}{tag}"
-def _parse_rss_doc(rss_root: ET.Element, rss_feed: RssFeed) -> (list[NewsEntry], set[str]):
-    """
-    Parse the RSS document and return a list of NewsEntry objects and a set of GUIDs.
-    """
-    if rss_root.get("version") != "2.0":
-        raise RuntimeError(
-        f"Error: rss with invalid version. {rss_feed.feed_url}; version = {rss_root.attrib.get('version')}"
-    )
-    rss_items = rss_root.findall(".//item")
-    news_entries = []
-    guid_set = set()
-    for rss_item in rss_items:
-        news_entry = NewsEntry(rss_feed_id=rss_feed.id, crawl_time=datetime.now())
-        title = rss_item.find("title")
-        if title is None:
-            logger.warning("Error: rss item with no title")
-        else:
-            news_entry.title = title.text
-        link = rss_item.find("link")
-        if link is not None:
-            news_entry.entry_url = link.text
-        description = rss_item.find("description")
-        if description is not None:
-            news_entry.description = description.text
-        guid = rss_item.find("guid")
-        if guid is not None and guid.text is not None and guid.text.strip() != "":
-            news_entry.entry_rss_guid = guid.text
-            guid_set.add(guid.text)
-        elif title is not None and title.text is not None and title.text.strip() != "":
-            news_entry.entry_rss_guid = news_entry.title
-            guid_set.add(news_entry.title)    
-        elif link is not None and link.text is not None and link.text.strip() != "":
-            news_entry.entry_rss_guid = link.text
-            guid_set.add(link.text)    
-        news_entries.append(news_entry)
-    return news_entries, guid_set
 
-def _parse_atom_feed_doc(root: ET.Element, rss_feed: RssFeed) -> (list[NewsEntry], set[str]):
+def _get_rss_tag(tag: str) -> str:
+    return tag
+
+def _element_has_text(element: ET.Element) -> bool:
+    """
+    Check if the element has text content.
+    """
+    return element is not None and element.text is not None and element.text.strip() != ""
+
+class DocType(Enum):
+    """
+    Enum for document types supported by the RSS crawler.
+    """
+    RSS = "rss"
+    ATOM = "atom"
+
+def _parse_doc(root: ET.Element, rss_feed: RssFeed, doc_type: DocType) -> (list[NewsEntry], set[str]):
     """
     Parse the RSS document and return a list of NewsEntry objects and a set of GUIDs.
     """
     
-    atom_feed_entries = root.findall(f".//{_get_atom_tag("entry")}")
+    if doc_type == DocType.RSS and root.get("version") != "2.0":
+        raise RuntimeError(
+        f"Error: rss with invalid version. {rss_feed.feed_url}; version = {root.attrib.get('version')}"
+    )
+    tag_modifier = _get_rss_tag if doc_type == DocType.RSS else _get_atom_tag
+    items = root.findall(f".//{tag_modifier("item")}") if doc_type == DocType.RSS else root.findall(f".//{tag_modifier('entry')}")
     news_entries = []
     guid_set = set()
-    for atom_feed_entry in atom_feed_entries:
+    for item in items:
         news_entry = NewsEntry(rss_feed_id=rss_feed.id, crawl_time=datetime.now())
-        title = atom_feed_entry.find(_get_atom_tag("title"))
-        if title is None:
+        title = item.find(tag_modifier("title"))
+        if _element_has_text(title):
+            news_entry.title = title.text
+        else:
             logger.warning("Error: rss item with no title")
-            continue
-        news_entry.title = title.text
-        link = atom_feed_entry.find(_get_atom_tag("link"))
-        if link is not None:
+
+        link = item.find(tag_modifier("link"))
+        if _element_has_text(link):
             news_entry.entry_url = link.text
-        summary = atom_feed_entry.find(_get_atom_tag("summary"))
-        if summary is not None:
-            news_entry.description = summary.text
-        content = atom_feed_entry.find(_get_atom_tag("content"))
-        if content is not None:
-            news_entry.content = content.text    
-        id = atom_feed_entry.find(_get_atom_tag("id"))
-        if id is not None and id.text is not None and id.text.strip() != "":
-            news_entry.entry_rss_guid = id.text
-            guid_set.add(id.text)
-        elif title is not None and title.text is not None and title.text.strip() != "":
+        description = item.find(tag_modifier("description")) if doc_type == DocType.RSS else item.find(tag_modifier("summary"))
+        if _element_has_text(description):
+            news_entry.description = description.text
+        if doc_type == DocType.ATOM:
+            content = item.find(tag_modifier("content"))
+            if content is not None and content.text is not None and content.text.strip() != "":
+                news_entry.content = content.text
+        guid = item.find(tag_modifier("guid")) if doc_type == DocType.RSS else item.find(tag_modifier("id"))
+        if _element_has_text(guid):
+            news_entry.entry_rss_guid = guid.text
+            guid_set.add(guid.text)
+        elif _element_has_text(title):
             news_entry.entry_rss_guid = news_entry.title
             guid_set.add(news_entry.title)    
-        elif link is not None and link.text is not None and link.text.strip() != "":
+        elif _element_has_text(link):
             news_entry.entry_rss_guid = link.text
-            guid_set.add(link.text)     
+            guid_set.add(link.text)    
+        pub_date = item.find(tag_modifier("pubDate"))
+        published = item.find(tag_modifier("published"))
+        if _element_has_text(pub_date):
+            pub_date_text = pub_date.text         
+        elif _element_has_text(published):
+            pub_date_text = published.text
+        else:
+            pub_date_text = None
+        if pub_date_text is not None :
+            try:
+                news_entry.pub_time = parser.parse(pub_date_text)
+            except Exception as e:
+                logger.warning(f"Error parsing pubDate: {e}")
+                news_entry.pub_time = datetime.now()
+        else:
+            news_entry.pub_time = datetime.now()
         news_entries.append(news_entry)
     return news_entries, guid_set
 
@@ -179,9 +184,13 @@ def crawl_rss_feed(rss_feed: RssFeed):
     doc_root = _find_doc_root(ET.fromstring(response_text))
 
     if doc_root.rss_root is not None:
-        news_entries, guid_set = _parse_rss_doc(doc_root.rss_root, rss_feed)
+        doc_type = DocType.RSS
+        doc_root_obj = doc_root.rss_root
     elif doc_root.atom_feed_root is not None:
-        news_entries, guid_set = _parse_atom_feed_doc(doc_root.atom_feed_root, rss_feed)
+        doc_type = DocType.ATOM
+        doc_root_obj = doc_root.atom_feed_root
+    
+    news_entries, guid_set = _parse_doc(doc_root_obj, rss_feed, doc_type) 
     # always create a new session for parallel execution
     sql_session = SqlSessionLocal()
     existing_guids = sql_session.query(NewsEntry.entry_rss_guid).filter(
@@ -237,7 +246,7 @@ def crawl_news():
         sql_session.query(RssFeed)
         .filter(
             RssFeed.id.in_(subscribed_feed_ids),
-            RssFeed.last_crawl_time < today,
+            (RssFeed.last_crawl_time == None) | (RssFeed.last_crawl_time < today),
         )
         .yield_per(SQL_BATCH_SIZE)
     )

@@ -98,7 +98,6 @@
             <outline type="rss" text="Top News: US &amp; International Top News Stories Today | AP News" title="Top News: US &amp; International Top News Stories Today | AP News" xmlUrl="https://rsshub.app/apnews/topics/apf-topnews" htmlUrl="https://apnews.com/hub/apf-topnews"/>
             <outline type="rss" text="NYT - Politics " title="NYT - Politics " xmlUrl="http://www.nytimes.com/services/xml/rss/nyt/Politics.xml" htmlUrl="https://www.nytimes.com/section/politics"/>
             <outline type="rss" text="CNN" title="CNN" xmlUrl="http://rss.cnn.com/rss/cnn_topstories.rss" htmlUrl="https://www.cnn.com/index.html"/>
-            <outline type="rss" text="Washington Post - Politics " title="Washington Post - Politics " xmlUrl="http://www.washingtonpost.com/wp-dyn/rss/politics/index.xml" htmlUrl="https://www.washingtonpost.com"/>
             <outline type="rss" text="ProPublica" title="ProPublica" xmlUrl="http://feeds.propublica.org/propublica/main" htmlUrl="https://www.propublica.org/"/>
             <outline type="rss" text="The New York Times" title="The New York Times" xmlUrl="http://www.nytimes.com/services/xml/rss/nyt/HomePage.xml" htmlUrl="https://nytimes.com"/>
             <outline type="rss" text="SFist - San Francisco News, Restaurants, Events, &amp; Sports" title="SFist - San Francisco News, Restaurants, Events, &amp; Sports" xmlUrl="http://www.sfist.com/index.rdf" htmlUrl="https://sfist.com/"/>
