@@ -105,7 +105,6 @@
             <outline type="rss" text="Axios" title="Axios" xmlUrl="https://www.axios.com/feeds/feed.rss" htmlUrl="https://www.axios.com/"/>
             <outline type="rss" text="US news | The Guardian" title="US news | The Guardian" xmlUrl="http://www.guardian.co.uk/world/usa/rss" htmlUrl="https://www.theguardian.com/us-news"/>
             <outline type="rss" text="1 big thing" title="1 big thing" xmlUrl="https://feeds.megaphone.fm/axiostoday" htmlUrl="https://www.axios.com/podcasts/"/>
-            <outline type="rss" text="The Economist" title="The Economist" xmlUrl="http://www.economist.com/rss/the_world_this_week_rss.xml" htmlUrl="https://www.economist.com/the-world-this-week"/>
             <outline type="rss" text="FOX News" title="FOX News" xmlUrl="http://feeds.foxnews.com/foxnews/scitech" htmlUrl="https://www.foxnews.com/tech"/>
             <outline type="rss" text="Harvard Business Review " title="Harvard Business Review " xmlUrl="http://feeds.harvardbusiness.org/harvardbusiness/" htmlUrl="http://hbr.org"/>
             <outline type="rss" text="Huffington Post" title="Huffington Post" xmlUrl="https://www.huffpost.com/section/front-page/feed" htmlUrl="https://www.huffpost.com/news/front-page"/>

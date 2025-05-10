@@ -27,6 +27,7 @@ from constants import ( HTTP_HEADER_USER_AGENT)
 from dateutil import parser
 from enum import Enum
 import time
+from cron.common import generate_embedding
 
 # Clear default handlers
 logger.remove()
@@ -201,6 +202,7 @@ def crawl_rss_feed(rss_feed: RssFeed):
     news_entries = [
         entry for entry in news_entries if entry.entry_rss_guid not in existing_guids
     ]
+    generate_embedding(news_entries)
     sql_session.add_all(news_entries)
     sql_session.commit()
 

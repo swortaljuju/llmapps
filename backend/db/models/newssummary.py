@@ -4,6 +4,7 @@ import enum
 from .base import Base
 from sqlalchemy.dialects.postgresql import  ARRAY
 from .experiment import NewsChunkingExperiment, NewsPreferenceApplicationExperiment
+from pgvector.sqlalchemy import Vector
 
 class RssFeed(Base):
     __tablename__ = "rss_feeds"
@@ -28,6 +29,7 @@ class NewsEntry(Base):
     description = Column(String)
     content = Column(String)
     pub_time = Column(DateTime)
+    summary_embedding = Column(Vector(768))  # embedding of the content
 
 class NewsSummaryPeriod(enum.Enum):
     # Weekly summary
