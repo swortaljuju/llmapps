@@ -186,7 +186,8 @@ function SignUpForm({ onStateChange }: { onStateChange: (state: PageState) => vo
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    password: ''
+    password: '',
+    invitationCode: ''
   });
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -260,9 +261,23 @@ function SignUpForm({ onStateChange }: { onStateChange: (state: PageState) => vo
               required
             />
           </div>
-          <div className="mb-6">
+          <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Password
+            </label>
+            <input
+              type="text"
+              value={formData.invitationCode}
+              onChange={(e) => setFormData(prev => ({ ...prev, invitationCode: e.target.value }))}
+              disabled={isLoading || isSuccess}
+              className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+              required
+            />
+          </div>
+
+          <div className="mb-6">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              Invitation Code
             </label>
             <input
               type="password"

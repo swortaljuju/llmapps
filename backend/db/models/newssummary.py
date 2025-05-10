@@ -3,6 +3,7 @@ from datetime import datetime
 import enum
 from .base import Base
 from sqlalchemy.dialects.postgresql import  ARRAY
+from .experiment import NewsChunkingExperiment, NewsPreferenceApplicationExperiment
 
 class RssFeed(Base):
     __tablename__ = "rss_feeds"
@@ -28,6 +29,11 @@ class NewsEntry(Base):
     content = Column(String)
     pub_time = Column(DateTime)
 
+class NewsSummaryPeriod(enum.Enum):
+    # Weekly summary
+    weekly = "weekly"
+    # Monthly summary
+    monthly = "monthly"
 class NewsSummaryEntry(Base):
     __tablename__ = "news_summary_entry"
 
@@ -36,7 +42,9 @@ class NewsSummaryEntry(Base):
     # summary start date
     start_date = Column(Date)
     # summary end date
-    end_date = Column(Date)
+    period_type = Column(Enum(NewsSummaryPeriod), default=NewsSummaryPeriod.weekly)
+    news_chunking_experiment = Column(Enum(NewsChunkingExperiment), default=NewsChunkingExperiment.AGGREGATE_DAILY)
+    news_preference_application_experiment = Column(Enum(NewsPreferenceApplicationExperiment), default=NewsPreferenceApplicationExperiment.WITH_SUMMARIZATION_PROMPT)
     # summarized title from rss feeds title and description
     title = Column(String)
     # Expanded detailed summary of the news either by User or by AI
@@ -49,10 +57,22 @@ class NewsSummaryEntry(Base):
     display_order_within_period = Column(Integer)
     
     __table_args__ = (
-        Index("logical_key", "user_id", "start_date", "end_date", "display_order_within_period", unique=True),
+        Index("logical_key", "user_id", "start_date", "period_type", "news_chunking_experiment", "news_preference_application_experiment", "display_order_within_period", unique=True),
     )
     # TODO add category embeddings up to 3
 
+class NewsSummaryExperimentStats(Base):
+    __tablename__ = "news_summary_experiment_stats"
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    user_id = Column(Integer)
+    # summary start date
+    start_date = Column(Date)
+    # summary end date
+    period_type = Column(Enum(NewsSummaryPeriod), default=NewsSummaryPeriod.weekly)
+    news_chunking_experiment = Column(Enum(NewsChunkingExperiment), default=NewsChunkingExperiment.AGGREGATE_DAILY)
+    news_preference_application_experiment = Column(Enum(NewsPreferenceApplicationExperiment), default=NewsPreferenceApplicationExperiment.WITH_SUMMARIZATION_PROMPT)
+    liked = Column(Boolean, default=False)  # whether the user liked this summary
+    disliked = Column(Boolean, default=False) # if a summary is shown to the user but not liked, it is considered as disliked
 
 class NewsPreferenceChangeCause(enum.Enum):
     survey = "survey"

@@ -2,17 +2,19 @@ from fastapi import APIRouter, HTTPException, status, Response
 from utils.manage_session import GetUserInSession, cache_user_in_session
 from db import db
 import uuid
-from db.models import User, UserStatus
+from db.models import User, UserStatus, UserTier
 from passlib.context import CryptContext
 from pydantic import BaseModel, constr, Field
 from utils.mailer import send_email
 import os
-from constants import ONE_WEEK_IN_SECONDS
+from constants import ONE_WEEK_IN_SECONDS, MAX_USER_COUNT_PER_USER_TIER
 from fastapi.responses import HTMLResponse
 from utils.logger import logger
 import redis.asyncio as redis
+import json
 
 DOMAIN = os.getenv("DOMAIN", "localhost:3000")
+INVITATION_CODE_USER_TIER_MAP = json.loads(os.getenv("INVITATION_CODE_USER_TIER_MAP",""))
 
 router = APIRouter(prefix="/api/py/users", tags=["users"])
 
@@ -24,7 +26,7 @@ class SignInUser(BaseModel):
 
 class SignUpUser(SignInUser):
     email: str = Field(pattern=r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
-
+    invitation_code: str
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -140,13 +142,34 @@ async def signup(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Email already registered",
             )
+    user_tier = INVITATION_CODE_USER_TIER_MAP.get(signup_user.invitation_code)
+    if user_tier is None:
+        logger.error(f"Invalid invitation code: {signup_user.invitation_code}")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid invitation code",
+        )
+    
+    # Check if we've reached the limit for this user tier
+    existing_users_count = db.query(User).filter(User.tier == user_tier).count()
+    max_users_allowed = MAX_USER_COUNT_PER_USER_TIER.get(user_tier, 0)
 
+    if existing_users_count >= max_users_allowed:
+        logger.error(f"User tier {user_tier} has reached its limit")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"User tier {user_tier} has reached its limit",
+        )
+
+    # Set the user tier in the new user
+    new_user_tier = UserTier(user_tier)
     # Create new user
     new_user = User(
         name=signup_user.name,
         email=signup_user.email,
         hashed_password=get_password_hash(signup_user.password),
         status=UserStatus.pending,
+        user_tier=new_user_tier,
     )
 
     # Add to database

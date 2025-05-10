@@ -1,8 +1,8 @@
 from .base import Base
-from .log import ApiLatencyLog
-from .common import User, ConversationHistory, UserStatus
-from .newssummary import RssFeed, NewsEntry, NewsSummaryEntry,  NewsPreferenceVersion, NewsPreferenceChangeCause
-
+from .log import ApiLatencyLog, LlmUsageLog
+from .common import User, ConversationHistory, UserStatus, UserTier
+from .newssummary import RssFeed, NewsEntry, NewsSummaryEntry,  NewsPreferenceVersion, NewsPreferenceChangeCause, NewsSummaryExperimentStats
+from .experiment import NewsChunkingExperiment, NewsPreferenceApplicationExperiment
 __all__ = [
     'Base',
     'ApiLatencyLog',
@@ -14,4 +14,9 @@ __all__ = [
     'NewsSummaryEntry',
     'NewsPreferenceVersion',
     'NewsPreferenceChangeCause',
+    'UserTier',
+    'NewsSummaryExperimentStats',
+    'NewsChunkingExperiment',
+    'NewsPreferenceApplicationExperiment',
+    'LlmUsageLog',
 ]

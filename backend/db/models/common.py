@@ -3,7 +3,7 @@ from sqlalchemy.dialects.postgresql import  ARRAY
 from datetime import datetime
 import enum
 from .base import Base
-
+from .experiment import NewsChunkingExperiment, NewsPreferenceApplicationExperiment
 class UserStatus(enum.Enum):
     pending = "pending"
     active = "active"
@@ -20,7 +20,10 @@ class LangChainMessageType(enum.Enum):
     TOOL = "tool"
     UNKNOWN = "unknown" # not a langchain message
 
-
+class UserTier(enum.Enum):
+    UNLIMITED = "unlimited"
+    FULL_EXPERIMENTATION = "full_experimentation"
+    BASIC = "basic"
 class User(Base):
     __tablename__ = "users"
 
@@ -33,6 +36,9 @@ class User(Base):
     news_preference = Column(String)
     current_news_preference_version_id = Column(Integer)
     subscribed_rss_feeds_id = Column(ARRAY(Integer))
+    user_tier = Column(Enum(UserTier), default=UserTier.BASIC)
+    preferred_news_chunking_experiment = Column(Enum(NewsChunkingExperiment), default=NewsChunkingExperiment.AGGREGATE_DAILY)
+    preferred_news_preference_application_experiment = Column(Enum(NewsPreferenceApplicationExperiment), default=NewsPreferenceApplicationExperiment.WITH_SUMMARIZATION_PROMPT)
     
 class ConversationType(enum.Enum):
     news_preference_survey = "news_preference_survey"  
