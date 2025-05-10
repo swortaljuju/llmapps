@@ -26,6 +26,7 @@ from loguru import logger
 from constants import ( HTTP_HEADER_USER_AGENT)
 from dateutil import parser
 from enum import Enum
+import time
 
 # Clear default handlers
 logger.remove()
@@ -236,7 +237,7 @@ def get_subscribed_feed_ids():
     return list(subscribed_feed_ids)
 
 
-def crawl_news():
+def crawl_news() -> int:
     subscribed_feed_ids = get_subscribed_feed_ids()
     sql_session = get_sql_db()
     # Get today's date at midnight (beginning of the day)
@@ -283,12 +284,20 @@ def crawl_news():
                 error_count += 1
                 logger.error(f"Stack trace: {traceback.format_exc()}")
             finished_count += 1
-        logger.info(f"success count {success_count} error count {error_count}.")
+        logger.info(f"success count {success_count} error count {error_count}.")    
+        return error_count
 
 
 # Defining main function
 def main():
-    crawl_news()
+    unfinished_count = 1
+    retry_count = 0
+    while unfinished_count > 0 and retry_count < 3:
+        unfinished_count = crawl_news()
+        retry_count += 1
+        if unfinished_count > 0:
+            logger.info("Sleeping for 1 minutes before retrying...")
+            time.sleep(60)  # Sleep for 10 minutes
     # Summarize news every Saturday
     # if datetime.now().weekday() == 5:  # 0 is Monday, 6 is Sunday
     #     summarize_news()
