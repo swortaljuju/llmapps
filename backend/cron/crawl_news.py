@@ -290,8 +290,8 @@ def crawl_news():
 def main():
     crawl_news()
     # Summarize news every Saturday
-    if datetime.now().weekday() == 5:  # 0 is Monday, 6 is Sunday
-        summarize_news()
+    # if datetime.now().weekday() == 5:  # 0 is Monday, 6 is Sunday
+    #     summarize_news()
 
 
 if __name__ == "__main__":
