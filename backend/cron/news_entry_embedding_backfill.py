@@ -23,7 +23,7 @@ BATCH_SIZE = 1000
 MINI_BATCH_SIZE = 100
     
 # Defining main function
-def main():
+def backfill_embedding():
     sql_client = get_sql_db()
     news_entries_to_backfill = sql_client.query(NewsEntry).filter(
         NewsEntry.summary_embedding.is_(None)).limit(BATCH_SIZE).all()
@@ -38,4 +38,4 @@ def main():
         
 
 if __name__ == "__main__":
-    main()
+    backfill_embedding()

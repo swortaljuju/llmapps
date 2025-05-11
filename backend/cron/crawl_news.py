@@ -27,7 +27,7 @@ from constants import ( HTTP_HEADER_USER_AGENT)
 from dateutil import parser
 from enum import Enum
 import time
-from cron.common import generate_embedding
+from backend.cron.news_entry_embedding_backfill import backfill_embedding
 
 # Clear default handlers
 logger.remove()
@@ -202,7 +202,6 @@ def crawl_rss_feed(rss_feed: RssFeed):
     news_entries = [
         entry for entry in news_entries if entry.entry_rss_guid not in existing_guids
     ]
-    generate_embedding(news_entries)
     sql_session.add_all(news_entries)
     sql_session.commit()
 
@@ -300,6 +299,8 @@ def main():
         if unfinished_count > 0:
             logger.info("Sleeping for 1 minutes before retrying...")
             time.sleep(60)  # Sleep for 10 minutes
+    # populate the embedding separately so that the quota won't block the crawling
+    backfill_embedding()
     # Summarize news every Saturday
     # if datetime.now().weekday() == 5:  # 0 is Monday, 6 is Sunday
     #     summarize_news()
