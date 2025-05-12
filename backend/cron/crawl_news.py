@@ -27,7 +27,7 @@ from constants import ( HTTP_HEADER_USER_AGENT)
 from dateutil import parser
 from enum import Enum
 import time
-from backend.cron.news_entry_embedding_backfill import backfill_embedding
+from cron.news_entry_embedding_backfill import backfill_embedding
 
 # Clear default handlers
 logger.remove()
