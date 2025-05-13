@@ -15,3 +15,5 @@ class NewsPreferenceApplicationExperiment(enum.Enum):
     WITH_SUMMARIZATION_PROMPT = "with_summarization_prompt"
     # Apply user preference after the news summarization is done
     AFTER_NEW_SUMMARIZATION = "after_new_summarization"
+    # Not apply preference at all
+    NO_PREFERENCE = "no_preference"
