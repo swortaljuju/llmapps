@@ -22,7 +22,8 @@ from utils.manage_session import limit_usage
 from typing import Annotated
 import xml.etree.ElementTree as ET
 from utils.logger import logger
-
+from utils.rss import is_valid_rss_feed
+from constants import MAX_RSS_SUBSCRIPTION
 
 DOMAIN = os.getenv("DOMAIN", "localhost:3000")
 
@@ -34,7 +35,10 @@ class NewsSummaryPeriod(BaseModel):
     end_date_timestamp: int  # Timestamp in seconds
     id: int
 
-
+class ApiRssFeed(BaseModel):
+    id: int | None = None
+    title: str
+    feed_url: str
 class NewsSummaryInitializeResponse(BaseModel):
     mode: str
     latest_summary: Optional[NewsSummaryList] = None
@@ -77,7 +81,7 @@ async def initialize(
     user_data = sql_client.query(User).filter(User.id == user.user_id).first()
     if not user_data:
         raise HTTPException(status_code=404, detail="User not found")
-
+    
     # Check news preference
     if not user_data.news_preference:
         api_survey_history = await load_preference_survey_history(
@@ -103,10 +107,6 @@ async def initialize(
             mode="collect_news_preference",
             preference_conversation_history=preference_conversation_history,
         )
-
-    # Check RSS feeds subscription
-    if not user_data.subscribed_rss_feeds_id:
-        return NewsSummaryInitializeResponse(mode="collect_rss_feeds")
 
     # Query latest news summary
     all_summary = (
@@ -282,6 +282,11 @@ async def upload_rss_feeds(
     
     root = ET.fromstring(content)
     rss_feeds = root.findall('.//outline[@type="rss"]')
+    if len(rss_feeds) > MAX_RSS_SUBSCRIPTION:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Exceeded maximum number of RSS subscriptions: {MAX_RSS_SUBSCRIPTION}",
+        )
     feeds_to_add = {}
     for feed in rss_feeds:
         db_feed = RssFeed(
@@ -301,6 +306,10 @@ async def upload_rss_feeds(
     for db_feed in existing_feeds:
         if db_feed.feed_url in feeds_to_add:
             del feeds_to_add[db_feed.feed_url]
+    for feed_url, db_feed in feeds_to_add.items():
+        if not is_valid_rss_feed(db_feed.feed_url) and not is_valid_rss_feed(db_feed.html_url):
+            del feeds_to_add[feed_url]
+
     if feeds_to_add:
         sql_client.add_all(feeds_to_add.values())
         sql_client.commit()
@@ -310,3 +319,70 @@ async def upload_rss_feeds(
     user_data = sql_client.query(User).filter(User.id == user.user_id).first()
     user_data.subscribed_rss_feeds_id = [feed.id for feed in subscribed_feeds]
     sql_client.commit()
+
+
+
+@router.get("/get_subscribed_rss_feeds", response_model=list[ApiRssFeed])
+async def get_subscribed_rss_feeds( 
+    request: Request,
+    user: GetUserInSession,
+    sql_client: db.SqlClient):
+    if not user:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    request.state.api_latency_log.user_id = user.user_id
+    user_data = sql_client.query(User).filter(User.id == user.user_id).first()
+    subscribed_rss_feeds = sql_client.query(RssFeed).filter(
+        RssFeed.id.in_(user_data.subscribed_rss_feeds_id)
+    ).all()
+    return [
+        ApiRssFeed(id=feed.id, title=feed.title, feed_url=feed.feed_url)
+        for feed in subscribed_rss_feeds
+    ]
+
+@router.get("/delete_rss_feed/{feed_id}")
+async def delete_rss_feed( 
+    request: Request,
+    user: GetUserInSession,
+    sql_client: db.SqlClient,
+    feed_id: int):
+    if not user:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    request.state.api_latency_log.user_id = user.user_id
+    user_data = sql_client.query(User).filter(User.id == user.user_id).first()
+    if feed_id not in user_data.subscribed_rss_feeds_id:
+        raise HTTPException(status_code=400, detail="Feed ID not found in subscribed feeds")
+    user_data.subscribed_rss_feeds_id.remove(feed_id)
+    sql_client.commit()
+
+@router.post("/subscribe_rss_feed")
+async def subscribe_rss_feed( 
+    request: Request,
+    user: GetUserInSession,
+    sql_client: db.SqlClient,
+    rss_feed: ApiRssFeed):
+    if not user:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    request.state.api_latency_log.user_id = user.user_id
+    user_data = sql_client.query(User).filter(User.id == user.user_id).first()
+    if rss_feed.id in user_data.subscribed_rss_feeds_id:
+        return
+    if len(user_data.subscribed_rss_feeds_id) >= MAX_RSS_SUBSCRIPTION:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Exceeded maximum number of RSS subscriptions: {MAX_RSS_SUBSCRIPTION}",
+        )
+    existing_feed = sql_client.query(RssFeed).filter(
+        RssFeed.feed_url == rss_feed.feed_url
+    ).first()
+    if existing_feed:
+        user_data.subscribed_rss_feeds_id.append(existing_feed.id)
+    else:
+        new_feed = RssFeed(
+            title=rss_feed.title,
+            feed_url=rss_feed.feed_url,
+        )
+        sql_client.add(new_feed)
+        sql_client.flush()
+        user_data.subscribed_rss_feeds_id.append(new_feed.id)
+    sql_client.commit()
+    

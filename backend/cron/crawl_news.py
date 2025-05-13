@@ -28,6 +28,7 @@ from dateutil import parser
 from enum import Enum
 import time
 from cron.news_entry_embedding_backfill import backfill_embedding
+from utils.rss import get_atom_tag
 
 # Clear default handlers
 logger.remove()
@@ -39,7 +40,6 @@ UNLIMITED_USER_EMAILS = os.getenv("UNLIMITED_USER_EMAILS", "").split(",")
 SQL_BATCH_SIZE = 1000
 LIMITED_USER_SIZE = 20
 MAX_CRAWL_FEED_NUM = 2000
-ATOM_TAG_PREFIX = "{http://www.w3.org/2005/Atom}"
 
 class DocRoot():
     def __init__(self, rss_root: ET.Element | None = None, atom_feed_root: ET.Element | None = None):
@@ -69,17 +69,11 @@ def _find_doc_root(doc: ET) -> DocRoot:
         rss_root = doc.find(".//rss")
         if rss_root is not None:
             return DocRoot(rss_root=rss_root)
-    if doc.tag == _get_atom_tag("feed"):
+    if doc.tag == get_atom_tag("feed"):
         return DocRoot(atom_feed_root=doc)
     raise RuntimeError("Failed to determine doc type")
 
-def _get_atom_tag(tag: str) -> str:
-    """
-    Get the full Atom tag name with namespace.
-    """
-    if tag.startswith(ATOM_TAG_PREFIX):
-        return tag
-    return f"{ATOM_TAG_PREFIX}{tag}"
+
 
 def _get_rss_tag(tag: str) -> str:
     return tag
@@ -106,7 +100,7 @@ def _parse_doc(root: ET.Element, rss_feed: RssFeed, doc_type: DocType) -> (list[
         raise RuntimeError(
         f"Error: rss with invalid version. {rss_feed.feed_url}; version = {root.attrib.get('version')}"
     )
-    tag_modifier = _get_rss_tag if doc_type == DocType.RSS else _get_atom_tag
+    tag_modifier = _get_rss_tag if doc_type == DocType.RSS else get_atom_tag
     items = root.findall(f".//{tag_modifier("item")}") if doc_type == DocType.RSS else root.findall(f".//{tag_modifier('entry')}")
     news_entries = []
     guid_set = set()

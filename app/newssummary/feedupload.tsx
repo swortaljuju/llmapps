@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { uploadRssFeeds } from './store';
+import { useEffect, useState } from 'react';
+import { RssFeed, uploadRssFeeds, getSubscribedRssFeeds, deleteRssFeed, subscribeRssFeed } from './store';
 import { MainUiMode } from './common';
 
 interface FeedUploadProps {
@@ -12,6 +12,10 @@ export default function FeedUpload({ setMainUiState }: FeedUploadProps) {
     const [file, setFile] = useState<File | null>(null);
     const [isUploading, setIsUploading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [subscribedFeeds, setSubscribedFeeds] = useState<RssFeed[]>([]);
+    const [feedToUploadFormData, setFeedToUploadFormData] = useState<RssFeed>({
+        title: '',
+        url: ''});
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0];
@@ -35,7 +39,7 @@ export default function FeedUpload({ setMainUiState }: FeedUploadProps) {
         try {
             setIsUploading(true);
             await uploadRssFeeds(file, false);
-            setMainUiState(MainUiMode.Chat);
+            setMainUiState(MainUiMode.CreatePreference);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Failed to upload OPML file');
         } finally {
@@ -55,10 +59,51 @@ export default function FeedUpload({ setMainUiState }: FeedUploadProps) {
         }
     };
 
+    const handleDeleteFeed = async (feedId: number) => {
+        try {
+            setIsUploading(true);
+            await deleteRssFeed(feedId);
+            setSubscribedFeeds((prevFeeds) => prevFeeds.filter((feed) => feed.id !== feedId));
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Failed to delete feed');
+        } finally {
+            setIsUploading(false);
+        }
+    };
+
+    const handleFeedToUploadFormSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            setIsUploading(true);
+            await subscribeRssFeed(feedToUploadFormData);
+            setSubscribedFeeds((prevFeeds) => [...prevFeeds, feedToUploadFormData]);
+            setFeedToUploadFormData({ title: '', url: '' });
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Failed to subscribe to feed');
+        } finally {
+            setIsUploading(false);
+        }
+    };
+
+    useEffect(() => {
+        const fetchSubscribedFeeds = async () => {
+            try {
+                const feeds = await getSubscribedRssFeeds();
+                setSubscribedFeeds(feeds);
+            } catch (err) {
+                setError(err instanceof Error ? err.message : 'Failed to fetch subscribed feeds');
+            }
+        };
+        fetchSubscribedFeeds();
+    }, []);
     return (
         <div className="flex flex-col items-center justify-center p-8 max-w-md mx-auto">
             <h1 className="text-2xl font-bold mb-6">Upload RSS Feeds</h1>
-
+            {error && (
+                    <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
+                        {error}
+                    </div>
+                )}
             <div className="w-full bg-white p-6 rounded-lg shadow-md">
                 <p className="mb-4 text-gray-700">
                     Please upload an OPML file with your RSS feed subscriptions, or use our default feeds.
@@ -89,12 +134,6 @@ export default function FeedUpload({ setMainUiState }: FeedUploadProps) {
                     </div>
                 </div>
 
-                {error && (
-                    <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
-                        {error}
-                    </div>
-                )}
-
                 <div className="flex flex-col sm:flex-row gap-4">
                     <button
                         onClick={handleUpload}
@@ -118,6 +157,78 @@ export default function FeedUpload({ setMainUiState }: FeedUploadProps) {
                         {isUploading ? 'Processing...' : 'Use Default Feeds'}
                     </button>
                 </div>
+            </div>
+            <div className="w-full bg-white p-6 rounded-lg shadow-md mt-6">
+                <h2 className="text-lg font-medium text-gray-800 mb-4">Add RSS Feed Manually</h2>
+                <form onSubmit={handleFeedToUploadFormSubmit} className="space-y-4">
+                    <div>
+                        <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+                            Feed Title
+                        </label>
+                        <input
+                            type="text"
+                            id="title"
+                            value={feedToUploadFormData.title}
+                            onChange={(e) => setFeedToUploadFormData({...feedToUploadFormData, title: e.target.value})}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="url" className="block text-sm font-medium text-gray-700 mb-1">
+                            Feed URL
+                        </label>
+                        <input
+                            type="url"
+                            id="url"
+                            value={feedToUploadFormData.url}
+                            onChange={(e) => setFeedToUploadFormData({...feedToUploadFormData, url: e.target.value})}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="https://example.com/rss"
+                            required
+                        />
+                    </div>
+                    <button
+                        type="submit"
+                        disabled={isUploading || !feedToUploadFormData.title || !feedToUploadFormData.url}
+                        className={`w-full py-2 px-4 rounded-md ${
+                            isUploading || !feedToUploadFormData.title || !feedToUploadFormData.url
+                                ? 'bg-blue-300 cursor-not-allowed'
+                                : 'bg-blue-600 hover:bg-blue-700'
+                        } text-white font-medium`}
+                    >
+                        {isUploading ? 'Adding...' : 'Add Feed'}
+                    </button>
+                </form>
+            </div>
+            <div className="w-full bg-white p-6 rounded-lg shadow-md mt-6">
+                <h2 className="text-lg font-medium text-gray-800 mb-4">Subscribed Feeds</h2>
+                {subscribedFeeds.length === 0 ? (
+                    <p className="text-gray-500">No subscribed feeds.</p>
+                ) : (
+                    <ul className="space-y-4">
+                        {subscribedFeeds.map((feed) => (
+                            <li key={feed.id} className="flex justify-between items-center">
+                                <div>
+                                    <a 
+                                        href={feed.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-blue-600 hover:underline"
+                                    >
+                                        {feed.title}
+                                    </a>
+                                </div>
+                                <button
+                                    onClick={() => handleDeleteFeed(feed.id!)}
+                                    className="text-red-600 hover:text-red-700"
+                                >
+                                    Delete
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                )}
             </div>
         </div>
     );

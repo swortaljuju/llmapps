@@ -61,16 +61,16 @@ export default function NewsSummary() {
     const createCustomActionItem = () => {
         return [
             {
-                label: 'Preference',
-                id: PREFERENCE_ID,
-                onClick: onPreferenceClick,
-                selected: mainUiMode === MainUiMode.EditPreference || mainUiMode === MainUiMode.CreatePreference
-            },
-            {
                 label: 'Upload RSS',
                 id: MainUiMode.UploadRss,
                 onClick: onUploadRssClick,
                 selected: mainUiMode === MainUiMode.UploadRss
+            },
+            {
+                label: 'Preference',
+                id: PREFERENCE_ID,
+                onClick: onPreferenceClick,
+                selected: mainUiMode === MainUiMode.EditPreference || mainUiMode === MainUiMode.CreatePreference
             }
         ]
     };

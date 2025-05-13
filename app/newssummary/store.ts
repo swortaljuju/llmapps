@@ -118,6 +118,12 @@ export async function savePreference(savePreferenceRequest: SavePreferenceReques
     }
 }
 
+export interface RssFeed {
+    id?: number;
+    title: string;
+    url: string;
+}
+
 export async function uploadRssFeeds(file: File | null, useDefault: boolean): Promise<void> {
     const formData = new FormData();
     
@@ -138,4 +144,46 @@ export async function uploadRssFeeds(file: File | null, useDefault: boolean): Pr
     }
 
     return await response.json();
+}
+
+export async function getSubscribedRssFeeds(): Promise<RssFeed[]> {
+    const response = await fetch(getBackendApiUrl('/news_summary/get_subscribed_rss_feeds'), {
+        method: 'GET',
+        credentials: 'include',
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Failed to get RSS feeds');
+    }
+
+    return await response.json();
+}
+
+export async function deleteRssFeed(feedId: number): Promise<void> {
+    const response = await fetch(getBackendApiUrl(`/news_summary/delete_rss_feed/${feedId}`), {
+        method: 'GET',
+        credentials: 'include',
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Failed to delete RSS feed');
+    }
+}
+
+export async function subscribeRssFeed(rss_feed: RssFeed): Promise<void> {
+    const response = await fetch(getBackendApiUrl('/news_summary/subscribe_rss_feed'), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(rss_feed),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Failed to subscribe RSS feed');
+    }
 }
