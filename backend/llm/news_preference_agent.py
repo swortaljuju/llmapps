@@ -4,7 +4,7 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from sqlalchemy.orm import Session
 import redis.asyncio as redis
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
-from db.models.common import ConversationHistory, ConversationType
+from db.models.common import ConversationHistory, ConversationType, User
 from db.models import ApiLatencyLog
 from utils.conversation_history import (
     ApiConversationHistoryItem,
@@ -13,10 +13,11 @@ from utils.conversation_history import (
     create_message_id,
     convert_api_conversation_history_item_to_db_row,
 )
+from db.models.newssummary import RssFeed
 import json
 from enum import Enum
 import time
-
+from sqlalchemy import select
 
 class NewsPreferenceAgentOutput(BaseModel):
     """
@@ -43,18 +44,23 @@ class NewsPreferenceAgentError(Enum):
     # Incoming survey question's parent message id does not match the last message in chat history
     MISSING_ANSWER = 0
     MISSING_QUESTION_FOR_ANSWER = 1
+    NO_SUBSCRIBED_RSS_FEED = 2
 
 
 _llm = langchain_gemini_client.with_structured_output(NewsPreferenceAgentOutput)
 _survey_generation_system_message = SystemMessage(
     content="""You are a news preference survey agent. Your task is to ask the user questions about their news preferences.
-    - Ask one question at a time and wait for the user's response. 
+    - We already know the user's subscribed list of rss feeds: {rss_feed_list}
+    - Ask questions to help you determine the order of importance of different news topics for the user.
+    - You will be provided with a huge amount of news to summarize. Ask questions which could help you select the topic, story, idea, or meta element which user might be interested in when summarizing the news.
+    - Since you will show user a summary of weekly news, you should ask questions which help you understand how to 
+        make the user more likely and comfortable to read the summary.
+    - in terms of format, we only support text summary 
+    - Introduce yourself as a news preference survey agent and explain the purpose of the survey to the user first.
+    - generate all questions first and then ask one question at a time and wait for the user's response. 
     - After each response, Determine if you have enough information to summarize the user's news preferences. 
     -- If you do, you will return the summary in the `news_preference_summary` field.
     -- If not, you will return the next question to ask in the `next_survey_question` field.
-    - Ask questions to help you determine the order of importance of different news topics for the user.
-    - Since you will show user a summary of weekly news, you should ask questions which help you understand how to 
-        make the user more likely and comfortable to read the summary.
     - Introduce yourself as a news preference survey agent and explain the purpose of the survey to the user first."""
 )
 _prompt = ChatPromptTemplate.from_messages(
@@ -113,8 +119,54 @@ async def load_preference_survey_history(
     return api_survey_history
 
 
+def _get_subscribed_rss_feed_list_redis_key(user_id: int) -> str:
+    """
+    Generates a Redis key for storing the news preference survey history for a user.
+    """
+    return f"news_preference_survey_subscribed_rss_feed_list:{user_id}"
+
+
+async def load_subscribed_rss_feed_list_for_preference_prompt(
+    user_id: int, redis: redis.Redis, sql_client: Session
+) -> str:
+    redis_key = _get_subscribed_rss_feed_list_redis_key(user_id)
+
+    # Check if cached_subscribed_rss_feed_list exists in Redis
+    redis_key_exists = await redis.exists(redis_key)
+    if redis_key_exists:
+        # Load survey history from Redis
+        cached_subscribed_rss_feed_list = await redis.get(redis_key)
+        await redis.expire(redis_key, 3600)  # Extend TTL to 1 hour (3600 seconds)
+        return cached_subscribed_rss_feed_list
+    # If not in Redis, load from the database
+    subscribed_rss_feed_list = sql_client.execute(select(User.subscribed_rss_feed_list)
+        .filter(
+            User.id == user_id
+        )).first().subscribed_rss_feed_list
+
+    if not subscribed_rss_feed_list:
+        raise ValueError(
+            error_type=NewsPreferenceAgentError.NO_SUBSCRIBED_RSS_FEED,
+            message="User has no subscribed rss feed list",
+        )
+    subscribed_rss_feed_title_list = [ row.title for row in sql_client.execute(select(RssFeed.title)
+        .filter(
+            RssFeed.id.in_(subscribed_rss_feed_list)
+        )).all()]
+    subscribed_rss_feed_title_list_str = ";\n".join(subscribed_rss_feed_title_list)
+
+    await redis.set(
+        redis_key,
+        subscribed_rss_feed_title_list_str,
+        ex=3600,
+    )  # Cache for 1 hour
+
+    return subscribed_rss_feed_title_list_str
+
+
+
 def next_preference_question(
-    chat_history: list[ApiConversationHistoryItem], api_latency_log: ApiLatencyLog
+    subscribed_rss_feed_list: str, chat_history: list[ApiConversationHistoryItem], api_latency_log: ApiLatencyLog
 ) -> NewsPreferenceAgentOutput:
     llm_start_time = time.time()
     llm_result = _new_preference_survey_agent.invoke(
@@ -125,7 +177,8 @@ def next_preference_question(
                 or item.tool_message
                 or item.system_message
                 for item in chat_history
-            ]
+            ],
+            "rss_feed_list": subscribed_rss_feed_list,
         }
     )
     api_latency_log.llm_elapsed_time_ms = (
@@ -149,6 +202,7 @@ async def save_answer_and_generate_next_question(
     user_id: int,
     answer: str | None,
     parent_message_id: str | None,
+    subscribed_rss_feed_list: str,
     chat_history: list[ApiConversationHistoryItem],
     redis: redis.Redis,
     sql_client: Session,
@@ -190,7 +244,7 @@ async def save_answer_and_generate_next_question(
         message_to_save.append(answer_conversation_item)
 
     next_question_or_summary = next_preference_question(
-        chat_history, api_latency_log=api_latency_log
+        subscribed_rss_feed_list, chat_history, api_latency_log=api_latency_log
     )
     if next_question_or_summary.next_survey_question is not None:
         question_conversation_item = ApiConversationHistoryItem(

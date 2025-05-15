@@ -28,7 +28,7 @@ from dateutil import parser
 from enum import Enum
 import time
 from cron.news_entry_embedding_backfill import backfill_embedding
-from utils.rss import get_atom_tag
+from utils.rss import get_atom_tag, is_valid_rss_type
 
 # Clear default handlers
 logger.remove()
@@ -46,21 +46,7 @@ class DocRoot():
         self.rss_root = rss_root
         self.atom_feed_root = atom_feed_root
 
-def _is_valid_rss_type(content_type: str) -> bool:
-    """
-    Check if the content type is a valid RSS type.
-    """
-    valid_rss_types = [
-        "application/rss+xml",
-        "text/xml",
-        "application/atom+xml",
-        "application/xml",
-        "text/html",
-    ]
-    for valid_type in valid_rss_types:
-        if valid_type in content_type:
-            return True
-    return False
+
 
 def _find_doc_root(doc: ET) -> DocRoot:
     if doc.tag == "rss":
@@ -166,7 +152,7 @@ def _fetch_feed_content(rss_feed: RssFeed) -> str:
             rss_feed.feed_url = rss_feed.html_url
         response.raise_for_status()  # Raise an error for bad responses
         content_type = response.headers.get('Content-Type', '')
-        if not _is_valid_rss_type(content_type):
+        if not is_valid_rss_type(content_type):
             raise RuntimeError(
                 f"Error: Bad rss type for rss {rss_feed.feed_url}. Actual content type {response.headers.get('Content-Type')}"
             )

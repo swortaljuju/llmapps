@@ -10,7 +10,7 @@ export interface SideSectionItem {
     label: string;
     id: string;
     selected: boolean;
-    onClick: (id: string) => void;
+    onClick: (id: string) => boolean;
 }
 
 export interface SideSection {

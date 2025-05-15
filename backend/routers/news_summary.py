@@ -16,6 +16,7 @@ from llm.news_preference_agent import (
     load_preference_survey_history,
     save_answer_and_generate_next_question,
     ApiConversationHistoryItem,
+    load_subscribed_rss_feed_list_for_preference_prompt
 )
 from .common import ChatMessage, ChatAuthorType
 from utils.manage_session import limit_usage
@@ -82,16 +83,25 @@ async def initialize(
     if not user_data:
         raise HTTPException(status_code=404, detail="User not found")
     
+    # Check RSS feeds subscription
+    if not user_data.subscribed_rss_feeds_id:
+        return NewsSummaryInitializeResponse(mode="collect_rss_feeds")
+    
     # Check news preference
     if not user_data.news_preference:
         api_survey_history = await load_preference_survey_history(
             user.user_id, redis=redis_client, sql_client=sql_client
         )
+        
         if not api_survey_history:
+            subscribe_rss_feed_list = load_subscribed_rss_feed_list_for_preference_prompt(
+                user.user_id, redis=redis_client, sql_client=sql_client
+            )
             api_survey_history, next_survey_message = await save_answer_and_generate_next_question(
                 user.user_id,
                 answer=None,
                 parent_message_id=None,
+                subscribe_rss_feed_list=subscribe_rss_feed_list,
                 chat_history=[],
                 redis=redis_client,
                 sql_client=sql_client,
@@ -155,11 +165,16 @@ async def preference_survey(
     chat_history = await load_preference_survey_history(
         user.user_id, redis=redis_client, sql_client=sql_client
     )
+    
+    subscribe_rss_feed_list = await load_subscribed_rss_feed_list_for_preference_prompt(
+        user.user_id, redis=redis_client, sql_client=sql_client
+    )
 
     chat_history, next_survey_message = await save_answer_and_generate_next_question(
         user.user_id,
         answer=preference_survey_request.answer,
         parent_message_id=preference_survey_request.parent_message_id,
+        subscribe_rss_feed_list=subscribe_rss_feed_list,
         chat_history=chat_history,
         redis=redis_client,
         sql_client=sql_client,

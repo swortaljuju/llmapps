@@ -8,6 +8,7 @@ from datetime import datetime
 
 ### Prompt templates for summarizing news entries
 SUMMARY_WITH_USER_PREFERENCE_AND_CHUNKED_DATA_PROMPT = """
+    try to keep the content diverse and interesting. also cater to the user's preferences below
     {user_preferences}
     Merge and summarize the following news entries. If some news entries are similar, summarize and merge them into one while keeping their reference urls
     For example, if the following two news entries are similar:

@@ -22,6 +22,7 @@ export default function NewsSummary() {
     const onChatListItemClick = (id: string) => {
         setChatId(id);
         setMainUiMode(MainUiMode.Chat);
+        return true;
     }
 
     const initializeChatListItems = (initData: InitializeResponse) => {
@@ -57,6 +58,7 @@ export default function NewsSummary() {
     }
     const onUploadRssClick = () => {
         setMainUiMode(MainUiMode.UploadRss);
+        return true;
     }
     const createCustomActionItem = () => {
         return [
