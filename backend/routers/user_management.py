@@ -174,7 +174,7 @@ async def signup(
 
     # Add to database
     db.add(new_user)
-    db.execute()
+    db.flush()
     await send_verification_email(signup_user.email, redis_client, new_user.id)
     db.commit()
     
