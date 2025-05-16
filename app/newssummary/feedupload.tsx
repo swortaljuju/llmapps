@@ -1,14 +1,15 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { RssFeed, uploadRssFeeds, getSubscribedRssFeeds, deleteRssFeed, subscribeRssFeed } from './store';
+import { RssFeed, uploadRssFeeds, getSubscribedRssFeeds, deleteRssFeed, subscribeRssFeed,  NewsSummaryMode} from './store';
 import { MainUiMode } from './common';
 
 interface FeedUploadProps {
     setMainUiState: React.Dispatch<React.SetStateAction<MainUiMode>>;
+    initMode?: NewsSummaryMode;
 }
 
-export default function FeedUpload({ setMainUiState }: FeedUploadProps) {
+export default function FeedUpload({ setMainUiState, initMode }: FeedUploadProps) {
     const [file, setFile] = useState<File | null>(null);
     const [isUploading, setIsUploading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -39,7 +40,9 @@ export default function FeedUpload({ setMainUiState }: FeedUploadProps) {
         try {
             setIsUploading(true);
             await uploadRssFeeds(file, false);
-            setMainUiState(MainUiMode.CreatePreference);
+            if (initMode === 'collect_rss_feeds') {
+                setMainUiState(MainUiMode.CreatePreference);
+            }
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Failed to upload OPML file');
         } finally {

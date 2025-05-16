@@ -52,9 +52,13 @@ export default function NewsSummary() {
     });
 
     const onPreferenceClick = () => {
+        if (initData?.mode === 'collect_rss_feeds') {
+            return false;
+        }
         if (mainUiMode !== MainUiMode.CreatePreference && mainUiMode !== MainUiMode.EditPreference) {
             setMainUiMode(MainUiMode.EditPreference);
         }
+        return true;
     }
     const onUploadRssClick = () => {
         setMainUiMode(MainUiMode.UploadRss);
@@ -196,7 +200,7 @@ function NewsSummaryMainUi({
         case MainUiMode.EditPreference:
             return <EditPreference />;
         case MainUiMode.UploadRss:
-            return <FeedUpload setMainUiState={setMainUiState} />;
+            return <FeedUpload setMainUiState={setMainUiState} initMode={initData?.mode}/>;
         case MainUiMode.Chat:
             if (selectedSummaryId === EMPTY_SUMMARY_CHAT_ID) {
                 return <div className="flex items-center justify-center h-screen">No summary available yet. Please wait for the next summary.</div>;

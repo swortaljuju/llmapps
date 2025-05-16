@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 interface TypewriterProps {
     text: string;
@@ -51,7 +52,7 @@ export function TypewriterText({
     
     
     return (
-        <p className="typewriter-text">{displayedText}</p>
+        <ReactMarkdown>{displayedText}</ReactMarkdown>
     );
 };
 

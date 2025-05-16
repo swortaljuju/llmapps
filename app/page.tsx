@@ -48,7 +48,6 @@ function AppsSummary({ onStateChange }: { onStateChange: (state: PageState) => v
           Sign Up
         </button>
         <button onClick={() => onStateChange(PageState.SignIn)}
-
           className="px-6 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors duration-300">
           Sign In
         </button>
@@ -187,7 +186,7 @@ function SignUpForm({ onStateChange }: { onStateChange: (state: PageState) => vo
     name: '',
     email: '',
     password: '',
-    invitationCode: ''
+    invitation_code: ''
   });
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -267,8 +266,8 @@ function SignUpForm({ onStateChange }: { onStateChange: (state: PageState) => vo
             </label>
             <input
               type="text"
-              value={formData.invitationCode}
-              onChange={(e) => setFormData(prev => ({ ...prev, invitationCode: e.target.value }))}
+              value={formData.password}
+              onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
               disabled={isLoading || isSuccess}
               className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
               required
@@ -280,9 +279,9 @@ function SignUpForm({ onStateChange }: { onStateChange: (state: PageState) => vo
               Invitation Code
             </label>
             <input
-              type="password"
-              value={formData.password}
-              onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
+              type="text"
+              value={formData.invitation_code}
+              onChange={(e) => setFormData(prev => ({ ...prev, invitation_code: e.target.value }))}
               disabled={isLoading || isSuccess}
               className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
               required

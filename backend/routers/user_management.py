@@ -151,7 +151,7 @@ async def signup(
         )
     
     # Check if we've reached the limit for this user tier
-    existing_users_count = db.query(User).filter(User.tier == user_tier).count()
+    existing_users_count = db.query(User).filter(User.user_tier == UserTier(user_tier)).count()
     max_users_allowed = MAX_USER_COUNT_PER_USER_TIER.get(user_tier, 0)
 
     if existing_users_count >= max_users_allowed:
@@ -174,10 +174,10 @@ async def signup(
 
     # Add to database
     db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    
+    db.execute()
     await send_verification_email(signup_user.email, redis_client, new_user.id)
+    db.commit()
+    
 
     return {
         "status": "success",

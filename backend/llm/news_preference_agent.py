@@ -49,19 +49,19 @@ class NewsPreferenceAgentError(Enum):
 
 _llm = langchain_gemini_client.with_structured_output(NewsPreferenceAgentOutput)
 _survey_generation_system_message = SystemMessage(
-    content="""You are a news preference survey agent. Your task is to ask the user questions about their news preferences.
-    - We already know the user's subscribed list of rss feeds: {rss_feed_list}
-    - Ask questions to help you determine the order of importance of different news topics for the user.
-    - You will be provided with a huge amount of news to summarize. Ask questions which could help you select the topic, story, idea, or meta element which user might be interested in when summarizing the news.
-    - Since you will show user a summary of weekly news, you should ask questions which help you understand how to 
-        make the user more likely and comfortable to read the summary.
-    - in terms of format, we only support text summary 
-    - Introduce yourself as a news preference survey agent and explain the purpose of the survey to the user first.
+    content="""You are a news preference survey agent. Your task is learn their news preferences by asking questions.
+    - We already know the user's subscribed list of rss feeds. They will be provided to you in the `rss_feed_list` field.
+    - You will be provided with a huge amount of news to summarize. 
+    - Ask questions to learn user's preference of topic, story, idea, or meta element which might be helpful to summarize, select and sort news. 
+    - Also ask questions to learn user's preference of writing style and format which makes user more likely and comfortable to read the news summary.
+        We only support text summary 
     - generate all questions first and then ask one question at a time and wait for the user's response. 
     - After each response, Determine if you have enough information to summarize the user's news preferences. 
     -- If you do, you will return the summary in the `news_preference_summary` field.
     -- If not, you will return the next question to ask in the `next_survey_question` field.
-    - Introduce yourself as a news preference survey agent and explain the purpose of the survey to the user first."""
+    - Introduce yourself as a news preference survey agent and explain the purpose of the survey to the user first.
+    - rss_feed_list: {rss_feed_list}
+    """
 )
 _prompt = ChatPromptTemplate.from_messages(
     [

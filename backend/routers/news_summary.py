@@ -4,8 +4,6 @@ from pydantic import BaseModel
 from db import db
 from db.models import (
     User,
-    NewsSummary,
-    NewsSummaryList,
     NewsPreferenceChangeCause,
     NewsPreferenceVersion,
     RssFeed,
@@ -25,6 +23,7 @@ import xml.etree.ElementTree as ET
 from utils.logger import logger
 from utils.rss import is_valid_rss_feed
 from constants import MAX_RSS_SUBSCRIPTION
+from enum import Enum
 
 DOMAIN = os.getenv("DOMAIN", "localhost:3000")
 
@@ -40,11 +39,17 @@ class ApiRssFeed(BaseModel):
     id: int | None = None
     title: str
     feed_url: str
+
+class NewsSummaryUiMode(Enum):
+    COLLECT_RSS_FEEDS = "collect_rss_feeds"
+    COLLECT_NEWS_PREFERENCE = "collect_news_preference"
+    SHOW_SUMMARY = "show_summary"
+
 class NewsSummaryInitializeResponse(BaseModel):
-    mode: str
-    latest_summary: Optional[NewsSummaryList] = None
-    news_summary_periods: list[NewsSummaryPeriod] = None
-    preference_conversation_history: list[ChatMessage] = None
+    mode: NewsSummaryUiMode
+    latest_summary: Optional[str] = None
+    news_summary_periods: list[NewsSummaryPeriod] = []
+    preference_conversation_history: list[ChatMessage] = []
 
 
 def _from_api_conversation_history_item_to_chat_message(
@@ -85,7 +90,7 @@ async def initialize(
     
     # Check RSS feeds subscription
     if not user_data.subscribed_rss_feeds_id:
-        return NewsSummaryInitializeResponse(mode="collect_rss_feeds")
+        return NewsSummaryInitializeResponse(mode=NewsSummaryUiMode.COLLECT_RSS_FEEDS)
     
     # Check news preference
     if not user_data.news_preference:
@@ -114,28 +119,28 @@ async def initialize(
                     _from_api_conversation_history_item_to_chat_message(item)
                 )
         return NewsSummaryInitializeResponse(
-            mode="collect_news_preference",
+            mode=NewsSummaryUiMode.COLLECT_NEWS_PREFERENCE,
             preference_conversation_history=preference_conversation_history,
         )
 
     # Query latest news summary
-    all_summary = (
-        sql_client.query(NewsSummary)
-        .filter(NewsSummary.user_id == user.user_id)
-        .order_by(NewsSummary.end_date.desc())
-        .all()
-    )
+    # all_summary = (
+    #     sql_client.query(NewsSummary)
+    #     .filter(NewsSummary.user_id == user.user_id)
+    #     .order_by(NewsSummary.end_date.desc())
+    #     .all()
+    # )
 
     return NewsSummaryInitializeResponse(
-        mode="show_summary",
-        latest_summary=len(all_summary) > 0 and all_summary[0].content or None,
+        mode=NewsSummaryUiMode.SHOW_SUMMARY,
+        latest_summary= None,
         news_summary_periods=[
-            NewsSummaryPeriod(
-                start_date_timestamp=int(summary.start_date.timestamp()),
-                end_date_timestamp=int(summary.end_date.timestamp()),
-                id=summary.id,
-            )
-            for summary in all_summary
+            # NewsSummaryPeriod(
+            #     start_date_timestamp=int(summary.start_date.timestamp()),
+            #     end_date_timestamp=int(summary.end_date.timestamp()),
+            #     id=summary.id,
+            # )
+            # for summary in all_summary
         ],
     )
 

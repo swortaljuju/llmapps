@@ -92,7 +92,7 @@ export function NewsPreferenceChat({
                 <p>{preferenceSummary}</p>
                 <button
                     className="mt-4 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md"
-                    onClick={() => { setMainUiState(MainUiMode.UploadRss); }}
+                    onClick={() => { setMainUiState(MainUiMode.Chat); }}
                 >
                     Upload RSS Feeds
                 </button>
