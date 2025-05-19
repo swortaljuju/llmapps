@@ -55,8 +55,10 @@ export default function NewsSummary() {
         if (initData?.mode === 'collect_rss_feeds') {
             return false;
         }
-        if (mainUiMode !== MainUiMode.CreatePreference && mainUiMode !== MainUiMode.EditPreference) {
+        if (initData?.mode === 'show_summary') {
             setMainUiMode(MainUiMode.EditPreference);
+        } else {
+            setMainUiMode(MainUiMode.CreatePreference);
         }
         return true;
     }
@@ -125,7 +127,12 @@ export default function NewsSummary() {
         fetchInitialData();
     }, []); // Empty dependency array means this runs once on component mount
 
-
+    const fromFeedUploadToCreatePreference = async () => {
+        const data: InitializeResponse = await initialize();
+        // generate initial preference survey
+        setInitData(data);
+        setMainUiMode(MainUiMode.CreatePreference);
+    }
     // Update chatList selection when mainUiMode or chatId changes
     useEffect(() => {
         setChatList(prev => ({
@@ -165,6 +172,7 @@ export default function NewsSummary() {
                 mainUiMode={mainUiMode}
                 initData={initData}
                 setMainUiState={setMainUiMode}
+                fromFeedUploadToCreatePreference={fromFeedUploadToCreatePreference}
                 selectedSummaryId={chatId}
             />
         );
@@ -184,6 +192,7 @@ interface NewsSummaryMainUiProps {
     mainUiMode: MainUiMode;
     initData: InitializeResponse | null;
     setMainUiState: React.Dispatch<React.SetStateAction<MainUiMode>>;
+    fromFeedUploadToCreatePreference: () => void;
     selectedSummaryId: string;
 }
 
@@ -191,6 +200,7 @@ function NewsSummaryMainUi({
     mainUiMode,
     initData,
     setMainUiState,
+    fromFeedUploadToCreatePreference,
     selectedSummaryId,
 }: NewsSummaryMainUiProps) {
 
@@ -200,7 +210,7 @@ function NewsSummaryMainUi({
         case MainUiMode.EditPreference:
             return <EditPreference />;
         case MainUiMode.UploadRss:
-            return <FeedUpload setMainUiState={setMainUiState} initMode={initData?.mode}/>;
+            return <FeedUpload fromFeedUploadToCreatePreference={fromFeedUploadToCreatePreference} initMode={initData?.mode}/>;
         case MainUiMode.Chat:
             if (selectedSummaryId === EMPTY_SUMMARY_CHAT_ID) {
                 return <div className="flex items-center justify-center h-screen">No summary available yet. Please wait for the next summary.</div>;

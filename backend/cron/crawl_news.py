@@ -209,12 +209,11 @@ def get_subscribed_feed_ids():
         feed_id for sublist in limited_user_subscribed_feed_ids for feed_id in sublist
     ]
     random.shuffle(limited_user_subscribed_feed_ids)
-    for sublist in limited_user_subscribed_feed_ids:
-        for feed_id in sublist:
-            if feed_id not in subscribed_feed_ids:
-                subscribed_feed_ids.add(feed_id)
-                if len(subscribed_feed_ids) >= MAX_CRAWL_FEED_NUM:
-                    return list(subscribed_feed_ids)
+    for feed_id in limited_user_subscribed_feed_ids:
+        if feed_id not in subscribed_feed_ids:
+            subscribed_feed_ids.add(feed_id)
+            if len(subscribed_feed_ids) >= MAX_CRAWL_FEED_NUM:
+                return list(subscribed_feed_ids)
     return list(subscribed_feed_ids)
 
 

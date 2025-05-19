@@ -1,6 +1,7 @@
 import requests
 import xml.etree.ElementTree as ET
 from constants import ( HTTP_HEADER_USER_AGENT)
+from utils.logger import logger
         
 ATOM_TAG_PREFIX = "{http://www.w3.org/2005/Atom}"
 
@@ -35,11 +36,17 @@ def is_valid_rss_feed(feed_url: str) -> bool:
     headers = {
             'User-Agent': HTTP_HEADER_USER_AGENT
         }
+    try:
+        response = requests.head(feed_url, timeout=30, headers=headers)
+    except Exception as e:
+        logger.error(f"Error checking feed URL: {feed_url}, Error: {e}")
+        return False
     response = requests.get(feed_url, timeout=30, headers=headers)
     content_type = response.headers.get('Content-Type', '')
     if not is_valid_rss_type(content_type):
         return False
     if response.status_code >= 400: 
+        logger.error(f"Error checking feed URL: {feed_url}")
         return False
     root_doc = ET.fromstring(response.text)
     rss_root = root_doc.find(".//rss")

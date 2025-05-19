@@ -50,7 +50,7 @@ class NewsPreferenceAgentError(Enum):
 _llm = langchain_gemini_client.with_structured_output(NewsPreferenceAgentOutput)
 _survey_generation_system_message = SystemMessage(
     content="""You are a news preference survey agent. Your task is learn their news preferences by asking questions.
-    - We already know the user's subscribed list of rss feeds. They will be provided to you in the `rss_feed_list` field.
+    - We already know the user has subscribed to follow RSS feeds: {rss_feed_list}
     - You will be provided with a huge amount of news to summarize. 
     - Ask questions to learn user's preference of topic, story, idea, or meta element which might be helpful to summarize, select and sort news. 
     - Also ask questions to learn user's preference of writing style and format which makes user more likely and comfortable to read the news summary.
@@ -60,7 +60,7 @@ _survey_generation_system_message = SystemMessage(
     -- If you do, you will return the summary in the `news_preference_summary` field.
     -- If not, you will return the next question to ask in the `next_survey_question` field.
     - Introduce yourself as a news preference survey agent and explain the purpose of the survey to the user first.
-    - rss_feed_list: {rss_feed_list}
+    - Don't tell the user that we know the user has subscribed to follow RSS feeds.
     """
 )
 _prompt = ChatPromptTemplate.from_messages(
@@ -139,21 +139,21 @@ async def load_subscribed_rss_feed_list_for_preference_prompt(
         await redis.expire(redis_key, 3600)  # Extend TTL to 1 hour (3600 seconds)
         return cached_subscribed_rss_feed_list
     # If not in Redis, load from the database
-    subscribed_rss_feed_list = sql_client.execute(select(User.subscribed_rss_feed_list)
+    subscribed_rss_feeds_id = sql_client.execute(select(User.subscribed_rss_feeds_id)
         .filter(
             User.id == user_id
-        )).first().subscribed_rss_feed_list
+        )).first().subscribed_rss_feeds_id
 
-    if not subscribed_rss_feed_list:
+    if not subscribed_rss_feeds_id:
         raise ValueError(
             error_type=NewsPreferenceAgentError.NO_SUBSCRIBED_RSS_FEED,
             message="User has no subscribed rss feed list",
         )
     subscribed_rss_feed_title_list = [ row.title for row in sql_client.execute(select(RssFeed.title)
         .filter(
-            RssFeed.id.in_(subscribed_rss_feed_list)
+            RssFeed.id.in_(subscribed_rss_feeds_id)
         )).all()]
-    subscribed_rss_feed_title_list_str = ";\n".join(subscribed_rss_feed_title_list)
+    subscribed_rss_feed_title_list_str = "(list start)" + ";\n".join(subscribed_rss_feed_title_list) + "(list end)"
 
     await redis.set(
         redis_key,

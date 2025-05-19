@@ -25,6 +25,7 @@ def send_email(receiver_email: str, subject: str, content: str):
         server.sendmail(gmail_user, receiver_email, msg.as_string())
     except Exception as e:
         logger.error(f"Failed to send email. subject {subject}; error: {e}")
+        raise e
     finally:
         server.quit()
 

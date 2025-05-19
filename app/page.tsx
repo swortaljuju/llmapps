@@ -286,7 +286,7 @@ function SignUpForm({ onStateChange }: { onStateChange: (state: PageState) => vo
               className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
               required
               minLength={4}
-              maxLength={20}
+              maxLength={50}
             />
           </div>
 

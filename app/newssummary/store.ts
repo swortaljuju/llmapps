@@ -121,7 +121,7 @@ export async function savePreference(savePreferenceRequest: SavePreferenceReques
 export interface RssFeed {
     id?: number;
     title: string;
-    url: string;
+    feed_url: string;
 }
 
 export async function uploadRssFeeds(file: File | null, useDefault: boolean): Promise<void> {
@@ -172,7 +172,7 @@ export async function deleteRssFeed(feedId: number): Promise<void> {
     }
 }
 
-export async function subscribeRssFeed(rss_feed: RssFeed): Promise<void> {
+export async function subscribeRssFeed(rss_feed: RssFeed): Promise<number> {
     const response = await fetch(getBackendApiUrl('/news_summary/subscribe_rss_feed'), {
         method: 'POST',
         headers: {
@@ -186,4 +186,6 @@ export async function subscribeRssFeed(rss_feed: RssFeed): Promise<void> {
         const errorData = await response.json();
         throw new Error(errorData.detail || 'Failed to subscribe RSS feed');
     }
+    const responseJson = await response.json();
+    return responseJson.feed_id;
 }

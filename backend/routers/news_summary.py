@@ -99,14 +99,14 @@ async def initialize(
         )
         
         if not api_survey_history:
-            subscribe_rss_feed_list = load_subscribed_rss_feed_list_for_preference_prompt(
+            subscribed_rss_feed_list = await load_subscribed_rss_feed_list_for_preference_prompt(
                 user.user_id, redis=redis_client, sql_client=sql_client
             )
             api_survey_history, next_survey_message = await save_answer_and_generate_next_question(
                 user.user_id,
                 answer=None,
                 parent_message_id=None,
-                subscribe_rss_feed_list=subscribe_rss_feed_list,
+                subscribed_rss_feed_list=subscribed_rss_feed_list,
                 chat_history=[],
                 redis=redis_client,
                 sql_client=sql_client,
@@ -171,7 +171,7 @@ async def preference_survey(
         user.user_id, redis=redis_client, sql_client=sql_client
     )
     
-    subscribe_rss_feed_list = await load_subscribed_rss_feed_list_for_preference_prompt(
+    subscribed_rss_feed_list = await load_subscribed_rss_feed_list_for_preference_prompt(
         user.user_id, redis=redis_client, sql_client=sql_client
     )
 
@@ -179,7 +179,7 @@ async def preference_survey(
         user.user_id,
         answer=preference_survey_request.answer,
         parent_message_id=preference_survey_request.parent_message_id,
-        subscribe_rss_feed_list=subscribe_rss_feed_list,
+        subscribed_rss_feed_list=subscribed_rss_feed_list,
         chat_history=chat_history,
         redis=redis_client,
         sql_client=sql_client,
@@ -352,7 +352,7 @@ async def get_subscribed_rss_feeds(
     request.state.api_latency_log.user_id = user.user_id
     user_data = sql_client.query(User).filter(User.id == user.user_id).first()
     subscribed_rss_feeds = sql_client.query(RssFeed).filter(
-        RssFeed.id.in_(user_data.subscribed_rss_feeds_id)
+        RssFeed.id.in_(user_data.subscribed_rss_feeds_id or [])
     ).all()
     return [
         ApiRssFeed(id=feed.id, title=feed.title, feed_url=feed.feed_url)
@@ -371,7 +371,9 @@ async def delete_rss_feed(
     user_data = sql_client.query(User).filter(User.id == user.user_id).first()
     if feed_id not in user_data.subscribed_rss_feeds_id:
         raise HTTPException(status_code=400, detail="Feed ID not found in subscribed feeds")
-    user_data.subscribed_rss_feeds_id.remove(feed_id)
+    subscribed_rss_feeds_id = user_data.subscribed_rss_feeds_id.copy()
+    subscribed_rss_feeds_id.remove(feed_id)
+    user_data.subscribed_rss_feeds_id = subscribed_rss_feeds_id
     sql_client.commit()
 
 @router.post("/subscribe_rss_feed")
@@ -391,11 +393,14 @@ async def subscribe_rss_feed(
             status_code=400,
             detail=f"Exceeded maximum number of RSS subscriptions: {MAX_RSS_SUBSCRIPTION}",
         )
+    if not is_valid_rss_feed(rss_feed.feed_url):
+        raise HTTPException(status_code=400, detail="Invalid RSS feed URL")
     existing_feed = sql_client.query(RssFeed).filter(
         RssFeed.feed_url == rss_feed.feed_url
     ).first()
+    feed_id_to_add = None
     if existing_feed:
-        user_data.subscribed_rss_feeds_id.append(existing_feed.id)
+        feed_id_to_add = existing_feed.id
     else:
         new_feed = RssFeed(
             title=rss_feed.title,
@@ -403,6 +408,13 @@ async def subscribe_rss_feed(
         )
         sql_client.add(new_feed)
         sql_client.flush()
-        user_data.subscribed_rss_feeds_id.append(new_feed.id)
+        feed_id_to_add = new_feed.id
+    subscribed_rss_feeds_id = user_data.subscribed_rss_feeds_id.copy()
+    subscribed_rss_feeds_id.append(feed_id_to_add)
+    user_data.subscribed_rss_feeds_id = subscribed_rss_feeds_id
     sql_client.commit()
+    return {
+        "status": "success",
+        "feed_id": feed_id_to_add,
+    }
     
