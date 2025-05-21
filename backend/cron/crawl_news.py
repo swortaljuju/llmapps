@@ -206,7 +206,7 @@ def get_subscribed_feed_ids():
     )
     # Flatten the list and shuffle the feed IDs
     limited_user_subscribed_feed_ids = [
-        feed_id for sublist in limited_user_subscribed_feed_ids for feed_id in sublist
+        feed_id for sublist in limited_user_subscribed_feed_ids for feed_id in sublist[0]
     ]
     random.shuffle(limited_user_subscribed_feed_ids)
     for feed_id in limited_user_subscribed_feed_ids:
