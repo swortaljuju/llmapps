@@ -36,6 +36,7 @@ class NewsSummaryPeriod(enum.Enum):
     weekly = "weekly"
     # Monthly summary
     monthly = "monthly"
+
 class NewsSummaryEntry(Base):
     __tablename__ = "news_summary_entry"
 

@@ -11,9 +11,7 @@ class NewsChunkingExperiment(enum.Enum):
 
 # Experiment on how user preferences are applied to the news summary in the LLM
 class NewsPreferenceApplicationExperiment(enum.Enum):
-    # Apply user preference together with the news summarization prompt in one step
-    WITH_SUMMARIZATION_PROMPT = "with_summarization_prompt"
-    # Apply user preference after the news summarization is done
-    AFTER_NEW_SUMMARIZATION = "after_new_summarization"
+    # Apply user preference 
+    APPLY_PREFERENCE = "apply_preference"
     # Not apply preference at all
     NO_PREFERENCE = "no_preference"
