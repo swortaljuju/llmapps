@@ -223,13 +223,11 @@ async def _save_preference_summary(
             causal_survey_conversation_history_thread_id
         )
     sql_client.add(news_preference_version)
-    sql_client.commit()
-    sql_client.refresh(news_preference_version)
+    sql_client.flush()
     # Update user's news preference and preference version ID
     user_data = sql_client.query(User).filter(User.id == user_id).first()
     user_data.news_preference = news_preference_summary
     user_data.current_news_preference_version_id = news_preference_version.id
-    sql_client.commit()
 
 
 class GetPreferenceResponse(BaseModel):
@@ -326,19 +324,17 @@ async def upload_rss_feeds(
     for db_feed in existing_feeds:
         if db_feed.feed_url in feeds_to_add:
             del feeds_to_add[db_feed.feed_url]
+    valid_feeds_to_add = []
     for feed_url, db_feed in feeds_to_add.items():
-        if not is_valid_rss_feed(db_feed.feed_url) and not is_valid_rss_feed(db_feed.html_url):
-            del feeds_to_add[feed_url]
+        if is_valid_rss_feed(db_feed.feed_url) or is_valid_rss_feed(db_feed.html_url):
+            valid_feeds_to_add.append(db_feed)
 
-    if feeds_to_add:
-        sql_client.add_all(feeds_to_add.values())
-        sql_client.commit()
-    subscribed_feeds = sql_client.query(RssFeed).filter(
-        RssFeed.feed_url.in_(subscribed_feed_keys)
-    ).all()
+    if valid_feeds_to_add:
+        sql_client.add_all(valid_feeds_to_add)
+        sql_client.flush()
+    subscribed_feeds = existing_feeds + valid_feeds_to_add
     user_data = sql_client.query(User).filter(User.id == user.user_id).first()
     user_data.subscribed_rss_feeds_id = [feed.id for feed in subscribed_feeds]
-    sql_client.commit()
 
 
 
@@ -374,7 +370,6 @@ async def delete_rss_feed(
     subscribed_rss_feeds_id = user_data.subscribed_rss_feeds_id.copy()
     subscribed_rss_feeds_id.remove(feed_id)
     user_data.subscribed_rss_feeds_id = subscribed_rss_feeds_id
-    sql_client.commit()
 
 @router.post("/subscribe_rss_feed")
 async def subscribe_rss_feed( 
@@ -412,7 +407,6 @@ async def subscribe_rss_feed(
     subscribed_rss_feeds_id = user_data.subscribed_rss_feeds_id.copy()
     subscribed_rss_feeds_id.append(feed_id_to_add)
     user_data.subscribed_rss_feeds_id = subscribed_rss_feeds_id
-    sql_client.commit()
     return {
         "status": "success",
         "feed_id": feed_id_to_add,

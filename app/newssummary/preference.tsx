@@ -8,14 +8,15 @@ import { TypewriterText } from '../common/typewriter';
 interface NewsPreferenceChatProps {
     preferenceConversationHistory: ChatMessage[];
     setMainUiState: React.Dispatch<React.SetStateAction<MainUiMode>>;
+    fromCreatePreferenceToNewsSummary: () => void;
 }
 
 export function NewsPreferenceChat({
     preferenceConversationHistory,
-    setMainUiState
+    setMainUiState,
+    fromCreatePreferenceToNewsSummary
 }: NewsPreferenceChatProps) {
     const [messages, setMessages] = useState<ChatMessage[]>(preferenceConversationHistory);
-    const [preferenceSummary, setPreferenceSummary] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [userInput, setUserInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -61,7 +62,7 @@ export function NewsPreferenceChat({
             // Call API
             const response = await submitPreferenceSurvey(preferenceSurveyRequest);
             if (response.preference_summary) {
-                setPreferenceSummary(response.preference_summary);
+                fromCreatePreferenceToNewsSummary();
             } else {
                 setMessages(prev => {
                     prev[prev.length - 1].message_id = response.parent_message_id;
@@ -83,22 +84,7 @@ export function NewsPreferenceChat({
         } finally {
             setIsLoading(false);
         }
-    }
-        ;
-    if (preferenceSummary) {
-        return (
-            <div className="p-4">
-                <h2 className="text-lg font-semibold mb-2">Your News Preferences</h2>
-                <p>{preferenceSummary}</p>
-                <button
-                    className="mt-4 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md"
-                    onClick={() => { setMainUiState(MainUiMode.EditPreference); }}
-                >
-                    Edit Preferences
-                </button>
-            </div>
-        );
-    }
+    };
 
     return (
 

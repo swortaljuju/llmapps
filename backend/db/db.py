@@ -1,11 +1,11 @@
 import redis.asyncio as redis
 import os
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
 from typing import Annotated
 from fastapi import Depends
 from sqlalchemy.orm import Session
-
+from contextvars import ContextVar
 
 
 # Get Redis config from environment variables
@@ -28,11 +28,13 @@ SQLALCHEMY_DATABASE_URL = os.getenv("SQLALCHEMY_DATABASE_URL", "")
 sql_engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SqlSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=sql_engine)
 
-sql_client = None
+db_session_context: ContextVar[Session] = ContextVar("db_session", default=None)
+
 def get_sql_db() -> Session:
-    global sql_client
-    if sql_client is None:
-        sql_client = SqlSessionLocal()
-    return sql_client
+    db = db_session_context.get()
+    if db is None:
+        db = SqlSessionLocal()
+        db_session_context.set(db)
+    return db
 
 SqlClient = Annotated[Session, Depends(get_sql_db)]

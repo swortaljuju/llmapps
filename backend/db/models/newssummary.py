@@ -47,7 +47,7 @@ class NewsSummaryEntry(Base):
     # summary end date
     period_type = Column(Enum(NewsSummaryPeriod), default=NewsSummaryPeriod.weekly)
     news_chunking_experiment = Column(Enum(NewsChunkingExperiment), default=NewsChunkingExperiment.AGGREGATE_DAILY)
-    news_preference_application_experiment = Column(Enum(NewsPreferenceApplicationExperiment), default=NewsPreferenceApplicationExperiment.WITH_SUMMARIZATION_PROMPT)
+    news_preference_application_experiment = Column(Enum(NewsPreferenceApplicationExperiment), default=NewsPreferenceApplicationExperiment.APPLY_PREFERENCE)
     # summarized title from rss feeds title and description
     title = Column(String)
     # Expanded detailed summary of the news either by User or by AI
@@ -73,7 +73,7 @@ class NewsSummaryExperimentStats(Base):
     # summary end date
     period_type = Column(Enum(NewsSummaryPeriod), default=NewsSummaryPeriod.weekly)
     news_chunking_experiment = Column(Enum(NewsChunkingExperiment), default=NewsChunkingExperiment.AGGREGATE_DAILY)
-    news_preference_application_experiment = Column(Enum(NewsPreferenceApplicationExperiment), default=NewsPreferenceApplicationExperiment.WITH_SUMMARIZATION_PROMPT)
+    news_preference_application_experiment = Column(Enum(NewsPreferenceApplicationExperiment), default=NewsPreferenceApplicationExperiment.APPLY_PREFERENCE)
     liked = Column(Boolean, default=False)  # whether the user liked this summary
     disliked = Column(Boolean, default=False) # if a summary is shown to the user but not liked, it is considered as disliked
 

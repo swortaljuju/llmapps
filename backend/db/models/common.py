@@ -38,7 +38,7 @@ class User(Base):
     subscribed_rss_feeds_id = Column(ARRAY(Integer))
     user_tier = Column(Enum(UserTier), default=UserTier.BASIC)
     preferred_news_chunking_experiment = Column(Enum(NewsChunkingExperiment), default=NewsChunkingExperiment.AGGREGATE_DAILY)
-    preferred_news_preference_application_experiment = Column(Enum(NewsPreferenceApplicationExperiment), default=NewsPreferenceApplicationExperiment.WITH_SUMMARIZATION_PROMPT)
+    preferred_news_preference_application_experiment = Column(Enum(NewsPreferenceApplicationExperiment), default=NewsPreferenceApplicationExperiment.APPLY_PREFERENCE)
     
 class ConversationType(enum.Enum):
     news_preference_survey = "news_preference_survey"  

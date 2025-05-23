@@ -272,7 +272,6 @@ async def save_answer_and_generate_next_question(
             for item in message_to_save
         ]
     )
-    sql_client.commit()
     return (
         chat_history,
         NextPreferenceSurveyMessage(

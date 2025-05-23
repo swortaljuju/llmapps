@@ -6,7 +6,7 @@ from db.models import (
 )
 import time
 
-
+# Log API latency. This middleware should be outermost in the middleware stack.
 class ApiLatencyLogMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         # Start timer for performance logging
@@ -28,4 +28,13 @@ class ApiLatencyLogMiddleware(BaseHTTPMiddleware):
         sql_client = db.get_sql_db()
         sql_client.add(request.state.api_latency_log)
         sql_client.commit()
+        return response
+
+class DbLifeCycleMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        sql_client = db.get_sql_db()
+        # Continue with the request
+        response = await call_next(request)
+        sql_client.commit()
+        
         return response

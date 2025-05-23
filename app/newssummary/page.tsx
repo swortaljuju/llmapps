@@ -133,6 +133,13 @@ export default function NewsSummary() {
         setInitData(data);
         setMainUiMode(MainUiMode.CreatePreference);
     }
+
+    const fromCreatePreferenceToNewsSummary = async () => {
+        const data: InitializeResponse = await initialize();
+        // generate initial preference survey
+        setInitData(data);
+        setMainUiMode(MainUiMode.Chat);
+    }
     // Update chatList selection when mainUiMode or chatId changes
     useEffect(() => {
         setChatList(prev => ({
@@ -173,6 +180,7 @@ export default function NewsSummary() {
                 initData={initData}
                 setMainUiState={setMainUiMode}
                 fromFeedUploadToCreatePreference={fromFeedUploadToCreatePreference}
+                fromCreatePreferenceToNewsSummary={fromCreatePreferenceToNewsSummary}
                 selectedSummaryId={chatId}
             />
         );
@@ -193,6 +201,7 @@ interface NewsSummaryMainUiProps {
     initData: InitializeResponse | null;
     setMainUiState: React.Dispatch<React.SetStateAction<MainUiMode>>;
     fromFeedUploadToCreatePreference: () => void;
+    fromCreatePreferenceToNewsSummary: () => void;
     selectedSummaryId: string;
 }
 
@@ -201,12 +210,13 @@ function NewsSummaryMainUi({
     initData,
     setMainUiState,
     fromFeedUploadToCreatePreference,
+    fromCreatePreferenceToNewsSummary,
     selectedSummaryId,
 }: NewsSummaryMainUiProps) {
 
     switch (mainUiMode) {
         case MainUiMode.CreatePreference:
-            return <NewsPreferenceChat preferenceConversationHistory={initData!.preference_conversation_history} setMainUiState={setMainUiState}></NewsPreferenceChat>;
+            return <NewsPreferenceChat preferenceConversationHistory={initData!.preference_conversation_history} setMainUiState={setMainUiState} fromCreatePreferenceToNewsSummary={fromCreatePreferenceToNewsSummary}></NewsPreferenceChat>;
         case MainUiMode.EditPreference:
             return <EditPreference />;
         case MainUiMode.UploadRss:

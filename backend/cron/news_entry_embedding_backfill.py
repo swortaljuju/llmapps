@@ -11,9 +11,7 @@ load_dotenv(
 # Add the parent directory to sys.path so that we can import modules correctly
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from cron.common import generate_embedding
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from db.db import get_sql_db
 from db.models import  NewsEntry
 from cron.common import generate_embedding

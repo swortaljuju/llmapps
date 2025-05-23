@@ -176,7 +176,6 @@ async def signup(
     db.add(new_user)
     db.flush()
     await send_verification_email(signup_user.email, redis_client, new_user.id)
-    db.commit()
     
 
     return {
@@ -234,7 +233,6 @@ async def verify(
         )
 
     user.status = UserStatus.active
-    db.commit()
 
     await redis_client.delete(f"verification:{verification_token}")
 
