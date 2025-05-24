@@ -29,6 +29,7 @@ from enum import Enum
 import time
 from cron.news_entry_embedding_backfill import backfill_embedding
 from utils.rss import get_atom_tag, is_valid_rss_type
+from constants import SQL_BATCH_SIZE
 
 # Clear default handlers
 logger.remove()
@@ -37,7 +38,6 @@ os.makedirs(LOG_DIR, exist_ok=True)
 logger.add(f"{LOG_DIR}/crawl_news.log", rotation="1 day", retention="30 days", level=os.getenv("LOG_LEVEL", "INFO"), compression="zip", encoding="utf-8")
 
 UNLIMITED_USER_EMAILS = os.getenv("UNLIMITED_USER_EMAILS", "").split(",")
-SQL_BATCH_SIZE = 1000
 LIMITED_USER_SIZE = 20
 MAX_CRAWL_FEED_NUM = 2000
 

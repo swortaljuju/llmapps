@@ -32,9 +32,11 @@ class NewsEntry(Base):
     summary_embedding = Column(Vector(768))  # embedding of the content
 
 class NewsSummaryPeriod(enum.Enum):
+    # Daily summary
+    daily = "daily"
     # Weekly summary
     weekly = "weekly"
-    # Monthly summary
+    # Monthly summary. Not supported yet
     monthly = "monthly"
 
 class NewsSummaryEntry(Base):
