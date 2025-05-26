@@ -14,7 +14,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from db.db import get_sql_db, SqlSessionLocal
 from db.models import User, RssFeed, NewsEntry
-from cron.summarize_news import summarize_news
+from cron.summarize_news import summarize_news_for_all_users
 from datetime import datetime
 import requests
 from sqlalchemy import func
@@ -23,13 +23,12 @@ import xml.etree.ElementTree as ET
 from sqlalchemy.dialects.postgresql import insert
 import traceback
 from loguru import logger
-from constants import ( HTTP_HEADER_USER_AGENT)
+from constants import ( HTTP_HEADER_USER_AGENT, SQL_BATCH_SIZE)
 from dateutil import parser
 from enum import Enum
 import time
 from cron.news_entry_embedding_backfill import backfill_embedding
 from utils.rss import get_atom_tag, is_valid_rss_type
-from constants import SQL_BATCH_SIZE
 
 # Clear default handlers
 logger.remove()
@@ -280,9 +279,9 @@ def main():
             time.sleep(60)  # Sleep for 10 minutes
     # populate the embedding separately so that the quota won't block the crawling
     backfill_embedding()
-    # Summarize news every Saturday
-    # if datetime.now().weekday() == 5:  # 0 is Monday, 6 is Sunday
-    #     summarize_news()
+    # Summarize news every Sunday
+    # if datetime.now().weekday() == 6:  # 0 is Monday, 6 is Sunday
+    #     summarize_news_for_all_users()
 
 
 if __name__ == "__main__":

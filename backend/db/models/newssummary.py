@@ -60,6 +60,7 @@ class NewsSummaryEntry(Base):
     clicked = Column(Boolean, default=False)  # whether the user clicked this summary
     # The order of the entry in the summary list for a given period by start_date and end_date
     display_order_within_period = Column(Integer)
+    creation_time = Column(DateTime, default=datetime.now())
     
     __table_args__ = (
         Index("logical_key", "user_id", "start_date", "period_type", "news_chunking_experiment", "news_preference_application_experiment", "display_order_within_period", unique=True),
