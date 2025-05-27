@@ -6,19 +6,20 @@ from db.db import get_sql_db, SqlSessionLocal
 import os
 from datetime import datetime, date
 from constants import MAX_INPUT_TOKENS_PER_USER_PER_MONTH, MAX_OUTPUT_TOKENS_PER_USER_PER_MONTH
+from langchain.callbacks.base import BaseCallbackHandler
 
 def track_usage(
     user_id: int,
-    usage_metadata: UsageMetadataCallbackHandler,
+    usage_metadata: dict
 ) -> None:
     """
     Track the usage of an LLM model by logging the prompt, completion, and total tokens used.
     """
-    usage_metadata_per_model = usage_metadata.get(os.getenv("GEMINI_MODEL", "gemini-2.0-flash"))
+    usage_metadata_per_model = usage_metadata[os.getenv("GEMINI_MODEL", "gemini-2.0-flash")]
     usage_log = LlmUsageLog(
         user_id=user_id,
-        llm_input_token_count=usage_metadata_per_model.input_tokens,
-        llm_output_token_count=usage_metadata_per_model.output_tokens,
+        llm_input_token_count=usage_metadata_per_model["input_tokens"],
+        llm_output_token_count=usage_metadata_per_model["output_tokens"],
     )
     with SqlSessionLocal() as db:
         db.add(usage_log)
@@ -52,3 +53,11 @@ def exceed_llm_token_limit(
         (result.total_output_tokens and result.total_output_tokens >= MAX_OUTPUT_TOKENS_PER_USER_PER_MONTH)):
         return True
     return False
+
+class LlmApiTracker(BaseCallbackHandler):
+    def on_llm_start(self, serialized, prompts, **kwargs):
+        self.kwargs = kwargs
+
+    def on_llm_end(self, response, **kwargs):
+        self.response = response
+        self.response_kwargs = kwargs

@@ -50,10 +50,11 @@ class NewsSummaryEntry(Base):
     period_type = Column(Enum(NewsSummaryPeriod), default=NewsSummaryPeriod.weekly)
     news_chunking_experiment = Column(Enum(NewsChunkingExperiment), default=NewsChunkingExperiment.AGGREGATE_DAILY)
     news_preference_application_experiment = Column(Enum(NewsPreferenceApplicationExperiment), default=NewsPreferenceApplicationExperiment.APPLY_PREFERENCE)
-    # summarized title from rss feeds title and description
+    # summarized title from rss feeds title
     title = Column(String)
+    content = Column(String)  # summarized content from rss feeds description and content
     # Expanded detailed summary of the news either by User or by AI
-    content = Column(String)
+    expanded_content = Column(String)
     # Referenced RSS feeds URLs
     reference_urls = Column(ARRAY(String))
     # If user clicked the news summary
