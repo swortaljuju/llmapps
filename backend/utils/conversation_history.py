@@ -1,19 +1,16 @@
-from db.models.common import ConversationHistory, ConversationType, LangChainMessageType
+from db.models.common import ConversationHistory, ConversationType, MessageType
 from pydantic import BaseModel
-from langchain_core.messages import  HumanMessage, AIMessage, ToolMessage, SystemMessage
 from collections import deque
 import json
 import uuid
-
+from llm.client_proxy import LlmMessage, LlmMessageType
+class Api
 class ApiConversationHistoryItem(BaseModel):
     user_id: int
     thread_id: str
     message_id: str
     parent_message_id: str | None = None
-    human_message: HumanMessage | None = None
-    ai_message: AIMessage | None = None
-    tool_message: ToolMessage | None = None
-    system_message: SystemMessage | None = None
+    llm_message: LlmMessage | None = None
     
 def convert_to_api_conversation_history(db_conversation_history: list[ConversationHistory]) -> list[ApiConversationHistoryItem]:
     '''

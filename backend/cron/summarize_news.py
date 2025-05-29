@@ -17,6 +17,7 @@ from datetime import timedelta, date
 from loguru import logger
 from llm.news_summary_agent import summarize_news 
 from constants import SQL_BATCH_SIZE
+from datetime import datetime
 
 def summarize_news_for_all_users():
     sql_session = get_sql_db()
@@ -57,14 +58,16 @@ def __test():
     Test function to summarize news for all users.
     This is a placeholder for actual test cases.
     """
+    start_time = datetime.now()
     summaries = summarize_news(
         news_preference_application_experiment=NewsPreferenceApplicationExperiment.APPLY_PREFERENCE,
         news_chunking_experiment=NewsChunkingExperiment.AGGREGATE_DAILY,
         user_id=6,
-        start_date=date(2025, 5, 12),  # Start from the beginning of the current week
-        period=NewsSummaryPeriod.weekly
+        start_date=date(2025, 5, 22),  # Start from the beginning of the current week
+        period=NewsSummaryPeriod.daily
     )
-    print(summaries)
+    logger.info(f"Summarization took {datetime.now() - start_time} seconds")
+    logger.info(f"Summaries: {summaries}")
 
 if __name__ == "__main__":
     print("testing...")

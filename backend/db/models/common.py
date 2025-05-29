@@ -7,13 +7,7 @@ from .experiment import NewsChunkingExperiment, NewsPreferenceApplicationExperim
 class UserStatus(enum.Enum):
     pending = "pending"
     active = "active"
-
-class ChatMessageGeneratorRole(enum.Enum):
-    user = "user"
-    system = "system"
-    unknown = "unknown"
-
-class LangChainMessageType(enum.Enum):
+class MessageType(enum.Enum):
     HUMAN = "human"
     AI = "ai"
     SYSTEM = "system"
@@ -49,8 +43,7 @@ class ConversationHistory(Base):
     thread_id = Column(String)
     message_id = Column(String)
     parent_message_id = Column(String, nullable=True)
-    role = Column(Enum(ChatMessageGeneratorRole), default=ChatMessageGeneratorRole.unknown) 
     content =  Column(String) # serialized content of the message
-    lang_chain_message_type = Column(Enum(LangChainMessageType), default=LangChainMessageType.UNKNOWN)
+    message_type = Column(Enum(MessageType), default=MessageType.UNKNOWN)
     created_at = Column(DateTime, default=datetime.now())
     conversation_type = Column(Enum(ConversationType), default=ConversationType.news_preference_survey)

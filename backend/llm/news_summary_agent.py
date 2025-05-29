@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 from db.models import NewsEntry, NewsPreferenceApplicationExperiment, NewsChunkingExperiment, NewsSummaryPeriod, NewsSummaryEntry, User, RssFeed
 from datetime import datetime, date, timedelta
-from constants import HTTP_HEADER_USER_AGENT
+from utils.http import ua
 import requests
 from utils.logger import logger
 from db.db import get_sql_db, SqlSessionLocal
@@ -495,7 +495,7 @@ __model_with_web_search_prompt = ChatPromptTemplate.from_template(
 ) | langchain_gemini_client
 
 __header = {
-    'User-Agent': HTTP_HEADER_USER_AGENT
+    'User-Agent': ua.random
 }
 
 MAX_NEWS_SUMMARY_TO_EXPAND = 10

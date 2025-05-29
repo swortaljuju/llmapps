@@ -1,4 +1,3 @@
-from langchain_core.callbacks import UsageMetadataCallbackHandler
 from db.models import LlmUsageLog, User, UserTier
 from sqlalchemy.orm import Session, Query
 from sqlalchemy import func
