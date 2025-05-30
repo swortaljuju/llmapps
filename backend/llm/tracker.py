@@ -1,28 +1,28 @@
 from db.models import LlmUsageLog, User, UserTier
-from sqlalchemy.orm import Session, Query
 from sqlalchemy import func
-from db.db import get_sql_db, SqlSessionLocal
-import os
-from datetime import datetime, date
+from db.db import SqlSessionLocal, get_sql_db
+from datetime import datetime
 from constants import MAX_INPUT_TOKENS_PER_USER_PER_MONTH, MAX_OUTPUT_TOKENS_PER_USER_PER_MONTH
-from langchain.callbacks.base import BaseCallbackHandler
 
-def track_usage(
-    user_id: int,
-    usage_metadata: dict
-) -> None:
+class LlmTracker:
     """
-    Track the usage of an LLM model by logging the prompt, completion, and total tokens used.
+    A class to track LLM usage and other logs.
     """
-    usage_metadata_per_model = usage_metadata[os.getenv("GEMINI_MODEL", "gemini-2.0-flash")]
-    usage_log = LlmUsageLog(
-        user_id=user_id,
-        llm_input_token_count=usage_metadata_per_model["input_tokens"],
-        llm_output_token_count=usage_metadata_per_model["output_tokens"],
-    )
-    with SqlSessionLocal() as db:
-        db.add(usage_log)
-        db.commit()
+    def __init__(self, user_id: int):
+        self.__user_id = user_id
+    
+    def start(self) -> None:
+        self.__usage_log = LlmUsageLog(
+            user_id=self.__user_id)
+        
+    def log_usage(self, input_token_count: int, output_token_count: int) -> None:
+        self.__usage_log.llm_input_token_count += input_token_count
+        self.__usage_log.llm_output_token_count += output_token_count
+
+    def end(self) -> bool:
+        with SqlSessionLocal() as db:
+            db.add(self.__usage_log)
+            db.commit()
 
 def exceed_llm_token_limit(
     user_id: int
@@ -53,10 +53,3 @@ def exceed_llm_token_limit(
         return True
     return False
 
-class LlmApiTracker(BaseCallbackHandler):
-    def on_llm_start(self, serialized, prompts, **kwargs):
-        self.kwargs = kwargs
-
-    def on_llm_end(self, response, **kwargs):
-        self.response = response
-        self.response_kwargs = kwargs

@@ -10,8 +10,6 @@ class UserStatus(enum.Enum):
 class MessageType(enum.Enum):
     HUMAN = "human"
     AI = "ai"
-    SYSTEM = "system"
-    TOOL = "tool"
     UNKNOWN = "unknown" # not a langchain message
 
 class UserTier(enum.Enum):
@@ -36,6 +34,8 @@ class User(Base):
     
 class ConversationType(enum.Enum):
     news_preference_survey = "news_preference_survey"  
+    
+# Only record ai and human conversation history. It won't record system messages or tool calls.
 class ConversationHistory(Base):
     __tablename__ = "conversation_history"
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
@@ -43,7 +43,7 @@ class ConversationHistory(Base):
     thread_id = Column(String)
     message_id = Column(String)
     parent_message_id = Column(String, nullable=True)
-    content =  Column(String) # serialized content of the message
+    content =  Column(String) # text content of the message
     message_type = Column(Enum(MessageType), default=MessageType.UNKNOWN)
     created_at = Column(DateTime, default=datetime.now())
     conversation_type = Column(Enum(ConversationType), default=ConversationType.news_preference_survey)

@@ -14,7 +14,7 @@ from utils.date_helper import is_valid_period_start_date, determine_period_exclu
 import numpy as np
 from sklearn.cluster import HDBSCAN
 from langchain_core.callbacks import UsageMetadataCallbackHandler
-from llm.usage_tracker import exceed_llm_token_limit, track_usage, LlmApiTracker
+from llm.tracker import exceed_llm_token_limit, LlmTracker
 import traceback
 from langchain_core.runnables import Runnable, RunnableConfig
 from langchain_core.runnables.utils import Input
@@ -156,11 +156,13 @@ def summarize_news(
         news_preference = user_data.news_preference
     usage_metadata_callback = UsageMetadataCallbackHandler()    
     news_summary_entry_list = []
+    llm_tracker = LlmTracker(user_id)
+    llm_tracker.start()
     if news_chunking_experiment == NewsChunkingExperiment.AGGREGATE_DAILY:
-        news_summary_entry_list = __chunk_and_summarize_news(user_id, start_date, user_data.subscribed_rss_feeds_id, period, news_preference, usage_metadata_callback)
+        news_summary_entry_list = __chunk_and_summarize_news(user_id, start_date, user_data.subscribed_rss_feeds_id, period, news_preference, llm_tracker)
     elif news_chunking_experiment == NewsChunkingExperiment.EMBEDDING_CLUSTERING:
-        news_summary_entry_list = __cluster_and_summarize_news(user_id, start_date, user_data.subscribed_rss_feeds_id, period, news_preference, usage_metadata_callback)
-    track_usage(user_id, usage_metadata_callback.usage_metadata)
+        news_summary_entry_list = __cluster_and_summarize_news(user_id, start_date, user_data.subscribed_rss_feeds_id, period, news_preference, llm_tracker)
+    llm_tracker.end()
     return news_summary_entry_list
         
 def __get_existing_news_summary_entries(
@@ -199,7 +201,7 @@ def __chunk_and_summarize_news(
     user_id: int, start_date: date, subscribed_feed_id_list: list[int],
     period_type: NewsSummaryPeriod, 
     news_preference: str | None,
-    usage_metadata_callback: UsageMetadataCallbackHandler) -> list[NewsSummaryEntry]:
+    llm_tracker: LlmTracker) -> list[NewsSummaryEntry]:
     # based on news entry token count, chunk them per smaller period, summarize them per chunk and then merge the summaries
     # into one summary. Currently, we only support daily chunking
     period_end_date = determine_period_exclusive_end_date(period_type, start_date)
@@ -220,7 +222,7 @@ def __chunk_and_summarize_news_per_period(
     subscribed_feed_id_list: list[int], 
     target_period_type: NewsSummaryPeriod, 
     news_preference: str | None,
-    usage_metadata_callback: UsageMetadataCallbackHandler):
+    llm_tracker: LlmTracker):
     news_preference_experiment = NewsPreferenceApplicationExperiment.APPLY_PREFERENCE if news_preference else NewsPreferenceApplicationExperiment.NO_PREFERENCE
     news_chunking_experiment = NewsChunkingExperiment.AGGREGATE_DAILY
     for_base_period = target_period_type == BASE_CHUNK_PERIOD
@@ -287,12 +289,11 @@ def __chunk_and_summarize_news_per_period(
         try:
             model = __model_with_preference_applied_summary_list_output if for_base_period else __model_with_aggregated_summary_list_output
             prompt = ChatPromptTemplate.from_template(SUMMARY_WITH_USER_PREFERENCE_AND_CHUNKED_DATA_PROMPT)
-            llm_api_tracker = LlmApiTracker()
             summary_result = __run_model_with_retry((prompt | model), {
                 "user_preferences": news_preference or "No specific preferences",
                 "news_entries": formatted_entries,
                 "expansion_instruction": EXPANSION_INSTRUCTION if for_base_period else ""
-            }, config={"callbacks": [usage_metadata_callback, llm_api_tracker]})             
+            }, config={"callbacks": [usage_metadata_callback]})             
             # Process results and prepare for expansion if needed
             if summary_result and summary_result.summary_entry:
                 logger.info(f"Generated summary for {start_date} with {summary_result.model_dump_json(indent=2)}")
@@ -325,7 +326,6 @@ def __chunk_and_summarize_news_per_period(
                     session, user_id, start_date, end_date, target_period_type,
                     subscribed_feed_id_list, news_preference_experiment, news_chunking_experiment)
             else:
-                logger.warning(f"No summaries generated for {start_date} input kwargs { llm_api_tracker.kwargs} response {llm_api_tracker.response} {llm_api_tracker.response_kwargs}")
                 return []
         except Exception as e:
             session.rollback()
@@ -338,7 +338,7 @@ def __cluster_and_summarize_news(
     subscribed_feed_id_list: list[int],
     target_period_type: NewsSummaryPeriod, 
     news_preference: str | None,
-    usage_metadata_callback: UsageMetadataCallbackHandler) -> list[NewsSummaryEntry]:
+    llm_tracker: LlmTracker) -> list[NewsSummaryEntry]:
     news_preference_experiment = NewsPreferenceApplicationExperiment.APPLY_PREFERENCE if news_preference else NewsPreferenceApplicationExperiment.NO_PREFERENCE
     news_chunking_experiment = NewsChunkingExperiment.EMBEDDING_CLUSTERING
     end_date = determine_period_exclusive_end_date(target_period_type, start_date)
@@ -502,7 +502,7 @@ MAX_NEWS_SUMMARY_TO_EXPAND = 10
 
 def _expand_news_if_necessary(
     news_summary_list:  list[NewsSummaryWithPreferenceAppliedOutput],
-    usage_metadata_callback: UsageMetadataCallbackHandler):
+    llm_tracker: LlmTracker):
     # If llm decide to expand the summary but fail to crawl it, we will crawl the reference urls and ask llm to summarize them
     # If we also fail to crawl the reference urls, we will just ask llm to search the title on the web and summarize the content
     # make sure headers contain correct user agent value
