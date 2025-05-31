@@ -28,14 +28,13 @@ class NewsPreferenceAgentOutput(BaseModel):
     """
 
     news_preference_summary: str | None = Field(
-        default=None,
         description="""The summary of the user's news preference if the survey is completed 
             and no next survey question is generated. Write the preference summary in third-person perspective 
             so that AI could understand how to write news summary and rank news. 
             It should also contain instructions to rank news based on the user's preferences.""",
     )
     next_survey_question: str | None = Field(
-        default=None, description="The next new preference question to ask the user"
+        description="The next new preference question to ask the user"
     )
 
 class NewsPreferenceAgentError(Enum):

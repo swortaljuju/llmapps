@@ -16,7 +16,7 @@
             <outline type="rss" text="Asana Engineering Blog" title="Asana Engineering Blog" xmlUrl="https://blog.asana.com/category/eng/feed/" htmlUrl="https://blog.asana.com"/>
             <outline type="rss" text="9to5Google" title="9to5Google" xmlUrl="http://9to5google.com/feed/" htmlUrl="https://9to5google.com/"/>
             <outline type="rss" text="Lifehacker" title="Lifehacker" xmlUrl="http://feeds.gawker.com/lifehacker/vip" htmlUrl="https://lifehacker.com/feed/rss"/>
-            <outline type="rss" text="Google Developers " title="Google Developers " xmlUrl="http://code.google.com/feeds/updates.xml" htmlUrl="https://developers.googleblog.com/rss/"/>
+            <outline type="rss" text="Google Developers " title="Google Developers " xmlUrl="https://developers.googleblog.com/rss/" htmlUrl="https://developers.googleblog.com/rss/"/>
             <outline type="rss" text="TDS Archive - Medium" title="TDS Archive - Medium" xmlUrl="https://medium.com/feed/towards-data-science" htmlUrl="https://medium.com/data-science?source=rss----7f60cf5620c9---4"/>
             <outline type="rss" text="Netflix TechBlog" title="Netflix TechBlog" xmlUrl="http://techblog.netflix.com/feeds/posts/default" htmlUrl="https://netflixtechblog.com?source=rss----2615bd06b42e---4"/>
             <outline type="rss" text="" title="" xmlUrl="http://wanqu.co/feed" htmlUrl="https://wanqu.co/issues/1370?s=rss"/>

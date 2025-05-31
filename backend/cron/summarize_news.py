@@ -61,10 +61,10 @@ def __test():
     start_time = datetime.now()
     summaries = summarize_news(
         news_preference_application_experiment=NewsPreferenceApplicationExperiment.APPLY_PREFERENCE,
-        news_chunking_experiment=NewsChunkingExperiment.AGGREGATE_DAILY,
+        news_chunking_experiment=NewsChunkingExperiment.EMBEDDING_CLUSTERING,
         user_id=6,
-        start_date=date(2025, 5, 22),  # Start from the beginning of the current week
-        period=NewsSummaryPeriod.daily
+        start_date=date(2025, 5, 19),  # Start from the beginning of the current week
+        period=NewsSummaryPeriod.weekly
     )
     logger.info(f"Summarization took {datetime.now() - start_time} seconds")
     logger.info(f"Summaries: {summaries}")

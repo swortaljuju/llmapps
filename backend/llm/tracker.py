@@ -16,6 +16,10 @@ class LlmTracker:
             user_id=self.__user_id)
         
     def log_usage(self, input_token_count: int, output_token_count: int) -> None:
+        if not self.__usage_log.llm_input_token_count:
+            self.__usage_log.llm_input_token_count = 0
+        if not self.__usage_log.llm_output_token_count:
+            self.__usage_log.llm_output_token_count = 0
         self.__usage_log.llm_input_token_count += input_token_count
         self.__usage_log.llm_output_token_count += output_token_count
 

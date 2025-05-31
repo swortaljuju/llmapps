@@ -1,6 +1,6 @@
 import os
 from google.genai import Client, types
-from client_proxy import LlmClientProxy, LlmMessage, LlmMessageType, FunctionCallMessage, FunctionResponseMessage
+from .client_proxy import LlmClientProxy, LlmMessage, LlmMessageType, FunctionCallMessage, FunctionResponseMessage
 from pydantic import BaseModel
 from collections.abc import Callable
 from typing import Any
@@ -25,12 +25,12 @@ class GeminiClientProxy(LlmClientProxy):
             config.response_schema = output_object
         elif tools:
             config.tools = tools
-        
+        if system_prompt:
+            config.system_instruction = system_prompt
         try: 
             response: types.GenerateContentResponse = self.__client.models.generate_content(
                 model=self.__generation_model,
-                system_prompt=system_prompt,
-                contents=self.__generate_contents(prompt, system_prompt),
+                contents=self.__generate_contents(prompt, config),
                 config=config
             )
         except Exception as e:
@@ -71,7 +71,7 @@ class GeminiClientProxy(LlmClientProxy):
             )
         raise ValueError("Response does not contain valid content")
 
-    def __generate_contents(self, prompt: str | list[LlmMessage], system_prompt: str | None = None) -> list[types.Content]:
+    def __generate_contents(self, prompt: str | list[LlmMessage], config: types.GenerateContentConfig) -> list[types.Content]:
         contents = []
         if isinstance(prompt, str):
             contents.append(types.Content(role="user", parts=[types.Part(text=prompt)]))
@@ -82,7 +82,7 @@ class GeminiClientProxy(LlmClientProxy):
                 elif message.type == LlmMessageType.AI:
                     contents.append(types.Content(role="model", parts=[types.Part(text=message.text_content or "")]))
                 elif message.type == LlmMessageType.SYSTEM:
-                    system_prompt = message.text_content or system_prompt
+                    config.system_instruction = message.text_content
                 elif message.type == LlmMessageType.FUNCTION_CALL:
                     contents.append(types.Content(
                         role="model", 
@@ -110,4 +110,4 @@ class GeminiClientProxy(LlmClientProxy):
 
     def embed_content(self, contents: list[str]) -> list[list[float]]:
         response = self.__client.models.embed_content(model=self.__embedding_model, contents=contents)
-        return response.embeddings
+        return [ embd.values for embd in response.embeddings]

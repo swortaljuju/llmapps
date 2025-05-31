@@ -27,7 +27,7 @@ def generate_embedding(news_entry_list: list[NewsEntry]):
             f"{_empty_for_none(news_entry.title)} {_empty_for_none(news_entry.description)} {_empty_for_none(news_entry.content)}"
             for news_entry in news_entry_list_chunk
         ]
-        embedding = get_default_client_proxy().embed_documents(
+        embedding = get_default_client_proxy().embed_content(
             embedding_input_list
         )
         for j, embedding_vector in enumerate(embedding):

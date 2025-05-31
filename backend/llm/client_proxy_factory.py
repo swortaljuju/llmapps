@@ -21,8 +21,8 @@ def get_llm_client_proxy(model_type: ModelType) -> LlmClientProxy:
     Factory function to get the appropriate LLM client proxy based on the model type.
     """
     if model_type == ModelType.GEMINI:
+        global __gemini_client_proxy
         if __gemini_client_proxy is None:
-            global __gemini_client_proxy
             __gemini_client_proxy = GeminiClientProxy()
         return __gemini_client_proxy
     else:
