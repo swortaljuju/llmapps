@@ -1,10 +1,8 @@
 from db.models.common import ConversationHistory, ConversationType, MessageType
 from pydantic import BaseModel
 from collections import deque
-import json
 import uuid
 from llm.client_proxy import LlmMessage, LlmMessageType
-class Api
 class ApiConversationHistoryItem(BaseModel):
     user_id: int
     thread_id: str
@@ -36,17 +34,16 @@ def convert_to_api_conversation_history(db_conversation_history: list[Conversati
                 message_id=current_item.message_id,
                 parent_message_id=current_item.parent_message_id
             )
-            json_content = json.loads(current_item.content)
-            if current_item.lang_chain_message_type == LangChainMessageType.HUMAN:
-                api_conversation_history_item.human_message = HumanMessage(**json_content)
-            elif current_item.lang_chain_message_type == LangChainMessageType.AI:
-                api_conversation_history_item.ai_message = AIMessage(**json_content)
-            elif current_item.lang_chain_message_type == LangChainMessageType.TOOL:
-                api_conversation_history_item.tool_message = ToolMessage(**json_content)
-            elif current_item.lang_chain_message_type == LangChainMessageType.SYSTEM:
-                api_conversation_history_item.system_message = SystemMessage(**json_content)
+            llm_message = LlmMessage(
+                text_content=current_item.content,
+            )
+            if current_item.message_type == MessageType.HUMAN:
+                llm_message.type = LlmMessageType.HUMAN
+            elif current_item.message_type == MessageType.AI:
+                llm_message.type = LlmMessageType.AI
             else:
                 continue
+            api_conversation_history_item.llm_message = llm_message
             api_sub_conversation_history.appendleft(api_conversation_history_item)
             current_message_id = current_item.parent_message_id
         api_conversation_history.extend(api_sub_conversation_history)    
@@ -57,31 +54,29 @@ def convert_api_conversation_history_item_to_db_row(
     item: ApiConversationHistoryItem,
     user_id: int,
     conversation_type: ConversationType = ConversationType.news_preference_survey
-) -> ConversationHistory:
+) -> ConversationHistory| None:
     """
     Converts an ApiConversationHistoryItem to a ConversationHistory item for database storage.
     """
-    content = {}
-    if item.human_message:
+    content = item.llm_message.text_content
+    llm_message_type = item.llm_message.type
+    message_type = MessageType.UNKNOWN
+    if llm_message_type == LlmMessageType.HUMAN:
         content = item.human_message.model_dump()
-        lang_chain_message_type = LangChainMessageType.HUMAN
-    elif item.ai_message:
+        message_type = MessageType.HUMAN
+    elif llm_message_type == LlmMessageType.AI:
         content = item.ai_message.model_dump()
-        lang_chain_message_type = LangChainMessageType.AI
-    elif item.tool_message:
-        content = item.tool_message.model_dump()
-        lang_chain_message_type = LangChainMessageType.TOOL
-    elif item.system_message:
-        content = item.system_message.model_dump()
-        lang_chain_message_type = LangChainMessageType.SYSTEM
+        message_type = MessageType.AI
+    else:
+        return None
     
     return ConversationHistory(
         user_id=user_id,
         thread_id=item.thread_id,
         message_id=item.message_id,
         parent_message_id=item.parent_message_id,
-        content=json.dumps(content),
-        lang_chain_message_type=lang_chain_message_type,
+        content=content,
+        message_type=message_type,
         conversation_type=conversation_type
     )
 

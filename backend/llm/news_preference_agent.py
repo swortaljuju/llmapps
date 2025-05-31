@@ -1,9 +1,7 @@
-from .clients import langchain_gemini_client
+from .client_proxy_factory import get_default_client_proxy
 from pydantic import BaseModel, Field
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from sqlalchemy.orm import Session
 import redis.asyncio as redis
-from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from db.models.common import ConversationHistory, ConversationType, User
 from db.models import ApiLatencyLog
 from utils.conversation_history import (
@@ -18,6 +16,7 @@ import json
 from enum import Enum
 import time
 from sqlalchemy import select
+from .client_proxy import LlmMessage, LlmMessageType
 
 class NewsPreferenceAgentOutput(BaseModel):
     """
@@ -39,7 +38,6 @@ class NewsPreferenceAgentOutput(BaseModel):
         default=None, description="The next new preference question to ask the user"
     )
 
-
 class NewsPreferenceAgentError(Enum):
     # Incoming survey question's parent message id does not match the last message in chat history
     MISSING_ANSWER = 0
@@ -47,9 +45,7 @@ class NewsPreferenceAgentError(Enum):
     NO_SUBSCRIBED_RSS_FEED = 2
 
 
-_llm = langchain_gemini_client.with_structured_output(NewsPreferenceAgentOutput)
-_survey_generation_system_message = SystemMessage(
-    content="""You are a news preference survey agent. Your task is learn their news preferences by asking questions.
+_survey_generation_system_message = """You are a news preference survey agent. Your task is learn their news preferences by asking questions.
     - We already know the user has subscribed to follow RSS feeds: {rss_feed_list}
     - You will be provided with a huge amount of news to summarize. 
     - Ask questions to learn user's preference of topic, story, idea, or meta element which might be helpful to summarize, select and sort news. 
@@ -62,19 +58,6 @@ _survey_generation_system_message = SystemMessage(
     - Introduce yourself as a news preference survey agent and explain the purpose of the survey to the user first.
     - Don't tell the user that we know the user has subscribed to follow RSS feeds.
     """
-)
-_prompt = ChatPromptTemplate.from_messages(
-    [
-        _survey_generation_system_message,
-        # Workaround for Gemini. The Gemini api request must have a content
-        # field which is only from HumanMessage or AIMessage. So add a dummy
-        # AIMessage to the prompt to satisfy this requirement.
-        AIMessage(content="Let's start"),
-        MessagesPlaceholder("chat_history"),
-    ]
-)
-_new_preference_survey_agent = _prompt | _llm
-
 
 def _get_news_preference_survey_history_key(user_id: int) -> str:
     """
@@ -169,18 +152,16 @@ def next_preference_question(
     subscribed_rss_feed_list: str, chat_history: list[ApiConversationHistoryItem], api_latency_log: ApiLatencyLog
 ) -> NewsPreferenceAgentOutput:
     llm_start_time = time.time()
-    llm_result = _new_preference_survey_agent.invoke(
-        {
-            "chat_history": [
-                item.human_message
-                or item.ai_message
-                or item.tool_message
-                or item.system_message
-                for item in chat_history
-            ],
-            "rss_feed_list": subscribed_rss_feed_list,
-        }
-    )
+    llm_result = get_default_client_proxy().generate_content(
+        system_prompt=_survey_generation_system_message.format_map({"rss_feed_list": subscribed_rss_feed_list}),
+        prompt = [LlmMessage(text_content="Let's start", type=LlmMessageType.AI)] 
+        + [
+            item.llm_message
+            for item in chat_history
+            if item.llm_message and item.llm_message.type in (LlmMessageType.HUMAN, LlmMessage.AI)
+        ],        
+        output_object=NewsPreferenceAgentOutput,
+        )
     api_latency_log.llm_elapsed_time_ms = (
         api_latency_log.llm_elapsed_time_ms
         if api_latency_log.llm_elapsed_time_ms
@@ -188,7 +169,7 @@ def next_preference_question(
     ) + int(
         (time.time() - llm_start_time) * 1000
     )  # Convert to milliseconds
-    return llm_result
+    return llm_result.structured_output
 
 
 class NextPreferenceSurveyMessage(BaseModel):
@@ -238,7 +219,10 @@ async def save_answer_and_generate_next_question(
             thread_id=thread_id,
             message_id=answer_message_id,
             parent_message_id=chat_history[-1].message_id,
-            human_message=HumanMessage(content=answer),
+            llm_message=LlmMessage(
+                text_content=answer,
+                type=LlmMessageType.HUMAN,
+            ),
         )
         chat_history.append(answer_conversation_item)
         message_to_save.append(answer_conversation_item)
@@ -251,7 +235,10 @@ async def save_answer_and_generate_next_question(
             user_id=user_id,
             thread_id=thread_id,
             message_id=create_message_id(),
-            ai_message=AIMessage(content=next_question_or_summary.next_survey_question),
+            llm_message=LlmMessage(
+                text_content=next_question_or_summary.next_survey_question,
+                type=LlmMessageType.AI,
+            ),
         )
         if chat_history:
             question_conversation_item.parent_message_id = chat_history[-1].message_id
@@ -263,15 +250,12 @@ async def save_answer_and_generate_next_question(
     await redis.set(
         redis_key, json.dumps([item.model_dump() for item in chat_history]), ex=3600
     )  # Cache for 1 hour
-
-    sql_client.add_all(
-        [
-            convert_api_conversation_history_item_to_db_row(
-                item, user_id, ConversationType.news_preference_survey
-            )
-            for item in message_to_save
-        ]
-    )
+    for item in message_to_save:
+        db_conversation_history_item = convert_api_conversation_history_item_to_db_row(
+            item, user_id, ConversationType.news_preference_survey
+        )
+        if db_conversation_history_item:
+            sql_client.add(db_conversation_history_item)
     return (
         chat_history,
         NextPreferenceSurveyMessage(

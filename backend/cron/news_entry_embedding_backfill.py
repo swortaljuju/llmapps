@@ -14,7 +14,6 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from cron.common import generate_embedding
 from db.db import get_sql_db
 from db.models import  NewsEntry
-from cron.common import generate_embedding
 import time
 
 BATCH_SIZE = 1000

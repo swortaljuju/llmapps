@@ -13,7 +13,7 @@ class LlmMessageType(Enum):
     FUNCTION_CALL = "function_call"
     FUNCTION_RESPONSE = "function_response"
     STRUCTURED_OUTPUT = "structured_output"  # output object
-    UNKNOWN = "unknown"  # not a langchain message
+    UNKNOWN = "unknown"
 
 class FunctionCallMessage(BaseModel):
     """
@@ -53,9 +53,14 @@ class LlmClientProxy:
     def __init__(self, model: str):
         self.model = model
 
-    def generate_content(self, prompt: str | list[LlmMessage], system_prompt: str | None = None, tracker: LlmTracker  | None = None, tools: list[Callable[..., Any]] = [], output_object: BaseModel | list[BaseModel] | None = None ) -> LlmMessage:
-        """_summary_
-
+    def generate_content(self, 
+                        prompt: str | list[LlmMessage], 
+                        system_prompt: str | None = None, 
+                        tracker: LlmTracker  | None = None, 
+                        tools: list[Callable[..., Any]] = [], 
+                        output_object: BaseModel | list[BaseModel] | None = None ) -> LlmMessage:
+        """
+        Interface for generating content
         Args:
             prompt (str | list[LlmMessage]): single prompt or chat history where last message is the latest user message.
             system_prompt (str | None, optional): System prompt 

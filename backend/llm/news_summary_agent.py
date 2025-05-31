@@ -1,6 +1,5 @@
-from .clients import langchain_gemini_client
+from .client_proxy_factory import get_default_client_proxy
 from pydantic import BaseModel, Field
-from langchain_core.prompts import ChatPromptTemplate
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from db.models import NewsEntry, NewsPreferenceApplicationExperiment, NewsChunkingExperiment, NewsSummaryPeriod, NewsSummaryEntry, User, RssFeed
@@ -13,12 +12,8 @@ from sqlalchemy import select
 from utils.date_helper import is_valid_period_start_date, determine_period_exclusive_end_date
 import numpy as np
 from sklearn.cluster import HDBSCAN
-from langchain_core.callbacks import UsageMetadataCallbackHandler
 from llm.tracker import exceed_llm_token_limit, LlmTracker
 import traceback
-from langchain_core.runnables import Runnable, RunnableConfig
-from langchain_core.runnables.utils import Input
-from typing import Optional
 
 ### Prompt templates for summarizing news entries
 SUMMARY_WITH_USER_PREFERENCE_AND_CHUNKED_DATA_PROMPT = """
@@ -76,16 +71,6 @@ class AggregatedSummaryOutput(BaseModel):
         default=[],
         description="""The summarized news entries' reference URLs. """)
 
-class AggregatedSummaryListOutput(BaseModel):
-    """
-    Generated list of news summary entries. Each entry is a summary of multiple news entries or news summaries.
-    """
-    summary_entry: list[AggregatedSummaryOutput] | None = Field(
-        default=None,
-        description="""The list of news summaries. """)   
-
-__model_with_aggregated_summary_list_output = langchain_gemini_client.with_structured_output(AggregatedSummaryListOutput)
-
 class NewsSummaryWithPreferenceAppliedOutput(BaseModel):
     """
     Generated news summary entry. Each entry is a summary of multiple news entries. 
@@ -107,17 +92,6 @@ class NewsSummaryWithPreferenceAppliedOutput(BaseModel):
         default=None,
         description="""Optional. Summary of the reference urls' contents in accordance with the user preferences. None if failed to access the reference urls.""")
 
-class NewsSummaryWithPreferenceAppliedListOutput(BaseModel):
-    """
-    Generated list of news summary entries. Each entry is a summary of multiple news entries.
-    Pick 10 most important and preferred news summary entries and summarize their reference urls.
-    """
-    summary_entry: list[NewsSummaryWithPreferenceAppliedOutput] | None = Field(
-        default=None,
-        description="""The list of news summaries. """)   
-
-__model_with_preference_applied_summary_list_output = langchain_gemini_client.with_structured_output(NewsSummaryWithPreferenceAppliedListOutput)
-
 # News summary without user preference output    
 class ClusterSummaryOutput(BaseModel):
     """
@@ -132,8 +106,6 @@ class ClusterSummaryOutput(BaseModel):
     reference_urls: list[str] = Field(
         default=[],
         description="""The summarized news entries' reference URLs. """)
-
-__model_with_cluster_summary_output = langchain_gemini_client.with_structured_output(ClusterSummaryOutput)
 
 # The basic period for chunking news entries
 BASE_CHUNK_PERIOD = NewsSummaryPeriod.daily
@@ -154,7 +126,6 @@ def summarize_news(
     news_preference = None
     if news_preference_application_experiment == NewsPreferenceApplicationExperiment.APPLY_PREFERENCE:
         news_preference = user_data.news_preference
-    usage_metadata_callback = UsageMetadataCallbackHandler()    
     news_summary_entry_list = []
     llm_tracker = LlmTracker(user_id)
     llm_tracker.start()
@@ -287,19 +258,23 @@ def __chunk_and_summarize_news_per_period(
         
         # Invoke LLM to generate summary
         try:
-            model = __model_with_preference_applied_summary_list_output if for_base_period else __model_with_aggregated_summary_list_output
-            prompt = ChatPromptTemplate.from_template(SUMMARY_WITH_USER_PREFERENCE_AND_CHUNKED_DATA_PROMPT)
-            summary_result = __run_model_with_retry((prompt | model), {
+            prompt = SUMMARY_WITH_USER_PREFERENCE_AND_CHUNKED_DATA_PROMPT.format_map(
+                {
                 "user_preferences": news_preference or "No specific preferences",
                 "news_entries": formatted_entries,
                 "expansion_instruction": EXPANSION_INSTRUCTION if for_base_period else ""
-            }, config={"callbacks": [usage_metadata_callback]})             
+            })
+            summary_result = get_default_client_proxy().generate_content(
+                prompt=prompt, 
+                tracker=llm_tracker, 
+                output_object= list[NewsSummaryWithPreferenceAppliedOutput]  if for_base_period else list[AggregatedSummaryOutput]).structured_output
+            
             # Process results and prepare for expansion if needed
             if summary_result and summary_result.summary_entry:
                 logger.info(f"Generated summary for {start_date} with {summary_result.model_dump_json(indent=2)}")
                 if for_base_period:
                     # Expand summaries based on user preference and importance
-                    _expand_news_if_necessary(summary_result.summary_entry, usage_metadata_callback)
+                    _expand_news_if_necessary(summary_result.summary_entry, llm_tracker)
                 added_summaries = []
                 # Create NewsSummaryEntry objects and save to database
                 for order, summary in enumerate(summary_result.summary_entry):
@@ -407,18 +382,18 @@ def __cluster_and_summarize_news(
                         formatted_entries.append(entry_data)
                     
                     # Invoke LLM to generate summary per cluster
-                    model = __model_with_cluster_summary_output
-                    prompt = ChatPromptTemplate.from_template(SUMMARY_PER_CLUSTERING_GROUP_PROMPT)
-                    
-                    summary_result = __run_model_with_retry((prompt | model), {
+                    prompt = SUMMARY_PER_CLUSTERING_GROUP_PROMPT.format_map({
                         "news_entries": formatted_entries
-                    }, config={"callbacks": [usage_metadata_callback]})
+                    })
+                    
+                    summary_result = get_default_client_proxy().generate_content(
+                        prompt=prompt, 
+                        tracker=llm_tracker, 
+                        output_object=ClusterSummaryOutput).structured_output
                     
                     if summary_result: 
                         summary_list.append(summary_result)
                 
-                model = __model_with_preference_applied_summary_list_output
-                prompt = ChatPromptTemplate.from_template(RANK_AND_EXPAND_PER_CLUSTERING_GROUP_PROMPT)
                 # Convert summary_list objects to dictionaries
                 summaries_as_dicts = [
                     {
@@ -428,15 +403,18 @@ def __cluster_and_summarize_news(
                     }
                     for summary in summary_list
                 ]
-                
-                rank_and_expand_result = __run_model_with_retry( (prompt | model), {
+                prompt = RANK_AND_EXPAND_PER_CLUSTERING_GROUP_PROMPT.format_map({
                     "user_preferences": news_preference or "No specific preferences",
-                    "news_entries": summaries_as_dicts,
-                }, config={"callbacks": [usage_metadata_callback]})
+                    "news_entries": summaries_as_dicts
+                })
+                rank_and_expand_result = get_default_client_proxy().generate_content(
+                    prompt=prompt,
+                    tracker=llm_tracker,
+                    output_object=list[NewsSummaryWithPreferenceAppliedOutput]).structured_output
                 
                 # Process results and prepare for expansion if needed
                 if rank_and_expand_result.summary_entry:
-                    _expand_news_if_necessary(rank_and_expand_result.summary_entry, usage_metadata_callback)
+                    _expand_news_if_necessary(rank_and_expand_result.summary_entry, llm_tracker)
                     added_summaries = []
                     # Create NewsSummaryEntry objects and save to database
                     for order, summary in enumerate(summary_result.summary_entry):
@@ -466,33 +444,13 @@ def __cluster_and_summarize_news(
                 logger.error(f"Error summarizing news for {start_date}: {str(e)}")
     return []
 
-def __run_model_with_retry(model: Runnable, input: Input, config: Optional[RunnableConfig] = None) -> AggregatedSummaryListOutput | NewsSummaryWithPreferenceAppliedListOutput | ClusterSummaryOutput:
-    """
-    Run the model with retry logic. If the model fails, it will retry up to 5 times. 
-    If the input and output is large, gemini model may fail with MALFORMED_FUNCTION_CALL intermittently.
-    """
-    max_retries = 5
-    for attempt in range(max_retries):
-        logger.info(f"Attempt {attempt + 1} to run model")
-        result = model.invoke(input, config=config)
-        if result and (
-            (isinstance(result, AggregatedSummaryListOutput) or 
-            isinstance(result, NewsSummaryWithPreferenceAppliedListOutput)) and result.summary_entry
-            or isinstance(result, ClusterSummaryOutput)
-        ):
-            return result
+__raw_summary_prompt = "Summarize the following news into less than 100 words. The news is crawled from web. {content}"
 
-__model_with_raw_summary_prompt = ChatPromptTemplate.from_template(
-    "Summarize the following news into less than 100 words. The news is crawled from web. {content}"
-) | langchain_gemini_client
-
-__model_with_web_search_prompt = ChatPromptTemplate.from_template(
-    """
+__web_search_prompt ="""
         Summarize the content in the urls into less than 100 words.
         {url}
         If you can't fetch content from the above urls, then search the news content on the web based on given title {title} 
     """
-) | langchain_gemini_client
 
 __header = {
     'User-Agent': ua.random
@@ -520,13 +478,18 @@ def _expand_news_if_necessary(
                             response.raise_for_status()  # This will raise an exception for HTTP errors
                             content = response.text
                             # summarize the content
-                            summary = __model_with_raw_summary_prompt.invoke({"content": content}, config={"callbacks": [usage_metadata_callback]})
+                            summary = get_default_client_proxy().generate_content(
+                                    prompt=__raw_summary_prompt.format_map({"content": content}),
+                                    tracker=llm_tracker).text_content
                             if summary:
                                 # update the content of the news summary
-                                news_summary.expanded_content = summary.content
+                                news_summary.expanded_content = summary
                                 break
                         except requests.RequestException as e:
                             logger.error(f"Failed to crawl {url}: {e}")
                 if not news_summary.expanded_content:
-                    search_result = __model_with_web_search_prompt.invoke({"title": news_summary.title, "url": news_summary.reference_urls}, config={"callbacks": [usage_metadata_callback]})
-                    news_summary.expanded_content = search_result.content
+                    search_result = get_default_client_proxy().generate_content(
+                            prompt=__web_search_prompt.format_map({"title": news_summary.title, "url": news_summary.reference_urls}),
+                            llm_tracker=llm_tracker                                    
+                        ).text_content
+                    news_summary.expanded_content = search_result

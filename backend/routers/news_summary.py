@@ -24,6 +24,7 @@ from utils.logger import logger
 from utils.rss import is_valid_rss_feed
 from constants import MAX_RSS_SUBSCRIPTION
 from enum import Enum
+from llm.client_proxy import LlmMessageType
 
 DOMAIN = os.getenv("DOMAIN", "localhost:3000")
 
@@ -61,12 +62,8 @@ def _from_api_conversation_history_item_to_chat_message(
         thread_id=api_item.thread_id,
         message_id=api_item.message_id,
         parent_message_id=api_item.parent_message_id,
-        content=(
-            api_item.human_message.content
-            if api_item.human_message
-            else api_item.ai_message.content if api_item.ai_message else ""
-        ),
-        author=(ChatAuthorType.USER if api_item.human_message else ChatAuthorType.AI),
+        content=api_item.llm_message.text_content or "",
+        author=(ChatAuthorType.USER if api_item.llm_message.type == LlmMessageType.HUMAN else ChatAuthorType.AI),
     )
 
 

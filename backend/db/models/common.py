@@ -10,7 +10,7 @@ class UserStatus(enum.Enum):
 class MessageType(enum.Enum):
     HUMAN = "human"
     AI = "ai"
-    UNKNOWN = "unknown" # not a langchain message
+    UNKNOWN = "unknown"
 
 class UserTier(enum.Enum):
     UNLIMITED = "unlimited"
