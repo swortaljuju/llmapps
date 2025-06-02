@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from enum import Enum
 from collections.abc import Callable
 from typing import Any
-from llm.tracker import LlmTracker
+from .tracker import LlmTracker
 class LlmMessageType(Enum):
     """
     Enum representing the type of message in a conversation.
@@ -58,7 +58,8 @@ class LlmClientProxy:
                         system_prompt: str | None = None, 
                         tracker: LlmTracker  | None = None, 
                         tools: list[Callable[..., Any]] = [], 
-                        output_object: BaseModel | list[BaseModel] | None = None ) -> LlmMessage:
+                        output_object: BaseModel | list[BaseModel] | None = None,
+                        max_retry: int = 0 ) -> LlmMessage:
         """
         Interface for generating content
         Args:
@@ -67,7 +68,31 @@ class LlmClientProxy:
             tracker LlmTracker: llm tracker.
             tools (list, optional): functions to be called by the LLM. Defaults to [], Assume the function will be automatically executed.
             output_object (dict, optional): Output pydantic model to be returned by the LLM. Defaults to None.
+            max_retry (int, optional): Maximum number of retries for the generation. Defaults to 0.
+        Raises:
+            NotImplementedError: _description_
 
+        Returns:
+            LlmMessage: _description_
+        """
+        raise NotImplementedError("This method should be implemented by subclasses.")
+    
+    async def generate_content_async(self, 
+                        prompt: str | list[LlmMessage], 
+                        system_prompt: str | None = None, 
+                        tracker: LlmTracker  | None = None, 
+                        tools: list[Callable[..., Any]] = [], 
+                        output_object: BaseModel | list[BaseModel] | None = None,
+                        max_retry: int = 0) -> LlmMessage:
+        """
+        Interface for generating content
+        Args:
+            prompt (str | list[LlmMessage]): single prompt or chat history where last message is the latest user message.
+            system_prompt (str | None, optional): System prompt 
+            tracker LlmTracker: llm tracker.
+            tools (list, optional): functions to be called by the LLM. Defaults to [], Assume the function will be automatically executed.
+            output_object (dict, optional): Output pydantic model to be returned by the LLM. Defaults to None.
+            max_retry (int, optional): Maximum number of retries for the generation. Defaults to 0.
         Raises:
             NotImplementedError: _description_
 
@@ -79,6 +104,13 @@ class LlmClientProxy:
     def embed_content(self, contents: list[str]) -> list[list[float]]:
         """
         Generate embeddings for the given content.
+        This method should be implemented by subclasses.
+        """
+        raise NotImplementedError("This method should be implemented by subclasses.")
+    
+    def count_tokens(self,  tokens: str) -> int:
+        """
+        Count the number of tokens in the given content.
         This method should be implemented by subclasses.
         """
         raise NotImplementedError("This method should be implemented by subclasses.")

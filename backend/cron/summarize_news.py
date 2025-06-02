@@ -18,6 +18,7 @@ from loguru import logger
 from llm.news_summary_agent import summarize_news 
 from constants import SQL_BATCH_SIZE
 from datetime import datetime
+import asyncio
 
 def summarize_news_for_all_users():
     sql_session = get_sql_db()
@@ -53,13 +54,13 @@ def summarize_news_for_all_users():
             logger.error(f"Error summarizing news for user {id}: {e}")
             continue
 
-def __test():
+async def __test():
     """
     Test function to summarize news for all users.
     This is a placeholder for actual test cases.
     """
     start_time = datetime.now()
-    summaries = summarize_news(
+    summaries = await summarize_news(
         news_preference_application_experiment=NewsPreferenceApplicationExperiment.APPLY_PREFERENCE,
         news_chunking_experiment=NewsChunkingExperiment.EMBEDDING_CLUSTERING,
         user_id=6,
@@ -71,4 +72,4 @@ def __test():
 
 if __name__ == "__main__":
     print("testing...")
-    __test()
+    asyncio.run(__test())

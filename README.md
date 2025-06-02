@@ -58,3 +58,9 @@ CREATE EXTENSION vector;
 
 ## NextJs Middleware
 - Used to check session validity and redirect based on session state. It has to be put in project root folder rather than frontend code root folder so that it can be picked up by NextJs server. 
+
+
+## News Summary Clustering
+For Clustering, I tried several approaches. First, I tried HDBSCAN. The advantage is that it could adaptively identify clusters based on local density. The disadvantage is that for news entry embeddings, it clusters more than 1/3 data as noise data which makes it hard to chunk and summarize the noise data. Even after tuning HDBSCAN and trying preprocessing such as PCA, the percentage of noise data is still not reduced. So I finally pick KMean which will generates n cluster without noise data. Then I feed each cluster data to LLM for summarization. Comparing to daily news aggregation approach, embedding clustering is a different chunking option. Daily news aggregation chunk news summary based on time locality while embedding clustering chunk data based on semantic locality. These 2 approaches are tackling the challenge of too large input (news entries for summarization) for LLM. 
+
+Another challenge is that to limit output size. For example, for news summary app, I don't want llm to generate too many news summary entries. I tried different approach. Emphasizing news summary entry limit in the prompt doesn't always work. The most reliable approach is to add a `max_items` property to output list's schema + retry on overflowed output. 

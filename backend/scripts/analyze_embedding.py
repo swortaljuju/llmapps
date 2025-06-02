@@ -19,6 +19,8 @@ from datetime import date
 import numpy as np
 from sklearn.metrics import pairwise_distances
 from sklearn.manifold import TSNE
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
 
 def __get_embedding_data(start_date: date, end_date: date) -> np.ndarray:
     db = get_sql_db()
@@ -46,21 +48,37 @@ def show_pairwise_distances(embeddings: np.ndarray, plt_container: plt.Figure):
     print(f"Mean: {np.mean(dists_flat):.4f}, Median: {np.median(dists_flat):.4f}, Min: {np.min(dists_flat):.4f}, Max: {np.max(dists_flat):.4f}")
 
 def show_tsne(embeddings: np.ndarray, plt_container: plt.Figure):
-    tsne = TSNE(n_components=2, random_state=42, perplexity=30, n_iter=300)
+    tsne = TSNE(n_components=2, perplexity=50, n_iter=300)
     embeddings_2d = tsne.fit_transform(embeddings)
 
-    subplot = plt_container.add_subplot(1, 3, 3)
+    subplot = plt_container.add_subplot(1, 1, 1)
     subplot.scatter(embeddings_2d[:, 0], embeddings_2d[:, 1], alpha=0.5)
     subplot.set_title('t-SNE Visualization of Embeddings')
     subplot.set_xlabel('t-SNE Component 1')
     subplot.set_ylabel('t-SNE Component 2')
 
+def show_pca(embeddings: np.ndarray, plt_container: plt.Figure):
+    pca = PCA(n_components=2)
+    embeddings_2d = pca.fit_transform(StandardScaler().fit_transform(embeddings))
+
+    subplot = plt_container.add_subplot(1, 2, 1)
+    subplot.scatter(embeddings_2d[:, 0], embeddings_2d[:, 1], alpha=0.5)
+    subplot.set_title('PCA Visualization of Embeddings')
+    subplot.set_xlabel('PCA Component 1')
+    subplot.set_ylabel('PCA Component 2')
+    distances = pairwise_distances(embeddings_2d)
+    subplot = plt_container.add_subplot(1, 2, 2)
+    dists_flat = distances[np.triu_indices_from(distances, k=1)]
+    subplot.hist(dists_flat, bins=50)
+    subplot.set_title('Pairwise Distance Distribution')
+
 embeddings = __get_embedding_data(date(2025, 5, 19), date(2025, 5, 25))
 print(embeddings.shape)
 plt_container = plt.figure(figsize=(20, 16))
-show_distribution(embeddings, plt_container)
-show_pairwise_distances(embeddings, plt_container)
-show_tsne(embeddings, plt_container)
+#show_distribution(embeddings, plt_container)
+#show_pairwise_distances(embeddings, plt_container)
+# show_tsne(embeddings, plt_container)
+show_pca(embeddings, plt_container)
 plt.suptitle(f"Embedding Analysis - {embeddings.shape[0]} samples, {embeddings.shape[1]} dimensions", 
                  fontsize=16)
     

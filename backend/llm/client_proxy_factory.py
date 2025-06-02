@@ -1,8 +1,8 @@
 
 
 from enum import Enum
-from llm.gemini_client_proxy import GeminiClientProxy
-from llm.client_proxy import LlmClientProxy
+from .gemini_client_proxy import GeminiClientProxy
+from .client_proxy import LlmClientProxy
 
 class ModelType(Enum):
     GEMINI = "gemini"

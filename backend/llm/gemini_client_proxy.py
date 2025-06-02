@@ -4,7 +4,7 @@ from .client_proxy import LlmClientProxy, LlmMessage, LlmMessageType, FunctionCa
 from pydantic import BaseModel
 from collections.abc import Callable
 from typing import Any
-from llm.tracker import LlmTracker
+from .tracker import LlmTracker
 from utils.logger import logger
 class GeminiClientProxy(LlmClientProxy):
     __generation_model = "gemini-2.0-flash"
@@ -18,7 +18,86 @@ class GeminiClientProxy(LlmClientProxy):
         system_prompt: str | None = None, 
         tracker: LlmTracker  | None = None, 
         tools: list[Callable[..., Any]] = [], 
-        output_object: BaseModel | list[BaseModel] | None = None ) -> LlmMessage:        
+        output_object: BaseModel | list[BaseModel] | None = None,
+        max_retry: int = 0) -> LlmMessage:        
+        config = self.__setup_generation_config(system_prompt, tools, output_object)
+        success = False
+        retry_count = 0
+        while not success and retry_count <= max_retry:
+            try: 
+                response: types.GenerateContentResponse = self.__client.models.generate_content(
+                    model=self.__generation_model,
+                    contents=self.__generate_contents(prompt, config),
+                    config=config
+                )
+            except Exception as e:
+                logger.error(f"Error generating content with Gemini: {e}")
+                if retry_count < max_retry:
+                    retry_count += 1
+                    continue
+                raise e
+            self.__track_usage(response.usage_metadata, tracker)
+            if self.__is_generation_output_unexpected(response, output_object):
+                if retry_count < max_retry:
+                    retry_count += 1
+                    continue
+                logger.error(f"Output object is specified but response does not contain parsed content. {response}.")
+                raise ValueError("Output object is specified but response does not contain parsed content.")
+            success = True
+        
+        return self.__from_response_to_llm_message(response)
+    
+    async def generate_content_async(self, 
+        prompt: str | list[LlmMessage], 
+        system_prompt: str | None = None, 
+        tracker: LlmTracker  | None = None, 
+        tools: list[Callable[..., Any]] = [], 
+        output_object: BaseModel | list[BaseModel] | None = None,
+        max_retry: int = 0) -> LlmMessage:   
+        config = self.__setup_generation_config(system_prompt, tools, output_object)
+        success = False
+        retry_count = 0
+        while not success and retry_count <= max_retry:
+            try: 
+                response: types.GenerateContentResponse = await self.__client.aio.models.generate_content(
+                    model=self.__generation_model,
+                    contents=self.__generate_contents(prompt, config),
+                    config=config
+                )
+            except Exception as e:
+                logger.error(f"Error generating content with Gemini: {e}")
+                if retry_count < max_retry:
+                    retry_count += 1
+                    continue
+                raise e
+            self.__track_usage(response.usage_metadata, tracker)
+            if self.__is_generation_output_unexpected(response, output_object):
+                if retry_count < max_retry:
+                    retry_count += 1
+                    continue
+                logger.error(f"Output object is specified but response does not contain parsed content. {response}.")
+                raise ValueError("Output object is specified but response does not contain parsed content.")
+            success = True
+        
+        return self.__from_response_to_llm_message(response)
+    def __is_generation_output_unexpected(self, response: types.GenerateContentResponse,  output_object: BaseModel | list[BaseModel] | None = None) -> bool:
+        """
+        Check if the response contains valid content.
+        This method checks if the response has parsed content or text.
+        """
+        return output_object and not response.parsed:        
+
+    def __track_usage(self, usage_metadata: types.GenerateContentResponseUsageMetadata | None, tracker: LlmTracker | None) -> None:
+        if usage_metadata and tracker:
+            tracker.log_usage(
+                input_token_count=usage_metadata.prompt_token_count,
+                output_token_count=usage_metadata.candidates_token_count
+            ) 
+
+    def __setup_generation_config(self, 
+        system_prompt: str | None = None, 
+        tools: list[Callable[..., Any]] = [], 
+        output_object: BaseModel | list[BaseModel] | None = None) -> types.GenerateContentConfig:
         config = types.GenerateContentConfig(response_mime_type="text/plain")
         if output_object:
             config.response_mime_type = "application/json"
@@ -27,24 +106,8 @@ class GeminiClientProxy(LlmClientProxy):
             config.tools = tools
         if system_prompt:
             config.system_instruction = system_prompt
-        try: 
-            response: types.GenerateContentResponse = self.__client.models.generate_content(
-                model=self.__generation_model,
-                contents=self.__generate_contents(prompt, config),
-                config=config
-            )
-        except Exception as e:
-            logger.error(f"Error generating content with Gemini: {e}")
-            raise e
-
-        if response.usage_metadata and tracker:
-            tracker.log_usage(
-                input_token_count=response.usage_metadata.prompt_token_count,
-                output_token_count=response.usage_metadata.candidates_token_count
-            ) 
-        
-        return self.__from_response_to_llm_message(response)
-
+        return config
+    
     def __from_response_to_llm_message(self, response: types.GenerateContentResponse) -> LlmMessage:
         if response.candidates[0].content.parts[0].function_call:
             function_call_list = []
@@ -111,3 +174,10 @@ class GeminiClientProxy(LlmClientProxy):
     def embed_content(self, contents: list[str]) -> list[list[float]]:
         response = self.__client.models.embed_content(model=self.__embedding_model, contents=contents)
         return [ embd.values for embd in response.embeddings]
+    
+    def count_tokens(self,  tokens: str) -> int:
+        """
+        Count the number of tokens in a string.
+        This is a placeholder implementation. Actual token counting logic should be implemented based on the model's tokenizer.
+        """
+        return self.__client.models.count_tokens(model=self.__generation_model, contents=tokens).total_tokens

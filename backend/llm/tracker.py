@@ -3,7 +3,7 @@ from sqlalchemy import func
 from db.db import SqlSessionLocal, get_sql_db
 from datetime import datetime
 from constants import MAX_INPUT_TOKENS_PER_USER_PER_MONTH, MAX_OUTPUT_TOKENS_PER_USER_PER_MONTH
-
+from utils.logger import logger
 class LlmTracker:
     """
     A class to track LLM usage and other logs.
@@ -20,6 +20,7 @@ class LlmTracker:
             self.__usage_log.llm_input_token_count = 0
         if not self.__usage_log.llm_output_token_count:
             self.__usage_log.llm_output_token_count = 0
+        logger.info(f"Logging LLM usage for user {self.__user_id}: input tokens: {input_token_count}, output tokens: {output_token_count}")
         self.__usage_log.llm_input_token_count += input_token_count
         self.__usage_log.llm_output_token_count += output_token_count
 
