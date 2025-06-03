@@ -46,3 +46,25 @@ def get_period_length(period_type: NewsSummaryPeriod) -> timedelta:
         return timedelta(weeks=1)
     else:
         raise ValueError(f"Invalid period type: {period_type}")
+
+def get_current_week_start_date() -> date:
+    """
+    Get the start date of the current week (Monday).
+    """
+    today = date.today()
+    return today - timedelta(days=today.weekday())
+
+def format_date(date_obj: date) -> str:
+    """
+    Format a date object to a string in the format YYYY-MM-DD.
+    """
+    return date_obj.strftime("%Y-%m-%d")
+
+def parse_date(date_str: str) -> date:
+    """
+    Parse a date string in the format YYYY-MM-DD to a date object.
+    """
+    try:
+        return date.fromisoformat(date_str)
+    except ValueError as e:
+        raise ValueError(f"Invalid date format: {date_str}. Expected format is YYYY-MM-DD.") from e

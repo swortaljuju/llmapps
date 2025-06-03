@@ -7,6 +7,11 @@ from db.models import (
     NewsPreferenceChangeCause,
     NewsPreferenceVersion,
     RssFeed,
+    NewsPreferenceApplicationExperiment,
+    NewsSummaryPeriod,
+    NewsSummaryExperimentStats,
+    NewsSummaryEntry,
+    NewsChunkingExperiment,
 )
 from utils.manage_session import GetUserInSession
 import os
@@ -25,6 +30,10 @@ from utils.rss import is_valid_rss_feed
 from constants import MAX_RSS_SUBSCRIPTION
 from enum import Enum
 from llm.client_proxy import LlmMessageType
+from llm.news_summary_agent import (
+    summarize_news, expand_news_summary)
+from utils.date_helper import get_current_week_start_date, format_date, parse_date
+import enum
 
 DOMAIN = os.getenv("DOMAIN", "localhost:3000")
 
@@ -46,10 +55,26 @@ class NewsSummaryUiMode(Enum):
     COLLECT_NEWS_PREFERENCE = "collect_news_preference"
     SHOW_SUMMARY = "show_summary"
 
+class ApiNewsSummaryEntry(BaseModel):
+    id: int
+    title: str
+    content: str
+    expanded_content: Optional[str] = None
+    reference_urls: list[str] = []
+    display_order: int = 0
+
+class NewsSummaryOptions(BaseModel):
+    news_chunking_experiment: NewsChunkingExperiment = NewsChunkingExperiment.AGGREGATE_DAILY
+    news_preference_application_experiment: NewsPreferenceApplicationExperiment = NewsPreferenceApplicationExperiment.APPLY_PREFERENCE
+    period_type: NewsSummaryPeriod = NewsSummaryPeriod.weekly
+
 class NewsSummaryInitializeResponse(BaseModel):
-    mode: NewsSummaryUiMode
-    latest_summary: Optional[str] = None
-    news_summary_periods: list[NewsSummaryPeriod] = []
+    mode: NewsSummaryUiMode      
+    # latest summary from default user preference option and current week            
+    latest_summary: list[ApiNewsSummaryEntry] = []
+    default_news_summary_options: NewsSummaryOptions
+    available_period_start_date_str: list[str] = []
+    # date string in YYYY-MM-DD format
     preference_conversation_history: list[ChatMessage] = []
 
 
@@ -66,6 +91,46 @@ def _from_api_conversation_history_item_to_chat_message(
         author=(ChatAuthorType.USER if api_item.llm_message.type == LlmMessageType.HUMAN else ChatAuthorType.AI),
     )
 
+def __convert_to_api_news_summary_entry(
+    news_summary_entry: NewsSummaryEntry,
+) -> ApiNewsSummaryEntry:
+    return ApiNewsSummaryEntry(
+        id=news_summary_entry.id,
+        title=news_summary_entry.title,
+        content=news_summary_entry.content,
+        expanded_content=news_summary_entry.expanded_content,
+        reference_urls=news_summary_entry.reference_urls or [],
+        display_order=news_summary_entry.display_order_within_period,
+    )
+
+def __get_or_create_news_summary_experiment_stats(
+    user_id: int,
+    start_date: str,
+    period_type: NewsSummaryPeriod,
+    news_chunking_experiment: NewsChunkingExperiment,
+    news_preference_application_experiment: NewsPreferenceApplicationExperiment,
+    sql_client: db.SqlClient,
+) -> NewsSummaryExperimentStats:
+    stats = sql_client.query(NewsSummaryExperimentStats).filter(
+        NewsSummaryExperimentStats.user_id == user_id,
+        NewsSummaryExperimentStats.start_date == start_date,
+        NewsSummaryExperimentStats.period_type == period_type,
+        NewsSummaryExperimentStats.news_chunking_experiment == news_chunking_experiment,
+        NewsSummaryExperimentStats.news_preference_application_experiment == news_preference_application_experiment
+    ).one_or_none()
+    
+    if not stats:
+        stats = NewsSummaryExperimentStats(
+            user_id=user_id,
+            start_date=start_date,
+            period_type=period_type,
+            news_chunking_experiment=news_chunking_experiment,
+            news_preference_application_experiment=news_preference_application_experiment
+        )
+        sql_client.add(stats)
+        sql_client.flush()
+    
+    return stats
 
 @router.get(
     "/initialize",
@@ -119,26 +184,56 @@ async def initialize(
             mode=NewsSummaryUiMode.COLLECT_NEWS_PREFERENCE,
             preference_conversation_history=preference_conversation_history,
         )
-
-    # Query latest news summary
-    # all_summary = (
-    #     sql_client.query(NewsSummary)
-    #     .filter(NewsSummary.user_id == user.user_id)
-    #     .order_by(NewsSummary.end_date.desc())
-    #     .all()
-    # )
-
+    default_news_preference_application_experiment = (
+        user_data.preferred_news_preference_application_experiment
+        or NewsPreferenceApplicationExperiment.APPLY_PREFERENCE
+    )
+    default_news_chunking_experiment = (
+        user_data.preferred_news_chunking_experiment
+        or NewsChunkingExperiment.AGGREGATE_DAILY
+    )
+    default_period_type = (
+        user_data.preferred_news_summary_period_type or NewsSummaryPeriod.weekly
+    )
+    current_week_start_date = get_current_week_start_date()
+    latest_summary = sql_client.query(NewsSummaryEntry).filter(
+            NewsSummaryEntry.user_id == user.user_id,
+            NewsSummaryEntry.start_date == current_week_start_date,
+            NewsSummaryEntry.period_type == default_period_type,
+            NewsSummaryEntry.news_preference_application_experiment
+            == default_news_preference_application_experiment,
+            NewsSummaryEntry.news_chunking_experiment == default_news_chunking_experiment,
+        ).order_by(NewsSummaryEntry.display_order_within_period).all()
+    if latest_summary:
+        news_summary_exp_stats = __get_or_create_news_summary_experiment_stats(
+            user_id=user.user_id,
+            start_date=current_week_start_date,
+            period_type=default_period_type,
+            news_chunking_experiment=default_news_chunking_experiment,
+            news_preference_application_experiment=default_news_preference_application_experiment,
+            sql_client=sql_client,
+        )
+        news_summary_exp_stats.shown = True
+    
+    available_period_start_date = sql_client.query(NewsSummaryEntry.start_date).filter(
+        NewsSummaryEntry.user_id == user.user_id,
+        NewsSummaryEntry.period_type == default_period_type,
+        NewsSummaryEntry.news_preference_application_experiment
+        == default_news_preference_application_experiment,
+        NewsSummaryEntry.news_chunking_experiment == default_news_chunking_experiment,
+    ).distinct().all()
     return NewsSummaryInitializeResponse(
         mode=NewsSummaryUiMode.SHOW_SUMMARY,
-        latest_summary= None,
-        news_summary_periods=[
-            # NewsSummaryPeriod(
-            #     start_date_timestamp=int(summary.start_date.timestamp()),
-            #     end_date_timestamp=int(summary.end_date.timestamp()),
-            #     id=summary.id,
-            # )
-            # for summary in all_summary
-        ],
+        latest_summary= [ __convert_to_api_news_summary_entry(news_summary_entry) for news_summary_entry in latest_summary],
+        default_news_summary_options=NewsSummaryOptions(
+            news_chunking_experiment=default_news_chunking_experiment,
+            news_preference_application_experiment=default_news_preference_application_experiment,
+            period_type=default_period_type,
+        ),
+        available_period_start_date_str=[
+                format_date(date_obj)
+                for date_obj in available_period_start_date
+            ],
     )
 
 class PreferenceSurveyRequest(BaseModel):
@@ -408,4 +503,113 @@ async def subscribe_rss_feed(
         "status": "success",
         "feed_id": feed_id_to_add,
     }
+
+class NewsSummaryStartDateAndOptionSelector(BaseModel):
+    start_date: str  # Date in YYYY-MM-DD format
+    option: NewsSummaryOptions
+
+class GetNewsSummaryRequest(BaseModel):
+    news_summary_start_date_and_option_selector: NewsSummaryStartDateAndOptionSelector
+
+@router.post("/get_news_summary", response_model=list[ApiNewsSummaryEntry])
+async def get_news_summary(
+    request: Request,
+    get_news_summary_request: GetNewsSummaryRequest,
+    user: GetUserInSession,
+    sql_client: db.SqlClient):
+    if not user:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    request.state.api_latency_log.user_id = user.user_id
+    news_summary_entry_list = await summarize_news(
+        news_preference_application_experiment=get_news_summary_request.news_summary_start_date_and_option_selector.option.news_preference_application_experiment,
+        news_chunking_experiment=get_news_summary_request.news_summary_start_date_and_option_selector.option.news_chunking_experiment,
+        user_id=user.user_id,
+        start_date=parse_date(get_news_summary_request.news_summary_start_date_and_option_selector.start_date),
+        period=get_news_summary_request.news_summary_start_date_and_option_selector.option.period_type,
+    )
+    news_summary_exp_stats = __get_or_create_news_summary_experiment_stats(
+        user_id=user.user_id,
+        start_date=get_news_summary_request.news_summary_start_date_and_option_selector.start_date,
+        period_type=get_news_summary_request.news_summary_start_date_and_option_selector.option.period_type,
+        news_chunking_experiment=get_news_summary_request.news_summary_start_date_and_option_selector.option.news_chunking_experiment,
+        news_preference_application_experiment=get_news_summary_request.news_summary_start_date_and_option_selector.option.news_preference_application_experiment,
+        sql_client=sql_client,
+    )
+    news_summary_exp_stats.shown = True
+    return [
+        __convert_to_api_news_summary_entry(news_summary_entry)
+        for news_summary_entry in news_summary_entry_list
+    ]
+
+class NewsSummaryLikeOrDislike(enum.Enum):
+    LIKE = "like"
+    DISLIKE = "dislike"
+
+class NewsSummaryLikeDislikeRequest(BaseModel):
+    news_summary_start_date_and_option_selector: NewsSummaryStartDateAndOptionSelector
+    action: NewsSummaryLikeOrDislike
+@router.post("/like_dislike_news_summary")
+async def like_dislike_news_summary(
+    request: Request,
+    news_summary_like_dislike_request: NewsSummaryLikeDislikeRequest,
+    user: GetUserInSession,
+    sql_client: db.SqlClient,
+):
+    if not user:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    request.state.api_latency_log.user_id = user.user_id
+    start_date = parse_date(news_summary_like_dislike_request.news_summary_start_date_and_option_selector.start_date)
+    period_type = news_summary_like_dislike_request.news_summary_start_date_and_option_selector.option.period_type
+    news_chunking_experiment = news_summary_like_dislike_request.news_summary_start_date_and_option_selector.option.news_chunking_experiment
+    news_preference_application_experiment = news_summary_like_dislike_request.news_summary_start_date_and_option_selector.option.news_preference_application_experiment
+    
+    stats = sql_client.query(NewsSummaryExperimentStats).filter(
+        NewsSummaryExperimentStats.user_id == user_data.id,
+        NewsSummaryExperimentStats.start_date == start_date,
+        NewsSummaryExperimentStats.period_type == period_type,
+        NewsSummaryExperimentStats.news_chunking_experiment == news_chunking_experiment,
+        NewsSummaryExperimentStats.news_preference_application_experiment == news_preference_application_experiment
+    ).one_or_none()
+    if not stats or not stats.shown:
+        raise HTTPException(
+            status_code=404,
+            detail="News summary experiment stats not found for the given parameters",
+        )
+    if news_summary_like_dislike_request.action == NewsSummaryLikeOrDislike.LIKE:
+        stats.liked = True
+        stats.disliked = False
+        user_data = sql_client.query(User).filter(User.id == user.user_id).first()
+        user_data.preferred_news_chunking_experiment = news_chunking_experiment
+        user_data.preferred_news_preference_application_experiment = news_preference_application_experiment
+        user_data.preferred_news_summary_period_type = period_type
+    elif news_summary_like_dislike_request.action == NewsSummaryLikeOrDislike.DISLIKE:
+        stats.liked = False
+        stats.disliked = True
+    return {"status": "success", "message": "News summary like or dislike action recorded successfully."}
+
+@router.get(
+    "/expand_summary/",
+    response_model=ApiNewsSummaryEntry,
+)
+async def expand_summary(
+    request: Request,
+    user: GetUserInSession,
+    sql_client: db.SqlClient,
+    summary_id: int,
+):
+    if not user:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    request.state.api_latency_log.user_id = user.user_id
+    summary_entry = sql_client.query(NewsSummaryEntry).filter(
+        NewsSummaryEntry.id == summary_id,
+        NewsSummaryEntry.user_id == user.user_id,
+    ).one_or_none()
+    if not summary_entry:
+        raise HTTPException(status_code=404, detail="Summary not found")
+    summary_entry.clicked = True
+    if not summary_entry.expanded_content: 
+        await expand_news_summary(summary_entry)
+        if not summary_entry.expanded_content:
+            raise HTTPException(status_code=500, detail="Failed to expand news summary")
+    return __convert_to_api_news_summary_entry(summary_entry)
     

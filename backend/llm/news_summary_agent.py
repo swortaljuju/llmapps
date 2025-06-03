@@ -637,6 +637,50 @@ __header = {"User-Agent": ua.random}
 
 MAX_NEWS_SUMMARY_TO_EXPAND = 10
 
+async def __expand_single_news_summary(
+    news_summary: NewsSummaryWithPreferenceAppliedOutput | NewsSummaryEntry,
+    llm_tracker: LlmTracker,
+):
+    """
+    Expand a single news summary if necessary.
+    """
+    if news_summary.reference_urls:
+        for url in news_summary.reference_urls:
+            try:
+                response = requests.get(url, headers=__header, timeout=10)
+                response.raise_for_status()  # This will raise an exception for HTTP errors
+                content = response.text
+                # summarize the content
+                summary = (await get_default_client_proxy().generate_content_async(
+                        prompt=__raw_summary_prompt.format_map(
+                            {"content": content}
+                        ),
+                        tracker=llm_tracker,
+                    )).text_content
+
+                if summary:
+                    # update the content of the news summary
+                    news_summary.expanded_content = summary
+                    break
+            except Exception as e:
+                logger.warning(f"Failed to crawl and summarize {url}: {e}")
+    if not news_summary.expanded_content:
+        try:
+            search_result = (await get_default_client_proxy().generate_content_async(
+                    prompt=__web_search_prompt.format_map(
+                        {
+                            "title": news_summary.title,
+                            "url": news_summary.reference_urls,
+                        }
+                    ),
+                    llm_tracker=llm_tracker,
+                )).text_content
+            
+            news_summary.expanded_content = search_result
+        except Exception as e:
+            logger.warning(f"Failed to search for {news_summary.title}: {e}")
+
+
 
 async def __expand_news_if_necessary(
     news_summary_list: list[NewsSummaryWithPreferenceAppliedOutput],
@@ -655,41 +699,23 @@ async def __expand_news_if_necessary(
         if news_summary.should_expand:
             expanded_news_count += 1
             if not news_summary.expanded_content:
-                if news_summary.reference_urls:
-                    for url in news_summary.reference_urls:
-                        try:
-                            response = requests.get(url, headers=__header, timeout=10)
-                            response.raise_for_status()  # This will raise an exception for HTTP errors
-                            content = response.text
-                            # summarize the content
-                            summary = (await get_default_client_proxy().generate_content_async(
-                                    prompt=__raw_summary_prompt.format_map(
-                                        {"content": content}
-                                    ),
-                                    tracker=llm_tracker,
-                                )).text_content
+                await __expand_single_news_summary(
+                    news_summary, llm_tracker
+                )
 
-                            if summary:
-                                # update the content of the news summary
-                                news_summary.expanded_content = summary
-                                break
-                        except Exception as e:
-                            logger.warning(f"Failed to crawl and summarize {url}: {e}")
-                if not news_summary.expanded_content:
-                    try:
-                        search_result = (await get_default_client_proxy().generate_content_async(
-                                prompt=__web_search_prompt.format_map(
-                                    {
-                                        "title": news_summary.title,
-                                        "url": news_summary.reference_urls,
-                                    }
-                                ),
-                                llm_tracker=llm_tracker,
-                            )).text_content
-                        
-                        news_summary.expanded_content = search_result
-                    except Exception as e:
-                        logger.warning(f"Failed to search for {news_summary.title}: {e}")
+async def expand_news_summary(
+    summary_entry: NewsSummaryEntry
+):
+    """
+    Expand the news summary if necessary.
+    """
+    if exceed_llm_token_limit(summary_entry.user_id):
+        raise ValueError(f"User {summary_entry.user_id} has exceeded the LLM token limit this month.")
+    
+    llm_tracker = LlmTracker(summary_entry.user_id)
+    llm_tracker.start()
+    await __expand_single_news_summary(summary_entry, llm_tracker)
+    llm_tracker.end()
 
 def __get_news_entry_filter_for_summarization(
     start_date: date, end_date: date, subscribed_feed_id_list: list[int]

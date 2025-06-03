@@ -20,12 +20,13 @@ from constants import SQL_BATCH_SIZE
 from datetime import datetime
 import asyncio
 
-def summarize_news_for_all_users():
+def summarize_news_for_unlimited_users():
     sql_session = get_sql_db()
     today = date.today()
     start_of_week = today - timedelta(days=today.weekday())
     user_data = sql_session.query(
-        User.id, User.preferred_news_chunking_experiment, User.preferred_news_preference_application_experiment
+        User.id, User.preferred_news_chunking_experiment, User.preferred_news_preference_application_experiment, 
+        User.preferred_news_summary_period_type
     ).filter(User.user_tier == UserTier.UNLIMITED).yield_per(SQL_BATCH_SIZE)
 
     for id, news_chunking_experiment, news_preference_application_experiment in user_data:
@@ -34,25 +35,8 @@ def summarize_news_for_all_users():
             news_chunking_experiment=news_chunking_experiment,
             user_id=id,
             start_date=start_of_week,  # Start from the beginning of the current week
-            period=NewsSummaryPeriod.weekly
+            period=user_data.preferred_news_summary_period_type or NewsSummaryPeriod.weekly
         )
-
-    user_data = sql_session.query(
-        User.id, User.preferred_news_chunking_experiment, User.preferred_news_preference_application_experiment
-    ).filter(User.user_tier != UserTier.UNLIMITED).yield_per(SQL_BATCH_SIZE)
-
-    for id, news_chunking_experiment, news_preference_application_experiment in user_data:
-        try:
-            summarize_news(
-                news_preference_application_experiment=news_preference_application_experiment,
-                news_chunking_experiment=news_chunking_experiment,
-                user_id=id,
-                start_date=start_of_week,  # Start from the beginning of the current week
-                period=NewsSummaryPeriod.weekly
-            )
-        except Exception as e:
-            logger.error(f"Error summarizing news for user {id}: {e}")
-            continue
 
 async def __test():
     """

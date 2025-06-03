@@ -4,6 +4,7 @@ from datetime import datetime
 import enum
 from .base import Base
 from .experiment import NewsChunkingExperiment, NewsPreferenceApplicationExperiment
+from .common_enums import NewsSummaryPeriod
 class UserStatus(enum.Enum):
     pending = "pending"
     active = "active"
@@ -31,6 +32,7 @@ class User(Base):
     user_tier = Column(Enum(UserTier), default=UserTier.BASIC)
     preferred_news_chunking_experiment = Column(Enum(NewsChunkingExperiment), default=NewsChunkingExperiment.AGGREGATE_DAILY)
     preferred_news_preference_application_experiment = Column(Enum(NewsPreferenceApplicationExperiment), default=NewsPreferenceApplicationExperiment.APPLY_PREFERENCE)
+    preferred_news_summary_period_type = Column(Enum(NewsSummaryPeriod), default=NewsSummaryPeriod.weekly)
     
 class ConversationType(enum.Enum):
     news_preference_survey = "news_preference_survey"  

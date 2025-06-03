@@ -5,6 +5,7 @@ from .base import Base
 from sqlalchemy.dialects.postgresql import  ARRAY
 from .experiment import NewsChunkingExperiment, NewsPreferenceApplicationExperiment
 from pgvector.sqlalchemy import Vector
+from .common_enums import NewsSummaryPeriod
 
 class RssFeed(Base):
     __tablename__ = "rss_feeds"
@@ -31,14 +32,6 @@ class NewsEntry(Base):
     pub_time = Column(DateTime)
     summary_embedding = Column(Vector(768))  # embedding of the content
 
-class NewsSummaryPeriod(enum.Enum):
-    # Daily summary
-    daily = "daily"
-    # Weekly summary
-    weekly = "weekly"
-    # Monthly summary. Not supported yet
-    monthly = "monthly"
-
 class NewsSummaryEntry(Base):
     __tablename__ = "news_summary_entry"
 
@@ -64,7 +57,7 @@ class NewsSummaryEntry(Base):
     creation_time = Column(DateTime, default=datetime.now())
     
     __table_args__ = (
-        Index("logical_key", "user_id", "start_date", "period_type", "news_chunking_experiment", "news_preference_application_experiment", "display_order_within_period", unique=True),
+        Index("news_summary_entry_logical_key", "user_id", "start_date", "period_type", "news_chunking_experiment", "news_preference_application_experiment", "display_order_within_period", unique=True),
     )
     # TODO add category embeddings up to 3
 
@@ -80,6 +73,10 @@ class NewsSummaryExperimentStats(Base):
     news_preference_application_experiment = Column(Enum(NewsPreferenceApplicationExperiment), default=NewsPreferenceApplicationExperiment.APPLY_PREFERENCE)
     liked = Column(Boolean, default=False)  # whether the user liked this summary
     disliked = Column(Boolean, default=False) # if a summary is shown to the user but not liked, it is considered as disliked
+    shown = Column(Boolean, default=False)  # whether the user has seen this summary
+    __table_args__ = (
+        Index("news_summary_experiment_stats_logical_key", "user_id", "start_date", "period_type", "news_chunking_experiment", "news_preference_application_experiment", unique=True),
+    )
 
 class NewsPreferenceChangeCause(enum.Enum):
     survey = "survey"
