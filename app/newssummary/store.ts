@@ -1,26 +1,25 @@
 import { getBackendApiUrl } from "../common/utils"
 
 export interface NewsSummaryItem {
-    title: string
-    content: string
-    reference_urls: string[]
-    clicked: boolean
-}
-
-export interface NewsSummaryList {
-    summary: NewsSummaryItem[]
-}
-
-export interface NewsSummaryPeriod {
-    start_date_timestamp: number;  // Timestamp in seconds
-    end_date_timestamp: number;    // Timestamp in seconds
     id: number;
+    title: string;
+    content: string;
+    expanded_content?: string;
+    reference_urls: string[];
+    display_order: number;
+    clicked: boolean;
 }
 
+export interface NewsSummaryOptions {
+    news_chunking_experiment: NewsChunkingExperiment;
+    news_preference_application_experiment: NewsPreferenceApplicationExperiment;
+    period_type: NewsSummaryPeriod;
+}
 export interface InitializeResponse {
     mode: NewsSummaryMode;
-    latest_summary?: NewsSummaryList;
-    news_summary_periods: NewsSummaryPeriod[];
+    latest_summary: NewsSummaryItem[];
+    default_news_summary_options: NewsSummaryOptions;
+    available_period_start_date_str: string[];
     preference_conversation_history: ChatMessage[];
 }
 
@@ -35,7 +34,22 @@ export interface ChatMessage {
 // You'll need to define ChatAuthorType as well, for example:
 export type ChatAuthorType = 'user' | 'ai'; // Adjust based on your actual types
 
-export type NewsSummaryMode = 'collect_news_preference' | 'collect_rss_feeds' | 'show_summary';
+export type NewsSummaryMode = 'collect_rss_feeds' | 'collect_news_preference' | 'show_summary';
+
+export enum NewsChunkingExperiment {
+    AGGREGATE_DAILY = "aggregate_daily",
+    EMBEDDING_CLUSTERING = "embedding_clustering"
+}
+
+export enum NewsPreferenceApplicationExperiment {
+    APPLY_PREFERENCE = "apply_preference",
+    NO_PREFERENCE = "no_preference"
+}
+
+export enum NewsSummaryPeriod {
+    DAILY = "daily",
+    WEEKLY = "weekly",
+}
 
 export async function initialize(): Promise<InitializeResponse> {
     const response = await fetch(getBackendApiUrl('/news_summary/initialize'), {
@@ -189,3 +203,70 @@ export async function subscribeRssFeed(rss_feed: RssFeed): Promise<number> {
     const responseJson = await response.json();
     return responseJson.feed_id;
 }
+
+export interface NewsSummaryStartDateAndOptionSelector {
+    start_date: string;
+    option: NewsSummaryOptions;
+}
+
+export interface GetNewsSummaryRequest {
+    news_summary_start_date_and_option_selector: NewsSummaryStartDateAndOptionSelector;
+}
+
+export async function getNewsSummary(request: GetNewsSummaryRequest): Promise<NewsSummaryItem[]> {
+    const response = await fetch(getBackendApiUrl('/news_summary/get_news_summary'), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(request),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Failed to get news summary');
+    }
+
+    return await response.json();
+}
+
+export enum NewsSummaryLikeDislikeAction {
+    LIKE = 'like',
+    DISLIKE = 'dislike'
+}
+export interface NewsSummaryLikeDislikeRequest {
+    news_summary_start_date_and_option_selector: NewsSummaryStartDateAndOptionSelector;
+    action: NewsSummaryLikeDislikeAction;
+}
+
+export async function likeDislikeNewsSummary(request: NewsSummaryLikeDislikeRequest): Promise<void> {
+    const response = await fetch(getBackendApiUrl('/news_summary/like_dislike_news_summary'), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(request),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Failed to like/dislike news summary');
+    }
+}
+
+export async function expandSummary(summaryId: number): Promise<NewsSummaryItem> {
+    const response = await fetch(getBackendApiUrl(`/news_summary/expand_summary/?summary_id=${summaryId}`), {
+        method: 'GET',
+        credentials: 'include',
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Failed to expand summary');
+    }
+
+    return await response.json();
+}
+

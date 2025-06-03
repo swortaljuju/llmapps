@@ -33,10 +33,9 @@ export function AppsLayout({
     const [expandedSections, setExpandedSections] = useState({
         apps: false,
         chatList: false,
-        customAction: false
     });
 
-    const toggleSection = (section: 'apps' | 'chatList' | 'customAction') => {
+    const toggleSection = (section: 'apps' | 'chatList') => {
         setExpandedSections(prev => ({
             ...prev,
             [section]: !prev[section]
@@ -144,29 +143,18 @@ export function AppsLayout({
                             </div>
                         )}
                     </div>
-                    <div className="border-b">
+
+                    {/* Custom Actions - Flattened List */}
+                    {customAction.items.map(customActionItem => (
                         <button
-                            onClick={() => toggleSection('customAction')}
-                            className="w-full p-2 flex items-center justify-between hover:bg-gray-100"
+                            key={customActionItem.id}
+                            onClick={() => onCustomActionItemClick(customActionItem)}
+                            className={`w-full p-2 flex items-center justify-between hover:bg-gray-100 ${customActionHighlights[customActionItem.id] ? 'bg-blue-100' : ''
+                                }`}
                         >
-                            <span className="font-small">{customAction.title}</span>
-                            {expandedSections.customAction ? <MdExpandLess /> : <MdExpandMore />}
+                            <span className="font-small">{customActionItem.label}</span>
                         </button>
-                        {expandedSections.customAction && (
-                            <div className="px-2 pb-1">
-                                {customAction.items
-                                    .map(customActionItem => (
-                                        <button
-                                            key={customActionItem.id}
-                                            onClick={() => onCustomActionItemClick(customActionItem)}
-                                            className={`w-full p-2 flex items-center justify-between hover:bg-gray-100 ${customActionHighlights[customActionItem.id] ? 'bg-blue-100' : ''
-                                                }`}>
-                                            <span className="font-small">{customActionItem.label}</span>
-                                        </button>
-                                    ))}
-                            </div>
-                        )}
-                    </div>
+                    ))}
 
                     <div className="border-b">
                         <button
@@ -184,7 +172,8 @@ export function AppsLayout({
                                             key={chatListItem.id}
                                             onClick={() => onChatListItemClick(chatListItem)}
                                             className={`w-full p-2 flex items-center justify-between hover:bg-gray-100 ${chatHighlights[chatListItem.id] ? 'bg-blue-100' : ''
-                                                }`}>
+                                                }`}
+                                        >
                                             <span className="font-small">{chatListItem.label}</span>
                                         </button>
                                     ))}

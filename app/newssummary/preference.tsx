@@ -2,18 +2,15 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { ChatMessage, ChatAuthorType, PreferenceSurveyRequest, submitPreferenceSurvey, getPreference, savePreference } from './store';
-import { MainUiMode } from "./common";
 import { TypewriterText } from '../common/typewriter';
 
 interface NewsPreferenceChatProps {
     preferenceConversationHistory: ChatMessage[];
-    setMainUiState: React.Dispatch<React.SetStateAction<MainUiMode>>;
     fromCreatePreferenceToNewsSummary: () => void;
 }
 
 export function NewsPreferenceChat({
     preferenceConversationHistory,
-    setMainUiState,
     fromCreatePreferenceToNewsSummary
 }: NewsPreferenceChatProps) {
     const [messages, setMessages] = useState<ChatMessage[]>(preferenceConversationHistory);

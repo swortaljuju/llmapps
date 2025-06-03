@@ -7,8 +7,8 @@ import { InitializeResponse, initialize } from './store';
 import { EditPreference, NewsPreferenceChat } from "./preference";
 import { MainUiMode } from "./common";
 import FeedUpload from './feedupload';
+import SummaryContent from './summarycontent';
 
-const EMPTY_SUMMARY_CHAT_ID = 'empty-summary';
 const PREFERENCE_ID = 'preference';
 
 export default function NewsSummary() {
@@ -17,39 +17,7 @@ export default function NewsSummary() {
     const [apiError, setApiError] = useState<string | null>(null);
     const [initData, setInitData] = useState<InitializeResponse | null>(null);
 
-    const [mainUiMode, setMainUiMode] = useState<MainUiMode>(MainUiMode.Chat);
-    const [chatId, setChatId] = useState<string>('');
-    const onChatListItemClick = (id: string) => {
-        setChatId(id);
-        setMainUiMode(MainUiMode.Chat);
-        return true;
-    }
-
-    const initializeChatListItems = (initData: InitializeResponse) => {
-        // Assuming initData has a property 'chat_threads' which is an array of chat thread objects
-        if (initData.news_summary_periods && initData.news_summary_periods.length > 0) {
-            return initData.news_summary_periods.map(newsSummaryPeriod => ({
-                label: `Summary from ${new Date(newsSummaryPeriod.start_date_timestamp * 1000).toLocaleDateString()} to ${new Date(newsSummaryPeriod.end_date_timestamp * 1000).toLocaleDateString()}`,
-                id: newsSummaryPeriod.id + '',
-                onClick: onChatListItemClick, // Placeholder for click handler
-                selected: chatId === newsSummaryPeriod.id + ''
-            }));
-        } else {
-            return [
-                {
-                    label: 'Next Summary Coming',
-                    id: EMPTY_SUMMARY_CHAT_ID,
-                    onClick: onChatListItemClick,
-                    selected: chatId === EMPTY_SUMMARY_CHAT_ID
-                }
-            ]
-        }
-
-    };
-    const [chatList, setChatList] = useState<SideSection>({
-        title: 'Chat List',
-        items: []
-    });
+    const [mainUiMode, setMainUiMode] = useState<MainUiMode>(MainUiMode.Summary);
 
     const onPreferenceClick = () => {
         if (initData?.mode === 'collect_rss_feeds') {
@@ -66,6 +34,13 @@ export default function NewsSummary() {
         setMainUiMode(MainUiMode.UploadRss);
         return true;
     }
+    const onSummaryClick = () => {
+        if (initData?.mode !== 'show_summary') {
+            return false;
+        }
+        setMainUiMode(MainUiMode.Summary);
+        return true;
+    }
     const createCustomActionItem = () => {
         return [
             {
@@ -79,11 +54,17 @@ export default function NewsSummary() {
                 id: PREFERENCE_ID,
                 onClick: onPreferenceClick,
                 selected: mainUiMode === MainUiMode.EditPreference || mainUiMode === MainUiMode.CreatePreference
+            },
+            {
+                label: 'News Summary',
+                id: MainUiMode.Summary,
+                onClick: onSummaryClick,
+                selected: mainUiMode === MainUiMode.Summary
             }
         ]
     };
     const [customAction, setCustomAction] = useState<SideSection>({
-        title: 'Preference and RSS Upload',
+        title: 'Custom Actions',
         items: createCustomActionItem()
     });
     // Fetch initialization data
@@ -101,22 +82,8 @@ export default function NewsSummary() {
                 } else if (data.mode === 'collect_rss_feeds') {
                     setMainUiMode(MainUiMode.UploadRss);
                 } else {
-                    setMainUiMode(MainUiMode.Chat);
+                    setMainUiMode(MainUiMode.Summary);
                 }
-
-                const chatListItems = initializeChatListItems(data);
-                if (chatId === '') {
-                    setChatId(chatListItems[0].id);
-                    chatListItems[0].selected = true; // Set the first item as selected
-                }
-                setChatList((prev) => {
-                    // Update the chatList with the new items
-                    return {
-                        ...prev,
-                        items: chatListItems
-                    };
-                });
-                
             } catch (error) {
                 console.error('Error initializing news summary:', error);
                 setApiError(error instanceof Error ? error.message : 'Unknown error');
@@ -138,23 +105,16 @@ export default function NewsSummary() {
         const data: InitializeResponse = await initialize();
         // generate initial preference survey
         setInitData(data);
-        setMainUiMode(MainUiMode.Chat);
+        setMainUiMode(MainUiMode.Summary);
     }
-    // Update chatList selection when mainUiMode or chatId changes
+
     useEffect(() => {
-        setChatList(prev => ({
-            ...prev,
-            items: prev.items.map(item => ({
-                ...item,
-                selected: item.id === chatId && mainUiMode === MainUiMode.Chat
-            }))
-        }));
         // Update the 'selected' property of each item in the chatList
         setCustomAction(prev => ({
             ...prev,
             items: createCustomActionItem()
         }));
-    }, [mainUiMode, chatId]);
+    }, [mainUiMode]);
 
     let mainChat: React.ReactNode = null;
     // Loading state
@@ -181,11 +141,13 @@ export default function NewsSummary() {
                 setMainUiState={setMainUiMode}
                 fromFeedUploadToCreatePreference={fromFeedUploadToCreatePreference}
                 fromCreatePreferenceToNewsSummary={fromCreatePreferenceToNewsSummary}
-                selectedSummaryId={chatId}
             />
         );
     }
-
+    const chatList = {
+        title: 'News Research',
+        items: []
+    } as SideSection;
     return (
         <AppsLayout
             mainChat={mainChat}
@@ -202,7 +164,6 @@ interface NewsSummaryMainUiProps {
     setMainUiState: React.Dispatch<React.SetStateAction<MainUiMode>>;
     fromFeedUploadToCreatePreference: () => void;
     fromCreatePreferenceToNewsSummary: () => void;
-    selectedSummaryId: string;
 }
 
 function NewsSummaryMainUi({
@@ -211,20 +172,18 @@ function NewsSummaryMainUi({
     setMainUiState,
     fromFeedUploadToCreatePreference,
     fromCreatePreferenceToNewsSummary,
-    selectedSummaryId,
 }: NewsSummaryMainUiProps) {
 
     switch (mainUiMode) {
         case MainUiMode.CreatePreference:
-            return <NewsPreferenceChat preferenceConversationHistory={initData!.preference_conversation_history} setMainUiState={setMainUiState} fromCreatePreferenceToNewsSummary={fromCreatePreferenceToNewsSummary}></NewsPreferenceChat>;
+            return <NewsPreferenceChat preferenceConversationHistory={initData!.preference_conversation_history} fromCreatePreferenceToNewsSummary={fromCreatePreferenceToNewsSummary}></NewsPreferenceChat>;
         case MainUiMode.EditPreference:
             return <EditPreference />;
         case MainUiMode.UploadRss:
             return <FeedUpload fromFeedUploadToCreatePreference={fromFeedUploadToCreatePreference} initMode={initData?.mode}/>;
-        case MainUiMode.Chat:
-            if (selectedSummaryId === EMPTY_SUMMARY_CHAT_ID) {
-                return <div className="flex items-center justify-center h-screen">No summary available yet. Please wait for the next summary.</div>;
-            }
-            return <div> chat </div>;
+        case MainUiMode.Summary:
+            return <SummaryContent latestSummary={initData?.latest_summary} defaultOptions={initData?.default_news_summary_options} startDateList={initData?.available_period_start_date_str}/>;
+        case MainUiMode.NewsResearch:
+            return <div className="flex items-center justify-center h-screen">News Research</div>;
     }
 }

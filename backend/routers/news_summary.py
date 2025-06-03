@@ -40,11 +40,6 @@ DOMAIN = os.getenv("DOMAIN", "localhost:3000")
 
 router = APIRouter(prefix="/api/py/news_summary", tags=["news_summary"])
 
-class NewsSummaryPeriod(BaseModel):
-    start_date_timestamp: int  # Timestamp in seconds
-    end_date_timestamp: int  # Timestamp in seconds
-    id: int
-
 class ApiRssFeed(BaseModel):
     id: int | None = None
     title: str

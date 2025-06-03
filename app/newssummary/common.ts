@@ -1,6 +1,7 @@
 export enum MainUiMode {
     CreatePreference = 'CreatePreference',
     EditPreference = 'EditPreference',
-    Chat = 'Chat',
+    NewsResearch = 'NewsResearch',
+    Summary = 'Summary',
     UploadRss = 'UploadRss',
 }

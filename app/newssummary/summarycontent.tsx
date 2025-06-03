@@ -1,0 +1,299 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import {
+    getNewsSummary,
+    likeDislikeNewsSummary,
+    expandSummary,
+    NewsChunkingExperiment,
+    NewsPreferenceApplicationExperiment,
+    NewsSummaryItem,
+    NewsSummaryOptions,
+    NewsSummaryPeriod,
+    NewsSummaryLikeDislikeRequest,
+    NewsSummaryLikeDislikeAction,
+} from './store';
+
+interface SummaryContentProps {
+    latestSummary: NewsSummaryItem[] | undefined;
+    defaultOptions: NewsSummaryOptions | undefined;
+    startDateList: string[] | undefined;
+}
+
+function getCurrentWeekStartDateStr(): string {
+    const today = new Date();
+    return new Date(today.setDate(today.getDate() - today.getDay())).toISOString().slice(0, 10);
+}
+
+interface UiNewsSummaryItem extends NewsSummaryItem {
+    expandSummaryCalled: boolean;
+    expandedContentShown: boolean;
+    isLoading: boolean;
+}
+
+function createUiNewsSummaryItem(item: NewsSummaryItem): UiNewsSummaryItem {
+    return {
+        ...item,
+        expandSummaryCalled: false,
+        expandedContentShown: false,
+        isLoading: false,
+    };
+}
+
+export default function SummaryContent({ latestSummary, defaultOptions, startDateList }: SummaryContentProps) {
+    const [summaryItems, setSummaryItems] = useState<UiNewsSummaryItem[]>(latestSummary?.map((item) => {
+        return createUiNewsSummaryItem(item);
+    }) || []);
+    const [isSummaryEntryLoading, setIsSummaryEntryLoading] = useState<boolean>(false);
+    const [selectedOptions, setSelectedOptions] = useState<NewsSummaryOptions>(defaultOptions || {
+        news_chunking_experiment: NewsChunkingExperiment.AGGREGATE_DAILY,
+        news_preference_application_experiment: NewsPreferenceApplicationExperiment.APPLY_PREFERENCE,
+        period_type: NewsSummaryPeriod.WEEKLY,
+    });
+    const [periodStartDate, setPeriodStartDate] = useState<string>("current week");
+    const [availableStartDateList, setAvailableStartDateList] = useState<string[]>(() => {
+        const startOfWeek = getCurrentWeekStartDateStr();
+        if (startDateList) {
+            if (startDateList.includes(startOfWeek)) {
+                return ["current week", ...startDateList.filter(date => date !== startOfWeek)];
+            } else {
+                return ["current week", ...startDateList];
+            }
+        }
+        return ["current week"];
+    });
+
+    useEffect(() => {
+        setSummaryItems(latestSummary?.map((item) => {
+            return createUiNewsSummaryItem(item);
+        }) || []);
+        setPeriodStartDate("current week");
+    }, [latestSummary]);
+
+    const handleOptionChange = (optionType: keyof NewsSummaryOptions, value: any) => {
+        setSelectedOptions(prev => ({ ...prev, [optionType]: value }));
+    };
+
+    const getPeriodStartDateStr = () => {
+        if (periodStartDate === "current week") {
+            return getCurrentWeekStartDateStr();
+        }
+        return periodStartDate;
+    };
+    const handleGetNewsSummary = async () => {
+        if (!selectedOptions) {
+            console.error("Options not initialized");
+            return;
+        }
+        const getNewsSummaryRequest = {
+            news_summary_start_date_and_option_selector: {
+                start_date: getPeriodStartDateStr(),
+                option: selectedOptions,
+            }
+        };
+
+        try {
+            setIsSummaryEntryLoading(true);
+            const newSummary = await getNewsSummary(getNewsSummaryRequest);
+            setSummaryItems(newSummary?.map((item) => {
+                return createUiNewsSummaryItem(item);
+            }) || []);
+        } catch (error: any) {
+            console.error("Failed to get news summary:", error.message);
+        } finally {
+            setIsSummaryEntryLoading(false);
+        }
+    };
+
+    const handleLikeDislike = async (action: NewsSummaryLikeDislikeAction) => {
+        if (!selectedOptions) {
+            console.error("Options not initialized");
+            return;
+        }
+
+
+        const newsSummaryLikeDislikeRequest: NewsSummaryLikeDislikeRequest = {
+            news_summary_start_date_and_option_selector: {
+                start_date: getPeriodStartDateStr(),
+                option: selectedOptions,
+            },
+            action: action,
+        };
+
+        try {
+            await likeDislikeNewsSummary(newsSummaryLikeDislikeRequest);
+            console.log(`Successfully ${action}d news summary`);
+        } catch (error: any) {
+            console.error(`Failed to ${action} news summary:`, error.message);
+        }
+    };
+
+    const callExpandSummaryApi = async (selectedItem: UiNewsSummaryItem) => {
+        setSummaryItems(prev =>
+            prev.map(item => (item.id === selectedItem.id ? { ...item, isLoading: true } : item))
+        );
+
+        try {
+            const expandedItem = await expandSummary(selectedItem.id);
+            setSummaryItems(prev =>
+                prev.map(item => (item.id === selectedItem.id ? { ...expandedItem, expandedContentShown: true, expandSummaryCalled: true, isLoading: false } : item))
+            );
+        } catch (error: any) {
+            console.error("Failed to expand summary:", error.message);
+            throw error;
+        } finally {
+            setSummaryItems(prev =>
+                prev.map(item => (item.id === selectedItem.id ? { ...item, isLoading: false } : item))
+            );
+        }
+    };
+
+    const onSummaryItemClicked = (selectedItem: UiNewsSummaryItem) => {
+        if (selectedItem.expandedContentShown) {
+            // If already expanded, collapse it
+            setSummaryItems(prev =>
+                prev.map(i => (i.id === selectedItem.id ? { ...i, expandedContentShown: false } : i))
+            );
+        } else {
+            if (selectedItem.expandSummaryCalled) {
+                setSummaryItems(prev =>
+                    prev.map(i => (i.id === selectedItem.id ? { ...i, expandedContentShown: true } : i))
+                );
+            } else {
+                callExpandSummaryApi(selectedItem)
+            }
+        }
+
+    };
+
+    return (
+        <div className="flex flex-col h-full">
+            {/* Upper Panel: News Summary Entry List */}
+            <div className="flex-1 overflow-y-auto p-4">
+                {isSummaryEntryLoading ? (
+                    <div className="flex justify-center items-center">
+                        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+                    </div>
+                ) : summaryItems.length === 0 ? (
+                    <p>No news summaries available.</p>
+                ) : (
+                    summaryItems.map(item => (
+                        <div key={item.id} className="mb-4 p-4 border rounded-md">
+                            <h3
+                                className="text-lg font-semibold cursor-pointer"
+                                onClick={() => onSummaryItemClicked(item)}
+                            >
+                                {item.title}
+                            </h3>
+                            {item.reference_urls && (
+                                <div className="mt-2">
+                                    {item.reference_urls.map((url, index) => (
+                                        <a
+                                            key={index}
+                                            href={url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-blue-500 hover:underline mr-2"
+                                        >
+                                            Ref {index + 1}
+                                        </a>
+                                    ))}
+                                </div>
+                            )}
+                            {item.isLoading ? (
+                                <div className="flex justify-center items-center">
+                                    <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"></div>
+                                </div>
+                            ) : (
+                                <div className={`mt-2 overflow-hidden transition-all duration-500 ease-in-out ${item.expandedContentShown ? 'max-h-96' : 'max-h-0'}`}>
+                                    {item.content && <p>{item.content}</p>}
+                                    {item.expanded_content && <p>{item.expanded_content}</p>}
+                                </div>
+                            )}
+                        </div>
+                    ))
+                )}
+            </div>
+
+
+            {/* Bottom Panel: Options and Buttons */}
+            <div className="p-4 border-t">
+                {/* Option Pickers */}
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700">Summarization Strategy</label>
+                    <select
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        value={selectedOptions?.news_chunking_experiment}
+                        onChange={e => handleOptionChange('news_chunking_experiment', e.target.value)}
+                    >
+                        <option value={NewsChunkingExperiment.AGGREGATE_DAILY}>Aggregate Daily</option>
+                        <option value={NewsChunkingExperiment.EMBEDDING_CLUSTERING}>Cluster by Content</option>
+                    </select>
+                </div>
+
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700">Apply Preference</label>
+                    <select
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        value={selectedOptions?.news_preference_application_experiment}
+                        onChange={e => handleOptionChange('news_preference_application_experiment', e.target.value)}
+                    >
+                        <option value={NewsPreferenceApplicationExperiment.APPLY_PREFERENCE}>Use Preference</option>
+                        <option value={NewsPreferenceApplicationExperiment.NO_PREFERENCE}>No Preference</option>
+                    </select>
+                </div>
+
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700" title="The period during which news are summarized">Period Type</label>
+                    <select
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        value={selectedOptions?.period_type}
+                        onChange={e => handleOptionChange('period_type', e.target.value)}
+                    >
+                        <option value={NewsSummaryPeriod.DAILY}>Daily</option>
+                        <option value={NewsSummaryPeriod.WEEKLY}>Weekly</option>
+                    </select>
+                </div>
+
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700">Period start date</label>
+                    <select
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        value={periodStartDate}
+                        onChange={e => setPeriodStartDate(e.target.value)}
+                    >
+                        {availableStartDateList.map(date => (
+                            <option key={date} value={date}>{date}</option>
+                        ))}
+                    </select>
+                </div>
+
+                {/* Buttons */}
+                <div className="flex justify-between">
+                    <button
+                        onClick={handleGetNewsSummary}
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                        Submit
+                    </button>
+                    <div>
+                        <button
+                            onClick={() => handleLikeDislike(NewsSummaryLikeDislikeAction.LIKE)}
+                            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2"
+                            title="Like the news summary"
+                        >
+                            Like
+                        </button>
+                        <button
+                            onClick={() => handleLikeDislike(NewsSummaryLikeDislikeAction.DISLIKE)}
+                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                            title="Dislike the news summary"
+                        >
+                            Dislike
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
