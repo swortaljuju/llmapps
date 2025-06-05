@@ -76,7 +76,7 @@ async def load_preference_survey_history(
         # Load survey history from Redis
         cached_history = json.loads(await redis.get(redis_key))
         await redis.expire(redis_key, 3600)  # Extend TTL to 1 hour (3600 seconds)
-        return [ApiConversationHistoryItem(**item) for item in cached_history]
+        return [ApiConversationHistoryItem.model_validate_json(item) for item in cached_history]
     # If not in Redis, load from the database
     survey_history = (
         sql_client.query(ConversationHistory)
@@ -94,7 +94,7 @@ async def load_preference_survey_history(
 
     await redis.set(
         redis_key,
-        json.dumps([item.model_dump() for item in api_survey_history]),
+        json.dumps([item.model_dump_json() for item in api_survey_history]),
         ex=3600,
     )  # Cache for 1 hour
 
@@ -157,7 +157,7 @@ def next_preference_question(
         + [
             item.llm_message
             for item in chat_history
-            if item.llm_message and item.llm_message.type in (LlmMessageType.HUMAN, LlmMessage.AI)
+            if item.llm_message and item.llm_message.type in (LlmMessageType.HUMAN, LlmMessageType.AI)
         ],        
         output_object=NewsPreferenceAgentOutput,
         )
@@ -247,7 +247,7 @@ async def save_answer_and_generate_next_question(
     # Update Redis cache
     redis_key = _get_news_preference_survey_history_key(user_id)
     await redis.set(
-        redis_key, json.dumps([item.model_dump() for item in chat_history]), ex=3600
+        redis_key, json.dumps([item.model_dump_json() for item in chat_history]), ex=3600
     )  # Cache for 1 hour
     for item in message_to_save:
         db_conversation_history_item = convert_api_conversation_history_item_to_db_row(

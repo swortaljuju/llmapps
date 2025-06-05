@@ -49,6 +49,7 @@ class LlmMessage(BaseModel):
     structured_output: BaseModel | list[BaseModel] | None = None
     function_call: list[FunctionCallMessage] = []
     function_response: list[FunctionResponseMessage] = []
+
 class SafeDict(dict):
     def __missing__(self, key):
         return '{' + key + '}'

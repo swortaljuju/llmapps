@@ -257,7 +257,7 @@ export async function likeDislikeNewsSummary(request: NewsSummaryLikeDislikeRequ
 }
 
 export async function expandSummary(summaryId: number): Promise<NewsSummaryItem> {
-    const response = await fetch(getBackendApiUrl(`/news_summary/expand_summary/?summary_id=${summaryId}`), {
+    const response = await fetch(getBackendApiUrl(`/news_summary/expand_summary?summary_id=${summaryId}`), {
         method: 'GET',
         credentials: 'include',
     });

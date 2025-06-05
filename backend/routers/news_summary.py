@@ -67,7 +67,7 @@ class NewsSummaryInitializeResponse(BaseModel):
     mode: NewsSummaryUiMode      
     # latest summary from default user preference option and current week            
     latest_summary: list[ApiNewsSummaryEntry] = []
-    default_news_summary_options: NewsSummaryOptions
+    default_news_summary_options: NewsSummaryOptions | None = None
     available_period_start_date_str: list[str] = []
     # date string in YYYY-MM-DD format
     preference_conversation_history: list[ChatMessage] = []
@@ -76,7 +76,7 @@ class NewsSummaryInitializeResponse(BaseModel):
 def _from_api_conversation_history_item_to_chat_message(
     api_item: ApiConversationHistoryItem,
 ) -> ChatMessage | None:
-    if api_item.ai_message is None and api_item.human_message is None:
+    if api_item.llm_message.type != LlmMessageType.AI and api_item.llm_message.type != LlmMessageType.HUMAN:
         return None
     return ChatMessage(
         thread_id=api_item.thread_id,
@@ -171,7 +171,7 @@ async def initialize(
             )
         preference_conversation_history = []
         for item in api_survey_history:
-            if item.ai_message is not None or item.human_message is not None:
+            if item.llm_message.type == LlmMessageType.HUMAN or item.llm_message.type == LlmMessageType.AI:
                 preference_conversation_history.append(
                     _from_api_conversation_history_item_to_chat_message(item)
                 )
@@ -226,7 +226,7 @@ async def initialize(
             period_type=default_period_type,
         ),
         available_period_start_date_str=[
-                format_date(date_obj)
+                format_date(date_obj[0])
                 for date_obj in available_period_start_date
             ],
     )
@@ -583,7 +583,7 @@ async def like_dislike_news_summary(
     return {"status": "success", "message": "News summary like or dislike action recorded successfully."}
 
 @router.get(
-    "/expand_summary/",
+    "/expand_summary",
     response_model=ApiNewsSummaryEntry,
 )
 async def expand_summary(

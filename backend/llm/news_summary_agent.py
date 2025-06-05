@@ -449,7 +449,7 @@ async def __cluster_and_summarize_news(
             logger.info(f"Using existing summaries for {start_date} to {end_date}")
             return existing_summary
         news_entry_id_and_embeddings = (
-            session.query(NewsEntry.id, NewsEntry.summary_embedding)
+            session.query(NewsEntry.id, NewsEntry.summary_clustering_embedding)
             .filter(
                 __get_news_entry_filter_for_summarization(
                     start_date, end_date, subscribed_feed_id_list

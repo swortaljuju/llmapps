@@ -28,7 +28,7 @@ from enum import Enum
 import time
 from cron.news_entry_embedding_backfill import backfill_embedding
 from utils.rss import get_atom_tag, is_valid_rss_type
-
+from asyncio import run
 # Clear default handlers
 logger.remove()
 LOG_DIR = os.getenv("LOG_DIR", "/tmp/logs")
@@ -278,7 +278,7 @@ def main():
             time.sleep(60)  # Sleep for 10 minutes
     # populate the embedding separately so that the quota won't block the crawling
     backfill_embedding()
-    summarize_news_for_unlimited_users()
+    run(summarize_news_for_unlimited_users())
 
 
 if __name__ == "__main__":

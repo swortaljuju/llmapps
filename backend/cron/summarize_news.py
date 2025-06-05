@@ -14,13 +14,13 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from db.db import get_sql_db
 from db.models import User, NewsChunkingExperiment, NewsPreferenceApplicationExperiment, NewsSummaryPeriod, UserTier
 from datetime import timedelta, date
-from loguru import logger
+from utils.logger import logger
 from llm.news_summary_agent import summarize_news 
 from constants import SQL_BATCH_SIZE
 from datetime import datetime
 import asyncio
 
-def summarize_news_for_unlimited_users():
+async def summarize_news_for_unlimited_users():
     sql_session = get_sql_db()
     today = date.today()
     start_of_week = today - timedelta(days=today.weekday())
@@ -28,14 +28,14 @@ def summarize_news_for_unlimited_users():
         User.id, User.preferred_news_chunking_experiment, User.preferred_news_preference_application_experiment, 
         User.preferred_news_summary_period_type
     ).filter(User.user_tier == UserTier.UNLIMITED).yield_per(SQL_BATCH_SIZE)
-
-    for id, news_chunking_experiment, news_preference_application_experiment in user_data:
-        summarize_news(
-            news_preference_application_experiment=news_preference_application_experiment,
-            news_chunking_experiment=news_chunking_experiment,
+    for id, news_chunking_experiment, news_preference_application_experiment, preferred_news_summary_period_type in user_data:
+        logger.info(f"Summarizing news for user {id} with chunking experiment {news_chunking_experiment} and preference application experiment {news_preference_application_experiment}")
+        await summarize_news(
+            news_preference_application_experiment=news_preference_application_experiment or NewsPreferenceApplicationExperiment.APPLY_PREFERENCE,
+            news_chunking_experiment=news_chunking_experiment or NewsChunkingExperiment.AGGREGATE_DAILY,
             user_id=id,
             start_date=start_of_week,  # Start from the beginning of the current week
-            period=user_data.preferred_news_summary_period_type or NewsSummaryPeriod.weekly
+            period=preferred_news_summary_period_type or NewsSummaryPeriod.weekly
         )
 
 async def __test():

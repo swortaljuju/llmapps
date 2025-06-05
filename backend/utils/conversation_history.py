@@ -61,11 +61,10 @@ def convert_api_conversation_history_item_to_db_row(
     content = item.llm_message.text_content
     llm_message_type = item.llm_message.type
     message_type = MessageType.UNKNOWN
+    content = item.llm_message.text_content or ""
     if llm_message_type == LlmMessageType.HUMAN:
-        content = item.human_message.model_dump()
         message_type = MessageType.HUMAN
     elif llm_message_type == LlmMessageType.AI:
-        content = item.ai_message.model_dump()
         message_type = MessageType.AI
     else:
         return None
