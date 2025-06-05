@@ -30,7 +30,8 @@ class NewsEntry(Base):
     description = Column(String)
     content = Column(String)
     pub_time = Column(DateTime)
-    summary_embedding = Column(Vector(768))  # embedding of the content
+    summary_clustering_embedding = Column(Vector(768))  # embedding of the content for clustering
+    summary_document_retrieval_embedding = Column(Vector(768))  # embedding of the content for RAG
 
 class NewsSummaryEntry(Base):
     __tablename__ = "news_summary_entry"

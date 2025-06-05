@@ -7,6 +7,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from db.models import NewsEntry
 from llm.client_proxy_factory import get_default_client_proxy
+from llm.client_proxy import EmbeddingTaskType
 
 EMBEDDING_RATE_LIMIT = 100
 
@@ -27,9 +28,12 @@ def generate_embedding(news_entry_list: list[NewsEntry]):
             f"{_empty_for_none(news_entry.title)} {_empty_for_none(news_entry.description)} {_empty_for_none(news_entry.content)}"
             for news_entry in news_entry_list_chunk
         ]
-        embedding = get_default_client_proxy().embed_content(
-            embedding_input_list
+        clustering_embedding = get_default_client_proxy().embed_content(
+            embedding_input_list, task_type=EmbeddingTaskType.CLUSTERING
         )
-        for j, embedding_vector in enumerate(embedding):
-            news_entry = news_entry_list_chunk[j]
-            news_entry.summary_embedding = embedding_vector
+        document_retrieval_embedding = get_default_client_proxy().embed_content(
+            embedding_input_list, task_type=EmbeddingTaskType.RETRIEVAL_DOCUMENT
+        )
+        for j, news_entry in enumerate(news_entry_list_chunk):
+            news_entry.summary_clustering_embedding = clustering_embedding[j]
+            news_entry.summary_document_retrieval_embedding = document_retrieval_embedding[j]

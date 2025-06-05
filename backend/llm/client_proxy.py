@@ -14,6 +14,14 @@ class LlmMessageType(Enum):
     FUNCTION_RESPONSE = "function_response"
     STRUCTURED_OUTPUT = "structured_output"  # output object
     UNKNOWN = "unknown"
+    
+class EmbeddingTaskType(Enum):
+    """
+    Enum representing the type of embedding task.
+    """
+    CLUSTERING = "clustering"  # embedding for clustering
+    RETRIEVAL_DOCUMENT = "retrieval_document"  # embedding for document to be retrieved
+    RETRIEVAL_QUERY = "retrieval_query"  # embedding for query to be retrieved
 
 class FunctionCallMessage(BaseModel):
     """
@@ -101,7 +109,7 @@ class LlmClientProxy:
         """
         raise NotImplementedError("This method should be implemented by subclasses.")
     
-    def embed_content(self, contents: list[str]) -> list[list[float]]:
+    def embed_content(self, contents: list[str], task_type: EmbeddingTaskType) -> list[list[float]]:
         """
         Generate embeddings for the given content.
         This method should be implemented by subclasses.

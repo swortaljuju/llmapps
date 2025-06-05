@@ -1,6 +1,6 @@
 import os
 from google.genai import Client, types
-from .client_proxy import LlmClientProxy, LlmMessage, LlmMessageType, FunctionCallMessage, FunctionResponseMessage
+from .client_proxy import LlmClientProxy, LlmMessage, LlmMessageType, FunctionCallMessage, FunctionResponseMessage, EmbeddingTaskType
 from pydantic import BaseModel
 from collections.abc import Callable
 from typing import Any
@@ -85,7 +85,7 @@ class GeminiClientProxy(LlmClientProxy):
         Check if the response contains valid content.
         This method checks if the response has parsed content or text.
         """
-        return output_object and not response.parsed:        
+        return output_object and not response.parsed        
 
     def __track_usage(self, usage_metadata: types.GenerateContentResponseUsageMetadata | None, tracker: LlmTracker | None) -> None:
         if usage_metadata and tracker:
@@ -171,9 +171,23 @@ class GeminiClientProxy(LlmClientProxy):
                     raise ValueError("Unknown message type in prompt")
         return contents
 
-    def embed_content(self, contents: list[str]) -> list[list[float]]:
-        response = self.__client.models.embed_content(model=self.__embedding_model, contents=contents)
+    def embed_content(self, contents: list[str], task_type: EmbeddingTaskType) -> list[list[float]]:
+        response = self.__client.models.embed_content(model=self.__embedding_model, contents=contents,
+                config=types.EmbedContentConfig(task_type=self.__get_embedding_task_type(task_type)))
         return [ embd.values for embd in response.embeddings]
+    
+    def __get_embedding_task_type(self, task_type: EmbeddingTaskType) -> str:
+        """
+        Convert the EmbeddingTaskType to the string representation expected by the Gemini API.
+        """
+        if task_type == EmbeddingTaskType.CLUSTERING:
+            return "CLUSTERING"
+        elif task_type == EmbeddingTaskType.RETRIEVAL_DOCUMENT:
+            return "RETRIEVAL_DOCUMENT"
+        elif task_type == EmbeddingTaskType.RETRIEVAL_QUERY:
+            return "RETRIEVAL_QUERY"
+        else:
+            raise ValueError(f"Unsupported embedding task type: {task_type}")
     
     def count_tokens(self,  tokens: str) -> int:
         """
