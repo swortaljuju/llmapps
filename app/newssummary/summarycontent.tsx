@@ -40,6 +40,8 @@ function createUiNewsSummaryItem(item: NewsSummaryItem): UiNewsSummaryItem {
     };
 }
 
+const CURRENT_WEEK = "Current Week";
+
 export default function SummaryContent({ latestSummary, defaultOptions, startDateList }: SummaryContentProps) {
     const [summaryItems, setSummaryItems] = useState<UiNewsSummaryItem[]>(latestSummary?.map((item) => {
         return createUiNewsSummaryItem(item);
@@ -50,24 +52,24 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
         news_preference_application_experiment: NewsPreferenceApplicationExperiment.APPLY_PREFERENCE,
         period_type: NewsSummaryPeriod.WEEKLY,
     });
-    const [periodStartDate, setPeriodStartDate] = useState<string>("current week");
+    const [periodStartDate, setPeriodStartDate] = useState<string>(CURRENT_WEEK);
     const [availableStartDateList, setAvailableStartDateList] = useState<string[]>(() => {
         const startOfWeek = getCurrentWeekStartDateStr();
         if (startDateList) {
             if (startDateList.includes(startOfWeek)) {
-                return ["current week", ...startDateList.filter(date => date !== startOfWeek)];
+                return [CURRENT_WEEK, ...startDateList.filter(date => date !== startOfWeek)];
             } else {
-                return ["current week", ...startDateList];
+                return [CURRENT_WEEK, ...startDateList];
             }
         }
-        return ["current week"];
+        return [CURRENT_WEEK];
     });
 
     useEffect(() => {
         setSummaryItems(latestSummary?.map((item) => {
             return createUiNewsSummaryItem(item);
         }) || []);
-        setPeriodStartDate("current week");
+        setPeriodStartDate(CURRENT_WEEK);
     }, [latestSummary]);
 
     const handleOptionChange = (optionType: keyof NewsSummaryOptions, value: any) => {
@@ -75,7 +77,7 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
     };
 
     const getPeriodStartDateStr = () => {
-        if (periodStartDate === "current week") {
+        if (periodStartDate === CURRENT_WEEK) {
             return getCurrentWeekStartDateStr();
         }
         return periodStartDate;
@@ -218,11 +220,12 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
 
             {/* Bottom Panel: Options and Buttons */}
             <div className="p-4 border-t">
+                <div className="flex flex-row items-center gap-10">
                 {/* Option Pickers */}
                 <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700">Summarization Strategy</label>
+                    <label className="block text-lg font-bold text-gray-700">Summarization Strategy</label>
                     <select
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        className="mt-1 block w-full rounded-md border-gray-300 text-lg shadow-sm bg-white h-12 text-center focus:border-indigo-500 focus:ring-indigo-500"
                         value={selectedOptions?.news_chunking_experiment}
                         onChange={e => handleOptionChange('news_chunking_experiment', e.target.value)}
                     >
@@ -232,9 +235,9 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
                 </div>
 
                 <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700">Apply Preference</label>
+                    <label className="block text-lg font-bold text-gray-700">Apply Preference</label>
                     <select
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        className="mt-1 block w-full rounded-md border-gray-300 text-lg shadow-sm bg-white h-12 text-center focus:border-indigo-500 focus:ring-indigo-500"
                         value={selectedOptions?.news_preference_application_experiment}
                         onChange={e => handleOptionChange('news_preference_application_experiment', e.target.value)}
                     >
@@ -244,9 +247,9 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
                 </div>
 
                 <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700" title="The period during which news are summarized">Period Type</label>
+                    <label className="block text-lg font-bold text-gray-700" title="The period during which news are summarized">Period Type</label>
                     <select
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        className="mt-1 block w-full rounded-md border-gray-300 text-lg shadow-sm bg-white h-12 text-center focus:border-indigo-500 focus:ring-indigo-500"
                         value={selectedOptions?.period_type}
                         onChange={e => handleOptionChange('period_type', e.target.value)}
                     >
@@ -256,9 +259,9 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
                 </div>
 
                 <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700">Period start date</label>
+                    <label className="block text-lg font-bold text-gray-700">Period start date</label>
                     <select
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        className="mt-1 block w-full rounded-md border-gray-300 text-lg shadow-sm bg-white h-12 text-center focus:border-indigo-500 focus:ring-indigo-500"
                         value={periodStartDate}
                         onChange={e => setPeriodStartDate(e.target.value)}
                     >
@@ -267,12 +270,12 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
                         ))}
                     </select>
                 </div>
-
+                </div>
                 {/* Buttons */}
-                <div className="flex justify-between">
+                <div className="flex gap-4 mt-4">
                     <button
                         onClick={handleGetNewsSummary}
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-20"
                     >
                         Submit
                     </button>
