@@ -153,7 +153,6 @@ export default function NewsSummary() {
             <NewsSummaryMainUi
                 mainUiMode={mainUiMode}
                 initData={initData}
-                setMainUiState={setMainUiMode}
                 fromFeedUploadToCreatePreference={fromFeedUploadToCreatePreference}
                 fromCreatePreferenceToNewsSummary={fromCreatePreferenceToNewsSummary}
             />
@@ -176,7 +175,6 @@ export default function NewsSummary() {
 interface NewsSummaryMainUiProps {
     mainUiMode: MainUiMode;
     initData: InitializeResponse | null;
-    setMainUiState: React.Dispatch<React.SetStateAction<MainUiMode>>;
     fromFeedUploadToCreatePreference: () => void;
     fromCreatePreferenceToNewsSummary: () => void;
 }
@@ -184,7 +182,6 @@ interface NewsSummaryMainUiProps {
 function NewsSummaryMainUi({
     mainUiMode,
     initData,
-    setMainUiState,
     fromFeedUploadToCreatePreference,
     fromCreatePreferenceToNewsSummary,
 }: NewsSummaryMainUiProps) {

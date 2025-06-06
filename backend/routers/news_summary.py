@@ -559,7 +559,7 @@ async def like_dislike_news_summary(
     news_preference_application_experiment = news_summary_like_dislike_request.news_summary_start_date_and_option_selector.option.news_preference_application_experiment
     
     stats = sql_client.query(NewsSummaryExperimentStats).filter(
-        NewsSummaryExperimentStats.user_id == user_data.id,
+        NewsSummaryExperimentStats.user_id == user.user_id,
         NewsSummaryExperimentStats.start_date == start_date,
         NewsSummaryExperimentStats.period_type == period_type,
         NewsSummaryExperimentStats.news_chunking_experiment == news_chunking_experiment,

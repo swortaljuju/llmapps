@@ -22,7 +22,7 @@ interface SummaryContentProps {
 
 function getCurrentWeekStartDateStr(): string {
     const today = new Date();
-    return new Date(today.setDate(today.getDate() - today.getDay())).toISOString().slice(0, 10);
+    return new Date(today.setDate(today.getDate() - today.getDay() + 1)).toISOString().slice(0, 10);
 }
 
 interface UiNewsSummaryItem extends NewsSummaryItem {
@@ -64,7 +64,7 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
         }
         return [CURRENT_WEEK];
     });
-
+    const [summaryLoadingError, setSummaryLoadingError] = useState<string | null>(null);
     useEffect(() => {
         setSummaryItems(latestSummary?.map((item) => {
             return createUiNewsSummaryItem(item);
@@ -101,6 +101,7 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
                 return createUiNewsSummaryItem(item);
             }) || []);
         } catch (error: any) {
+            setSummaryLoadingError(error.message);
             console.error("Failed to get news summary:", error.message);
         } finally {
             setIsSummaryEntryLoading(false);
@@ -178,6 +179,8 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
                     </div>
                 ) : summaryItems.length === 0 ? (
                     <p>No news summaries available.</p>
+                ) : summaryLoadingError ? (
+                    <p>{summaryLoadingError}</p>
                 ) : (
                     summaryItems.map(item => (
                         <div key={item.id} className="mb-4 p-4 border rounded-md">

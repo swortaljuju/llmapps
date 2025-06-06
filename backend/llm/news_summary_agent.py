@@ -673,7 +673,7 @@ async def __expand_single_news_summary(
                             "url": news_summary.reference_urls,
                         }
                     ),
-                    llm_tracker=llm_tracker,
+                    tracker=llm_tracker,
                 )).text_content
             
             news_summary.expanded_content = search_result
