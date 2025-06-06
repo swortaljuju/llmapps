@@ -34,15 +34,17 @@ def convert_to_api_conversation_history(db_conversation_history: list[Conversati
                 message_id=current_item.message_id,
                 parent_message_id=current_item.parent_message_id
             )
-            llm_message = LlmMessage(
-                text_content=current_item.content,
-            )
             if current_item.message_type == MessageType.HUMAN:
-                llm_message.type = LlmMessageType.HUMAN
+                llm_message_type = LlmMessageType.HUMAN
             elif current_item.message_type == MessageType.AI:
-                llm_message.type = LlmMessageType.AI
+                llm_message_type = LlmMessageType.AI
             else:
                 continue
+            llm_message = LlmMessage(
+                text_content=current_item.content,
+                type=llm_message_type,
+            )
+            
             api_conversation_history_item.llm_message = llm_message
             api_sub_conversation_history.appendleft(api_conversation_history_item)
             current_message_id = current_item.parent_message_id

@@ -14,6 +14,7 @@ export function NewsPreferenceChat({
     fromCreatePreferenceToNewsSummary
 }: NewsPreferenceChatProps) {
     const [messages, setMessages] = useState<ChatMessage[]>(preferenceConversationHistory);
+    console.log('Initial messages:', messages);
     const [error, setError] = useState<string>('');
     const [userInput, setUserInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);

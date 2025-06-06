@@ -18,11 +18,25 @@ export default function NewsSummary() {
     const [initData, setInitData] = useState<InitializeResponse | null>(null);
 
     const [mainUiMode, setMainUiMode] = useState<MainUiMode>(MainUiMode.Summary);
+    const refreshInitData = async () => {
+        setIsLoading(true);
+        setApiError(null);
 
-    const onPreferenceClick = () => {
+        try {
+            const data: InitializeResponse = await initialize();
+            setInitData(data);
+        } catch (error) {
+            console.error('Error initializing news summary:', error);
+            setApiError(error instanceof Error ? error.message : 'Unknown error');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    const onPreferenceClick = async () => {
         if (initData?.mode === 'collect_rss_feeds') {
             return false;
         }
+        await refreshInitData();
         if (initData?.mode === 'show_summary') {
             setMainUiMode(MainUiMode.EditPreference);
         } else {
@@ -30,11 +44,12 @@ export default function NewsSummary() {
         }
         return true;
     }
-    const onUploadRssClick = () => {
+    const onUploadRssClick = async () => {
+        await refreshInitData();
         setMainUiMode(MainUiMode.UploadRss);
         return true;
     }
-    const onSummaryClick = () => {
+    const onSummaryClick = async () => {
         if (initData?.mode !== 'show_summary') {
             return false;
         }

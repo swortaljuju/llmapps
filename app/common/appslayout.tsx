@@ -10,7 +10,7 @@ export interface SideSectionItem {
     label: string;
     id: string;
     selected: boolean;
-    onClick: (id: string) => boolean;
+    onClick: (id: string) => Promise<boolean>;
 }
 
 export interface SideSection {
@@ -94,13 +94,14 @@ export function AppsLayout({
         }));
         chatListItem.onClick(chatListItem.id);
     }
-    const onCustomActionItemClick = (customActionItem: SideSectionItem) => {
+    const onCustomActionItemClick = async (customActionItem: SideSectionItem) => {
+        const shouldContinue = await customActionItem.onClick(customActionItem.id);
+        if (!shouldContinue) return;
         resetHighlights();
         setCustomActionHighlights(prev => ({
             ...prev,
             [customActionItem.id]: true
         }));
-        customActionItem.onClick(customActionItem.id);
     }
     return (
         <div className="h-screen flex flex-col">
