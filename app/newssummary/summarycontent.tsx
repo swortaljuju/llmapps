@@ -13,6 +13,7 @@ import {
     NewsSummaryLikeDislikeRequest,
     NewsSummaryLikeDislikeAction,
 } from './store';
+import { start } from 'repl';
 
 interface SummaryContentProps {
     latestSummary: NewsSummaryItem[] | undefined;
@@ -23,6 +24,10 @@ interface SummaryContentProps {
 function getCurrentWeekStartDateStr(): string {
     const today = new Date();
     return new Date(today.setDate(today.getDate() - today.getDay() + 1)).toISOString().slice(0, 10);
+}
+
+function getTodayStr(): string {
+    return new Date().toISOString().slice(0, 10);
 }
 
 interface UiNewsSummaryItem extends NewsSummaryItem {
@@ -40,7 +45,11 @@ function createUiNewsSummaryItem(item: NewsSummaryItem): UiNewsSummaryItem {
     };
 }
 
-const CURRENT_WEEK = "Current Week";
+const CURRENT_WEEK_LABEL = "Current Week";
+const TODAY_LABEL = 'Today';
+const CURRENT_WEEK_STR = getCurrentWeekStartDateStr();
+const TODAY_STR = getTodayStr();
+
 
 export default function SummaryContent({ latestSummary, defaultOptions, startDateList }: SummaryContentProps) {
     const [summaryItems, setSummaryItems] = useState<UiNewsSummaryItem[]>(latestSummary?.map((item) => {
@@ -52,33 +61,67 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
         news_preference_application_experiment: NewsPreferenceApplicationExperiment.APPLY_PREFERENCE,
         period_type: NewsSummaryPeriod.WEEKLY,
     });
-    const [periodStartDate, setPeriodStartDate] = useState<string>(CURRENT_WEEK);
-    const [availableStartDateList, setAvailableStartDateList] = useState<string[]>(() => {
-        const startOfWeek = getCurrentWeekStartDateStr();
+
+    const filterAvailableStartDate = () => {
         if (startDateList) {
-            if (startDateList.includes(startOfWeek)) {
-                return [CURRENT_WEEK, ...startDateList.filter(date => date !== startOfWeek)];
+            const tempStartDateList = startDateList.filter(date => {
+                if (selectedOptions.period_type === NewsSummaryPeriod.DAILY) {
+                    return date !== TODAY_STR; // Remove 'Today' if it exists
+                } else if (selectedOptions.period_type === NewsSummaryPeriod.WEEKLY) {
+                    const dateObj = new Date(date);
+                    const dayOfWeek = dateObj.getDay();
+                    return dayOfWeek === 1 && date !== CURRENT_WEEK_STR; // Keep only Mondays and remove 'Current Week'
+                }
+                return false;
+            }); // Remove 'Today' if it exists
+            if (selectedOptions.period_type === NewsSummaryPeriod.WEEKLY) {
+                return [CURRENT_WEEK_LABEL, ...tempStartDateList];
+            } else if (selectedOptions.period_type === NewsSummaryPeriod.DAILY) {
+                return [TODAY_LABEL, ...tempStartDateList];
             } else {
-                return [CURRENT_WEEK, ...startDateList];
+                return [];
             }
         }
-        return [CURRENT_WEEK];
-    });
+        if (selectedOptions.period_type === NewsSummaryPeriod.WEEKLY) {
+            return [CURRENT_WEEK_LABEL];
+        } else if (selectedOptions.period_type === NewsSummaryPeriod.DAILY) {
+            return [TODAY_LABEL];
+        } else {
+            return [];
+        }
+    };
+
+    const [availableStartDateList, setAvailableStartDateList] = useState<string[]>(() => filterAvailableStartDate());
+    const [periodStartDate, setPeriodStartDate] = useState<string>(availableStartDateList[0]);
+
     const [summaryLoadingError, setSummaryLoadingError] = useState<string | null>(null);
     useEffect(() => {
         setSummaryItems(latestSummary?.map((item) => {
             return createUiNewsSummaryItem(item);
         }) || []);
-        setPeriodStartDate(CURRENT_WEEK);
+        setPeriodStartDate(availableStartDateList[0]);
     }, [latestSummary]);
+
+    useEffect(() => {
+        setAvailableStartDateList(filterAvailableStartDate());
+        if (selectedOptions.period_type === NewsSummaryPeriod.WEEKLY) {
+            setPeriodStartDate(CURRENT_WEEK_LABEL);
+        }
+        else if (selectedOptions.period_type === NewsSummaryPeriod.DAILY) {
+            setPeriodStartDate(TODAY_LABEL);
+        }
+    }, [selectedOptions.period_type]);
 
     const handleOptionChange = (optionType: keyof NewsSummaryOptions, value: any) => {
         setSelectedOptions(prev => ({ ...prev, [optionType]: value }));
+
     };
 
     const getPeriodStartDateStr = () => {
-        if (periodStartDate === CURRENT_WEEK) {
-            return getCurrentWeekStartDateStr();
+        if (periodStartDate === CURRENT_WEEK_LABEL) {
+            return CURRENT_WEEK_STR;
+        } else if (periodStartDate === TODAY_LABEL) {
+            return TODAY_STR;
         }
         return periodStartDate;
     };
@@ -224,55 +267,55 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
             {/* Bottom Panel: Options and Buttons */}
             <div className="p-4 border-t">
                 <div className="flex flex-row items-center gap-10">
-                {/* Option Pickers */}
-                <div className="mb-4">
-                    <label className="block text-lg font-bold text-gray-700">Summarization Strategy</label>
-                    <select
-                        className="mt-1 block w-full rounded-md border-gray-300 text-lg shadow-sm bg-white h-12 text-center focus:border-indigo-500 focus:ring-indigo-500"
-                        value={selectedOptions?.news_chunking_experiment}
-                        onChange={e => handleOptionChange('news_chunking_experiment', e.target.value)}
-                    >
-                        <option value={NewsChunkingExperiment.AGGREGATE_DAILY}>Aggregate Daily</option>
-                        <option value={NewsChunkingExperiment.EMBEDDING_CLUSTERING}>Cluster by Content</option>
-                    </select>
-                </div>
+                    {/* Option Pickers */}
+                    <div className="mb-4">
+                        <label className="block text-lg font-bold text-gray-700">Summarization Strategy</label>
+                        <select
+                            className="mt-1 block w-full rounded-md border-gray-300 text-lg shadow-sm bg-white h-12 text-center focus:border-indigo-500 focus:ring-indigo-500"
+                            value={selectedOptions?.news_chunking_experiment}
+                            onChange={e => handleOptionChange('news_chunking_experiment', e.target.value)}
+                        >
+                            <option value={NewsChunkingExperiment.AGGREGATE_DAILY}>Aggregate Daily</option>
+                            <option value={NewsChunkingExperiment.EMBEDDING_CLUSTERING}>Cluster by Content</option>
+                        </select>
+                    </div>
 
-                <div className="mb-4">
-                    <label className="block text-lg font-bold text-gray-700">Apply Preference</label>
-                    <select
-                        className="mt-1 block w-full rounded-md border-gray-300 text-lg shadow-sm bg-white h-12 text-center focus:border-indigo-500 focus:ring-indigo-500"
-                        value={selectedOptions?.news_preference_application_experiment}
-                        onChange={e => handleOptionChange('news_preference_application_experiment', e.target.value)}
-                    >
-                        <option value={NewsPreferenceApplicationExperiment.APPLY_PREFERENCE}>Use Preference</option>
-                        <option value={NewsPreferenceApplicationExperiment.NO_PREFERENCE}>No Preference</option>
-                    </select>
-                </div>
+                    <div className="mb-4">
+                        <label className="block text-lg font-bold text-gray-700">Apply Preference</label>
+                        <select
+                            className="mt-1 block w-full rounded-md border-gray-300 text-lg shadow-sm bg-white h-12 text-center focus:border-indigo-500 focus:ring-indigo-500"
+                            value={selectedOptions?.news_preference_application_experiment}
+                            onChange={e => handleOptionChange('news_preference_application_experiment', e.target.value)}
+                        >
+                            <option value={NewsPreferenceApplicationExperiment.APPLY_PREFERENCE}>Use Preference</option>
+                            <option value={NewsPreferenceApplicationExperiment.NO_PREFERENCE}>No Preference</option>
+                        </select>
+                    </div>
 
-                <div className="mb-4">
-                    <label className="block text-lg font-bold text-gray-700" title="The period during which news are summarized">Period Type</label>
-                    <select
-                        className="mt-1 block w-full rounded-md border-gray-300 text-lg shadow-sm bg-white h-12 text-center focus:border-indigo-500 focus:ring-indigo-500"
-                        value={selectedOptions?.period_type}
-                        onChange={e => handleOptionChange('period_type', e.target.value)}
-                    >
-                        <option value={NewsSummaryPeriod.DAILY}>Daily</option>
-                        <option value={NewsSummaryPeriod.WEEKLY}>Weekly</option>
-                    </select>
-                </div>
+                    <div className="mb-4">
+                        <label className="block text-lg font-bold text-gray-700" title="The period during which news are summarized">Period Type</label>
+                        <select
+                            className="mt-1 block w-full rounded-md border-gray-300 text-lg shadow-sm bg-white h-12 text-center focus:border-indigo-500 focus:ring-indigo-500"
+                            value={selectedOptions?.period_type}
+                            onChange={e => handleOptionChange('period_type', e.target.value)}
+                        >
+                            <option value={NewsSummaryPeriod.DAILY}>Daily</option>
+                            <option value={NewsSummaryPeriod.WEEKLY}>Weekly</option>
+                        </select>
+                    </div>
 
-                <div className="mb-4">
-                    <label className="block text-lg font-bold text-gray-700">Period start date</label>
-                    <select
-                        className="mt-1 block w-full rounded-md border-gray-300 text-lg shadow-sm bg-white h-12 text-center focus:border-indigo-500 focus:ring-indigo-500"
-                        value={periodStartDate}
-                        onChange={e => setPeriodStartDate(e.target.value)}
-                    >
-                        {availableStartDateList.map(date => (
-                            <option key={date} value={date}>{date}</option>
-                        ))}
-                    </select>
-                </div>
+                    <div className="mb-4">
+                        <label className="block text-lg font-bold text-gray-700">Period start date</label>
+                        <select
+                            className="mt-1 block w-full rounded-md border-gray-300 text-lg shadow-sm bg-white h-12 text-center focus:border-indigo-500 focus:ring-indigo-500"
+                            value={periodStartDate}
+                            onChange={e => setPeriodStartDate(e.target.value)}
+                        >
+                            {availableStartDateList.map(date => (
+                                <option key={date} value={date}>{date}</option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
                 {/* Buttons */}
                 <div className="flex gap-4 mt-4">

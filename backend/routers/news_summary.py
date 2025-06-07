@@ -7,6 +7,7 @@ from db.models import (
     NewsPreferenceChangeCause,
     NewsPreferenceVersion,
     RssFeed,
+    NewsEntry,
     NewsPreferenceApplicationExperiment,
     NewsSummaryPeriod,
     NewsSummaryExperimentStats,
@@ -34,6 +35,7 @@ from llm.news_summary_agent import (
     summarize_news, expand_news_summary)
 from utils.date_helper import get_current_week_start_date, format_date, parse_date
 import enum
+from sqlalchemy import func, or_
 
 DOMAIN = os.getenv("DOMAIN", "localhost:3000")
 
@@ -210,13 +212,23 @@ async def initialize(
         )
         news_summary_exp_stats.shown = True
     
-    available_period_start_date = sql_client.query(NewsSummaryEntry.start_date).filter(
-        NewsSummaryEntry.user_id == user.user_id,
-        NewsSummaryEntry.period_type == default_period_type,
-        NewsSummaryEntry.news_preference_application_experiment
-        == default_news_preference_application_experiment,
-        NewsSummaryEntry.news_chunking_experiment == default_news_chunking_experiment,
-    ).distinct().all()
+    available_period_start_date = sql_client.query(
+            func.coalesce(
+                func.date(NewsEntry.pub_time),  # Convert pub_time to date if not null
+                func.date(NewsEntry.crawl_time)  # Otherwise use crawl_time
+            )
+    ).filter(
+        or_(
+            NewsEntry.pub_time.isnot(None),  # Either pub_time is not null
+            NewsEntry.crawl_time.isnot(None)  # Or crawl_time is not null
+        ),
+        NewsEntry.rss_feed_id.in_(user_data.subscribed_rss_feeds_id)  # Filter by user's subscribed feeds
+    ).distinct().order_by(
+        func.coalesce(
+            func.date(NewsEntry.pub_time),
+            func.date(NewsEntry.crawl_time)
+        ).desc() 
+    ).all()
     return NewsSummaryInitializeResponse(
         mode=NewsSummaryUiMode.SHOW_SUMMARY,
         latest_summary= [ __convert_to_api_news_summary_entry(news_summary_entry) for news_summary_entry in latest_summary],
