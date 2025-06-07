@@ -218,6 +218,7 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
             <div className="flex-1 overflow-y-auto p-4">
                 {isSummaryEntryLoading ? (
                     <div className="flex justify-center items-center">
+                        <p className="text-lg font-semibold mb-4">Generating news summaries... It may take several minutes....</p>
                         <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
                     </div>
                 ) : summaryItems.length === 0 ? (
@@ -229,9 +230,11 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
                         <div key={item.id} className="mb-4 p-4 border rounded-md">
                             <h3
                                 className="text-lg font-semibold cursor-pointer"
+                                title='Click to expand/collapse summary'
                                 onClick={() => onSummaryItemClicked(item)}
                             >
                                 {item.title}
+                                {item.content &&  <div className='text-md font-light'>{item.content}</div>}
                             </h3>
                             {item.reference_urls && (
                                 <div className="mt-2">
@@ -254,8 +257,7 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
                                 </div>
                             ) : (
                                 <div className={`mt-2 overflow-hidden transition-all duration-500 ease-in-out ${item.expandedContentShown ? 'max-h-96' : 'max-h-0'}`}>
-                                    {item.content && <p>{item.content}</p>}
-                                    {item.expanded_content && <p>{item.expanded_content}</p>}
+                                    {item.expanded_content && <p className="text-lg">{item.expanded_content}</p>}
                                 </div>
                             )}
                         </div>
@@ -321,6 +323,7 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
                 <div className="flex gap-4 mt-4">
                     <button
                         onClick={handleGetNewsSummary}
+                        title="Get news summary based on selected options"
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-20"
                     >
                         Submit
@@ -329,14 +332,14 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
                         <button
                             onClick={() => handleLikeDislike(NewsSummaryLikeDislikeAction.LIKE)}
                             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2"
-                            title="Like the news summary"
+                            title="Like the news summary given the selected options"
                         >
                             Like
                         </button>
                         <button
                             onClick={() => handleLikeDislike(NewsSummaryLikeDislikeAction.DISLIKE)}
                             className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                            title="Dislike the news summary"
+                            title="Dislike the news summary given the selected options"
                         >
                             Dislike
                         </button>

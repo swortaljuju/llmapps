@@ -6,14 +6,19 @@ const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
+const PAGE_URLS = ['/', '/newssummary'];
 app.prepare().then(() => {
     const server = express();
     const userSessionMiddleware = function(req, res, next) {
+        if (PAGE_URLS.indexOf(req.url) === -1) {
+            // Only redirect for page urls. Don't redirect for resources like images, css, etc.
+            next();
+            return;
+        }
         // Mimic the Next.js request object structure
         const url = new URL(req.url, `http://${req.headers.host}`);
         const pathname = url.pathname;
         const isRoot = pathname === '/';
-
         // Use req and res to interact with the request
         fetch(`http://localhost:8000/api/py/users/has_valid_session`, {
             method: 'GET',
@@ -54,7 +59,7 @@ app.prepare().then(() => {
     );
 
     // Let Next.js handle everything else
-    server.all('/{*any}', [userSessionMiddleware], (req, res) => {
+    server.all('/{*any}', userSessionMiddleware, (req, res) => {
         return handle(req, res);
     });
 

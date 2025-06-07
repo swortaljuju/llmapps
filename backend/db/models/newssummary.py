@@ -53,6 +53,7 @@ class NewsSummaryEntry(Base):
     reference_urls = Column(ARRAY(String))
     # If user clicked the news summary
     clicked = Column(Boolean, default=False)  # whether the user clicked this summary
+    clicked_time = Column(DateTime, nullable=True)  # time when the user clicked this summary
     # The order of the entry in the summary list for a given period by start_date and end_date
     display_order_within_period = Column(Integer)
     creation_time = Column(DateTime, default=datetime.now())

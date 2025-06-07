@@ -36,6 +36,7 @@ from llm.news_summary_agent import (
 from utils.date_helper import get_current_week_start_date, format_date, parse_date
 import enum
 from sqlalchemy import func, or_
+from datetime import datetime
 
 DOMAIN = os.getenv("DOMAIN", "localhost:3000")
 
@@ -614,6 +615,7 @@ async def expand_summary(
     if not summary_entry:
         raise HTTPException(status_code=404, detail="Summary not found")
     summary_entry.clicked = True
+    summary_entry.clicked_time = datetime.now()
     if not summary_entry.expanded_content: 
         await expand_news_summary(summary_entry)
         if not summary_entry.expanded_content:

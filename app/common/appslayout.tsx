@@ -106,7 +106,7 @@ export function AppsLayout({
     return (
         <div className="h-screen flex flex-col">
             {/* Header */}
-            <header className="h-14 border-b flex items-center px-4 bg-white">
+            <header className="h-14 border-b flex items-center px-4 bg-white z-20 relative">
                 <button
                     onClick={() => setIsNavOpen(!isNavOpen)}
                     className="p-2 hover:bg-gray-100 rounded-md"
@@ -115,10 +115,19 @@ export function AppsLayout({
                 </button>
             </header>
 
-            <div className="flex-1 flex overflow-hidden">
-                {/* Navigation Sidebar */}
-                <nav className={`w-64 border-r bg-gray-50 flex-shrink-0 flex flex-col transition-all duration-300 ease-in-out ${isNavOpen ? 'translate-x-0' : '-translate-x-64'}
-        `}>
+            <div className="flex-1 flex overflow-hidden relative">
+                {/* Backdrop for mobile - only visible when nav is open */}
+                {isNavOpen && (
+                    <div 
+                        className="absolute inset-0 bg-black bg-opacity-50 z-10 md:hidden"
+                        onClick={() => setIsNavOpen(false)}
+                    />
+                )}
+                
+                {/* Navigation Sidebar - absolute positioned for mobile */}
+                <nav className={`w-64 border-r bg-gray-50 flex-shrink-0 flex flex-col transition-all duration-300 ease-in-out z-20
+                    absolute md:relative h-full ${isNavOpen ? 'translate-x-0' : '-translate-x-full'}
+                `}>
                     {/* Apps Section */}
                     <div className="border-b">
                         <button
@@ -183,8 +192,8 @@ export function AppsLayout({
                     </div>
                 </nav>
 
-                {/* Main Content */}
-                <main className="flex-1 overflow-auto bg-white">
+                {/* Main Content - full width */}
+                <main className="flex-1 overflow-auto bg-white w-full">
                     {mainChat}
                 </main>
             </div>
