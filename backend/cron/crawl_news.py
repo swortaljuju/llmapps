@@ -15,7 +15,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from db.db import get_sql_db, SqlSessionLocal
 from db.models import User, RssFeed, NewsEntry
 from cron.summarize_news import summarize_news_for_unlimited_users
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import requests
 from sqlalchemy import func
 import random
@@ -221,7 +221,7 @@ def crawl_rss_feed(rss_feed: RssFeed):
         if entry.entry_rss_guid not in existing_guids
         and (
             entry.pub_time is None
-            or entry.pub_time >= datetime.now() - timedelta(days=7)
+            or entry.pub_time.date() >= (datetime.now(timezone.utc) - timedelta(days=7)).date()
         )
     ]
     sql_session.add_all(news_entries)
