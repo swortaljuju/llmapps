@@ -172,6 +172,7 @@ def __get_existing_news_summary_entries(
     subscribed_feed_id_list: list[int],
     news_preference_application_experiment: NewsPreferenceApplicationExperiment,
     news_chunking_experiment: NewsChunkingExperiment,
+    delete_if_outdated: bool = False,
 ) -> list[NewsSummaryEntry]:
     existing_summaries = (
         session.query(NewsSummaryEntry)
@@ -208,6 +209,14 @@ def __get_existing_news_summary_entries(
                 f"No new content since last summary generation for period {start_date} to {end_date}. Skipping..."
             )
             return existing_summaries
+        if delete_if_outdated:
+            # If we are deleting existing summaries, remove them first
+            logger.info(
+                f"Deleting existing summaries for period {start_date} to {end_date} before regenerating."
+            )
+            for summary in existing_summaries:
+                session.delete(summary)
+                session.flush()
     return []
 
 
@@ -277,6 +286,7 @@ async def __chunk_and_summarize_news_per_period(
             subscribed_feed_id_list,
             news_preference_experiment,
             news_chunking_experiment,
+            delete_if_outdated=True,
         )
         if existing_summary:
             # If existing summaries are found, return them
@@ -407,6 +417,7 @@ async def __chunk_and_summarize_news_per_period(
                     subscribed_feed_id_list,
                     news_preference_experiment,
                     news_chunking_experiment,
+                    delete_if_outdated=False,
                 )
             else:
                 return []
@@ -443,6 +454,7 @@ async def __cluster_and_summarize_news(
             subscribed_feed_id_list,
             news_preference_experiment,
             news_chunking_experiment,
+            delete_if_outdated=True,
         )
         if existing_summary:
             # If existing summaries are found, return them
@@ -569,6 +581,7 @@ async def __cluster_and_summarize_news(
                         subscribed_feed_id_list,
                         news_preference_experiment,
                         news_chunking_experiment,
+                        delete_if_outdated=False,
                     )
             except Exception as e:
                 session.rollback()
