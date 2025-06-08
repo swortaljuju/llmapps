@@ -24,9 +24,6 @@ alembic upgrade head
 ```
 If a new schema model file is added under backend/db/models, expose it in __init__.py. Otherwise, it can't be added to db by the above upgrade scripts. 
 
-
-Copy gmail_creds.json and backend/token.json to related folder and update APP_MANAGER_GMAIL_CREDS_PATH environment pointing to it for gmail api access. 
-
 *pgvector*
 https://dev.to/farez/installing-postgresql-pgvector-on-debian-fcf 
 https://github.com/pgvector/pgvector

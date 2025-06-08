@@ -14,7 +14,6 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from db.db import get_sql_db, SqlSessionLocal
 from db.models import User, RssFeed, NewsEntry
-from cron.summarize_news import summarize_news_for_unlimited_users
 from datetime import datetime, timedelta, timezone
 import requests
 from sqlalchemy import func
@@ -28,7 +27,6 @@ from enum import Enum
 import time
 from cron.news_entry_embedding_backfill import backfill_embedding
 from utils.rss import get_atom_tag, is_valid_rss_type
-from asyncio import run
 
 
 # Clear default handlers
@@ -332,8 +330,6 @@ def main():
             time.sleep(60)  # Sleep for 10 minutes
     # populate the embedding separately so that the quota won't block the crawling
     backfill_embedding()
-    run(summarize_news_for_unlimited_users())
-
 
 if __name__ == "__main__":
     main()

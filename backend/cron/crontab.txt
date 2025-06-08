@@ -1,2 +1,3 @@
-0 20 * * *	cd ～/llmapps && backend/cron/python3 crawl_news.py
+0 18 * * *	cd ～/llmapps && python3 backend/cron/crawl_news.py
+0 20 * * 7	cd ～/llmapps && python3 backend/cron/summarize_news.py
 0 20 1 * *	cd ～/llmapps && python3 backend/cron/update_preference.py
