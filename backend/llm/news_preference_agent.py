@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 import redis.asyncio as redis
 from db.models.common import ConversationHistory, ConversationType, User
 from db.models import ApiLatencyLog
+from db.db import SqlSessionLocal
 from utils.conversation_history import (
     ApiConversationHistoryItem,
     convert_to_api_conversation_history,
@@ -11,12 +12,13 @@ from utils.conversation_history import (
     create_message_id,
     convert_api_conversation_history_item_to_db_row,
 )
-from db.models.newssummary import RssFeed
+from db.models.newssummary import RssFeed, NewsSummaryEntry, NewsPreferenceVersion, NewsPreferenceChangeCause
 import json
 from enum import Enum
 import time
 from sqlalchemy import select
 from .client_proxy import LlmMessage, LlmMessageType
+from utils.logger import logger
 
 class NewsPreferenceAgentOutput(BaseModel):
     """
@@ -36,6 +38,7 @@ class NewsPreferenceAgentOutput(BaseModel):
     next_survey_question: str | None = Field(
         description="The next new preference question to ask the user"
     )
+
 
 class NewsPreferenceAgentError(Enum):
     # Incoming survey question's parent message id does not match the last message in chat history
@@ -58,6 +61,7 @@ _survey_generation_system_message = """You are a news preference survey agent. Y
     - Don't tell the user that we know the user has subscribed to follow RSS feeds.
     """
 
+
 def _get_news_preference_survey_history_key(user_id: int) -> str:
     """
     Generates a Redis key for storing the news preference survey history for a user.
@@ -76,7 +80,10 @@ async def load_preference_survey_history(
         # Load survey history from Redis
         cached_history = json.loads(await redis.get(redis_key))
         await redis.expire(redis_key, 3600)  # Extend TTL to 1 hour (3600 seconds)
-        return [ApiConversationHistoryItem.model_validate_json(item) for item in cached_history]
+        return [
+            ApiConversationHistoryItem.model_validate_json(item)
+            for item in cached_history
+        ]
     # If not in Redis, load from the database
     survey_history = (
         sql_client.query(ConversationHistory)
@@ -121,21 +128,28 @@ async def load_subscribed_rss_feed_list_for_preference_prompt(
         await redis.expire(redis_key, 3600)  # Extend TTL to 1 hour (3600 seconds)
         return cached_subscribed_rss_feed_list
     # If not in Redis, load from the database
-    subscribed_rss_feeds_id = sql_client.execute(select(User.subscribed_rss_feeds_id)
-        .filter(
-            User.id == user_id
-        )).first().subscribed_rss_feeds_id
+    subscribed_rss_feeds_id = (
+        sql_client.execute(
+            select(User.subscribed_rss_feeds_id).filter(User.id == user_id)
+        )
+        .first()
+        .subscribed_rss_feeds_id
+    )
 
     if not subscribed_rss_feeds_id:
         raise ValueError(
             error_type=NewsPreferenceAgentError.NO_SUBSCRIBED_RSS_FEED,
             message="User has no subscribed rss feed list",
         )
-    subscribed_rss_feed_title_list = [ row.title for row in sql_client.execute(select(RssFeed.title)
-        .filter(
-            RssFeed.id.in_(subscribed_rss_feeds_id)
-        )).all()]
-    subscribed_rss_feed_title_list_str = "(list start)" + ";\n".join(subscribed_rss_feed_title_list) + "(list end)"
+    subscribed_rss_feed_title_list = [
+        row.title
+        for row in sql_client.execute(
+            select(RssFeed.title).filter(RssFeed.id.in_(subscribed_rss_feeds_id))
+        ).all()
+    ]
+    subscribed_rss_feed_title_list_str = (
+        "(list start)" + ";\n".join(subscribed_rss_feed_title_list) + "(list end)"
+    )
 
     await redis.set(
         redis_key,
@@ -146,21 +160,25 @@ async def load_subscribed_rss_feed_list_for_preference_prompt(
     return subscribed_rss_feed_title_list_str
 
 
-
 def next_preference_question(
-    subscribed_rss_feed_list: str, chat_history: list[ApiConversationHistoryItem], api_latency_log: ApiLatencyLog
+    subscribed_rss_feed_list: str,
+    chat_history: list[ApiConversationHistoryItem],
+    api_latency_log: ApiLatencyLog,
 ) -> NewsPreferenceAgentOutput:
     llm_start_time = time.time()
     llm_result = get_default_client_proxy().generate_content(
-        system_prompt=_survey_generation_system_message.format_map({"rss_feed_list": subscribed_rss_feed_list}),
-        prompt = [LlmMessage(text_content="Let's start", type=LlmMessageType.AI)] 
+        system_prompt=_survey_generation_system_message.format_map(
+            {"rss_feed_list": subscribed_rss_feed_list}
+        ),
+        prompt=[LlmMessage(text_content="Let's start", type=LlmMessageType.AI)]
         + [
             item.llm_message
             for item in chat_history
-            if item.llm_message and item.llm_message.type in (LlmMessageType.HUMAN, LlmMessageType.AI)
-        ],        
+            if item.llm_message
+            and item.llm_message.type in (LlmMessageType.HUMAN, LlmMessageType.AI)
+        ],
         output_object=NewsPreferenceAgentOutput,
-        )
+    )
     api_latency_log.llm_elapsed_time_ms = (
         api_latency_log.llm_elapsed_time_ms
         if api_latency_log.llm_elapsed_time_ms
@@ -247,7 +265,9 @@ async def save_answer_and_generate_next_question(
     # Update Redis cache
     redis_key = _get_news_preference_survey_history_key(user_id)
     await redis.set(
-        redis_key, json.dumps([item.model_dump_json() for item in chat_history]), ex=3600
+        redis_key,
+        json.dumps([item.model_dump_json() for item in chat_history]),
+        ex=3600,
     )  # Cache for 1 hour
     for item in message_to_save:
         db_conversation_history_item = convert_api_conversation_history_item_to_db_row(
@@ -268,3 +288,55 @@ async def save_answer_and_generate_next_question(
             preference_summary=next_question_or_summary.news_preference_summary,
         ),
     )
+
+__update_preference_based_on_clicked_news_prompt = """
+Update the user's news preference based on the clicked news.
+{user_preference}
+{clicked_news}
+"""
+class NewsPreference(BaseModel):
+    """
+    Represents the user's news preference.
+    """
+    updated_news_preference: str = Field(
+        description="The user's updated news preference."
+    )
+CLICKED_NEWS_LIMIT = 500  # Limit the number of clicked news to consider
+
+def update_preference_based_on_clicked_news(user_id: int):
+    with SqlSessionLocal() as sql_client:
+        user_data = (
+            sql_client.query(User)
+            .filter(User.id == user_id)
+            .one_or_none()
+        )
+        clicked_news = (
+            sql_client.query(NewsSummaryEntry.id, NewsSummaryEntry.title)
+            .filter(NewsSummaryEntry.clicked.is_(True), NewsSummaryEntry.user_id == user_id)
+            .order_by(NewsSummaryEntry.clicked_time.desc())
+            .limit(CLICKED_NEWS_LIMIT)
+            .all()
+        )
+        if not clicked_news:
+            logger.info(f"No clicked news found for user {user_id}.")
+            return
+        prompt = __update_preference_based_on_clicked_news_prompt.format_map(
+            {
+                "user_preference": {"user_preference": user_data.news_preference},
+                "clicked_news": {"clicked_news": [news_summary[1] for news_summary in clicked_news]},
+            }
+        )
+        updated_preference = get_default_client_proxy().generate_content(prompt=prompt, output_object=NewsPreference).structured_output.updated_news_preference
+        logger.info(f"Old user preference: {user_data.news_preference}\n Updated user preference: {updated_preference}")
+        news_preference_version = NewsPreferenceVersion(
+            user_id=user_id,
+            content=updated_preference,
+            cause=NewsPreferenceChangeCause.news_click,
+            previous_version_id=user_data.current_news_preference_version_id or -1,
+            causal_clicked_news_summary_entry_id =  [news_summary[0] for news_summary in clicked_news]
+        )
+        sql_client.add(news_preference_version)
+        sql_client.flush()
+        user_data.news_preference = news_preference_version.content
+        user_data.current_news_preference_version_id = news_preference_version.id
+        sql_client.commit()
