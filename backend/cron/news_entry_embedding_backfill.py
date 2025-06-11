@@ -25,7 +25,6 @@ def backfill_embedding():
     news_entries_to_backfill = sql_client.query(NewsEntry).filter(
         NewsEntry.summary_clustering_embedding.is_(None)).limit(BATCH_SIZE).all()
     while len(news_entries_to_backfill) > 0:
-        print(f"Backfilling {len(news_entries_to_backfill)} news entries")
         generate_embedding(news_entries_to_backfill)
         sql_client.commit()
         # avoid exceeding gemini rate limit        
