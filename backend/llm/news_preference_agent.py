@@ -178,7 +178,7 @@ def next_preference_question(
             and item.llm_message.type in (LlmMessageType.HUMAN, LlmMessageType.AI)
         ],
         output_object=NewsPreferenceAgentOutput,
-    )
+    )[0]
     api_latency_log.llm_elapsed_time_ms = (
         api_latency_log.llm_elapsed_time_ms
         if api_latency_log.llm_elapsed_time_ms
@@ -326,7 +326,7 @@ def update_preference_based_on_clicked_news(user_id: int):
                 "clicked_news": {"clicked_news": [news_summary[1] for news_summary in clicked_news]},
             }
         )
-        updated_preference = get_default_client_proxy().generate_content(prompt=prompt, output_object=NewsPreference).structured_output.updated_news_preference
+        updated_preference = get_default_client_proxy().generate_content(prompt=prompt, output_object=NewsPreference)[0].structured_output.updated_news_preference
         logger.info(f"Old user preference: {user_data.news_preference}\n Updated user preference: {updated_preference}")
         news_preference_version = NewsPreferenceVersion(
             user_id=user_id,

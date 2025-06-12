@@ -374,7 +374,7 @@ async def __chunk_and_summarize_news_per_period(
                         else AggregatedSummaryListOutput
                     ),
                     max_retry=5,
-                )).structured_output
+                ))[0].structured_output
 
             # Process results and prepare for expansion if needed
             if summary_result:
@@ -545,7 +545,7 @@ async def __cluster_and_summarize_news(
                         tracker=llm_tracker,
                         output_object=AggregatedSummaryListOutput,
                         max_retry=5,
-                    )).structured_output
+                    ))[0].structured_output
 
                 # Process results and prepare for expansion if needed
                 if aggregated_summary.summaries:
@@ -620,12 +620,12 @@ async def __summarize_single_cluster(
         }
     )
     logger.info(f"Summarizing cluster with {len(formatted_entries)} entries.")
-    summary_list = await get_default_client_proxy().generate_content_async(
+    summary_list = (await get_default_client_proxy().generate_content_async(
             prompt=prompt,
             tracker=llm_tracker,
             output_object=NewsSummaryWithPreferenceAppliedListOutput,
             max_retry=5,
-        )
+        ))[0]
     if not summary_list.structured_output:
         logger.error(f"No summaries generated for the cluster. {summary_list}")
         raise ValueError(
@@ -669,7 +669,7 @@ async def __expand_single_news_summary(
                             {"content": content}
                         ),
                         tracker=llm_tracker,
-                    )).text_content
+                    ))[0].text_content
 
                 if summary:
                     # update the content of the news summary
@@ -687,7 +687,7 @@ async def __expand_single_news_summary(
                         }
                     ),
                     tracker=llm_tracker,
-                )).text_content
+                ))[0].text_content
             
             news_summary.expanded_content = search_result
         except Exception as e:

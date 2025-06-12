@@ -47,8 +47,8 @@ class LlmMessage(BaseModel):
     type: LlmMessageType
     text_content: str = None
     structured_output: BaseModel | list[BaseModel] | None = None
-    function_call: list[FunctionCallMessage] = []
-    function_response: list[FunctionResponseMessage] = []
+    function_call: FunctionCallMessage = None
+    function_response: FunctionResponseMessage = None
 
 class SafeDict(dict):
     def __missing__(self, key):
@@ -67,8 +67,9 @@ class LlmClientProxy:
                         system_prompt: str | None = None, 
                         tracker: LlmTracker  | None = None, 
                         tools: list[Callable[..., Any]] = [], 
+                        tool_schemas: list[BaseModel] = [],
                         output_object: BaseModel | list[BaseModel] | None = None,
-                        max_retry: int = 0 ) -> LlmMessage:
+                        max_retry: int = 0 ) -> list[LlmMessage]:
         """
         Interface for generating content
         Args:
@@ -76,6 +77,7 @@ class LlmClientProxy:
             system_prompt (str | None, optional): System prompt 
             tracker LlmTracker: llm tracker.
             tools (list, optional): functions to be called by the LLM. Defaults to [], Assume the function will be automatically executed.
+            tool_schemas (list[BaseModel]): schemas for the tools defined as pydantic model.
             output_object (dict, optional): Output pydantic model to be returned by the LLM. Defaults to None.
             max_retry (int, optional): Maximum number of retries for the generation. Defaults to 0.
         Raises:
@@ -91,8 +93,9 @@ class LlmClientProxy:
                         system_prompt: str | None = None, 
                         tracker: LlmTracker  | None = None, 
                         tools: list[Callable[..., Any]] = [], 
+                        tool_schemas: list[BaseModel] = [],
                         output_object: BaseModel | list[BaseModel] | None = None,
-                        max_retry: int = 0) -> LlmMessage:
+                        max_retry: int = 0) -> list[LlmMessage]:
         """
         Interface for generating content
         Args:
@@ -100,6 +103,7 @@ class LlmClientProxy:
             system_prompt (str | None, optional): System prompt 
             tracker LlmTracker: llm tracker.
             tools (list, optional): functions to be called by the LLM. Defaults to [], Assume the function will be automatically executed.
+            tool_schemas (list[BaseModel]): schemas for the tools defined as pydantic model.
             output_object (dict, optional): Output pydantic model to be returned by the LLM. Defaults to None.
             max_retry (int, optional): Maximum number of retries for the generation. Defaults to 0.
         Raises:

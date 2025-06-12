@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from collections import deque
 import uuid
 from llm.client_proxy import LlmMessage, LlmMessageType
+from llm.common import from_db_conversation_history_to_llm_message
 class ApiConversationHistoryItem(BaseModel):
     user_id: int
     thread_id: str
@@ -34,16 +35,7 @@ def convert_to_api_conversation_history(db_conversation_history: list[Conversati
                 message_id=current_item.message_id,
                 parent_message_id=current_item.parent_message_id
             )
-            if current_item.message_type == MessageType.HUMAN:
-                llm_message_type = LlmMessageType.HUMAN
-            elif current_item.message_type == MessageType.AI:
-                llm_message_type = LlmMessageType.AI
-            else:
-                continue
-            llm_message = LlmMessage(
-                text_content=current_item.content,
-                type=llm_message_type,
-            )
+            llm_message = from_db_conversation_history_to_llm_message(current_item)
             
             api_conversation_history_item.llm_message = llm_message
             api_sub_conversation_history.appendleft(api_conversation_history_item)

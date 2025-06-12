@@ -6,6 +6,7 @@ from collections.abc import Callable
 from typing import Any
 from .tracker import LlmTracker
 from utils.logger import logger
+from .common import flatten_schema_and_remove_defs
 class GeminiClientProxy(LlmClientProxy):
     __generation_model = "gemini-2.0-flash"
     __embedding_model = "text-embedding-004"
@@ -18,9 +19,10 @@ class GeminiClientProxy(LlmClientProxy):
         system_prompt: str | None = None, 
         tracker: LlmTracker  | None = None, 
         tools: list[Callable[..., Any]] = [], 
+        tool_schemas: list[BaseModel] = [],
         output_object: BaseModel | list[BaseModel] | None = None,
-        max_retry: int = 0) -> LlmMessage:        
-        config = self.__setup_generation_config(system_prompt, tools, output_object)
+        max_retry: int = 0) -> list[LlmMessage]:        
+        config = self.__setup_generation_config(system_prompt, tools, tool_schemas, output_object)
         success = False
         retry_count = 0
         while not success and retry_count <= max_retry:
@@ -52,9 +54,10 @@ class GeminiClientProxy(LlmClientProxy):
         system_prompt: str | None = None, 
         tracker: LlmTracker  | None = None, 
         tools: list[Callable[..., Any]] = [], 
+        tool_schemas: list[BaseModel] = [],
         output_object: BaseModel | list[BaseModel] | None = None,
-        max_retry: int = 0) -> LlmMessage:   
-        config = self.__setup_generation_config(system_prompt, tools, output_object)
+        max_retry: int = 0) -> list[LlmMessage]:   
+        config = self.__setup_generation_config(system_prompt, tools, tool_schemas, output_object)
         success = False
         retry_count = 0
         while not success and retry_count <= max_retry:
@@ -97,6 +100,7 @@ class GeminiClientProxy(LlmClientProxy):
     def __setup_generation_config(self, 
         system_prompt: str | None = None, 
         tools: list[Callable[..., Any]] = [], 
+        tool_schemas: list[BaseModel] = [],
         output_object: BaseModel | list[BaseModel] | None = None) -> types.GenerateContentConfig:
         config = types.GenerateContentConfig(response_mime_type="text/plain")
         if output_object:
@@ -104,35 +108,48 @@ class GeminiClientProxy(LlmClientProxy):
             config.response_schema = output_object
         elif tools:
             config.tools = tools
+        elif tool_schemas:
+            config.tools = [types.Tool(
+                function_declarations=[self.__from_pydantic_model_to_function_schema(tool_schema) for tool_schema in tool_schemas]
+            )]
         if system_prompt:
             config.system_instruction = system_prompt
         return config
     
-    def __from_response_to_llm_message(self, response: types.GenerateContentResponse) -> LlmMessage:
-        if response.candidates[0].content.parts[0].function_call:
-            function_call_list = []
-            for part in response.candidates[0].content.parts:
-                if part.function_call:
-                    function_call_list.append(FunctionCallMessage(
-                        id=part.function_call.id,
-                        name=part.function_call.name,
-                        args=part.function_call.args or {}
-                    ))
-            return LlmMessage(
-                type=LlmMessageType.FUNCTION_CALL,
-                function_call=function_call_list
-            )
-        elif response.parsed:
-            return LlmMessage(
+    def __from_pydantic_model_to_function_schema(self,
+        pydantic_model: BaseModel) -> types.FunctionDeclaration:
+        pydantic_schema = flatten_schema_and_remove_defs(pydantic_model.model_json_schema())
+        function_schema = types.FunctionDeclaration(
+            name=pydantic_schema["title"],
+            description=pydantic_schema.get("description", ""),
+            parameters=pydantic_schema
+        )
+        return function_schema
+    
+    def __from_response_to_llm_message(self, response: types.GenerateContentResponse) -> list[LlmMessage]:
+        if response.parsed:
+            return [LlmMessage(
                 type=LlmMessageType.STRUCTURED_OUTPUT,
                 structured_output=response.parsed
-            )
-        elif response.text:
-            return LlmMessage(
-                type=LlmMessageType.AI,
-                text_content=response.text
-            )
-        raise ValueError("Response does not contain valid content")
+            )]
+        else:
+            result = []
+            for part in response.candidates[0].content.parts:
+                if part.text:
+                    result.append(LlmMessage(
+                        type=LlmMessageType.AI,
+                        text_content=part.text
+                    ))
+                elif part.function_call:    
+                    result.append(LlmMessage(
+                        type=LlmMessageType.FUNCTION_CALL,
+                        function_call=FunctionCallMessage(
+                            id=part.function_call.id,
+                            name=part.function_call.name,
+                            args=part.function_call.args or {}
+                        )
+                    ))
+            return result
 
     def __generate_contents(self, prompt: str | list[LlmMessage], config: types.GenerateContentConfig) -> list[types.Content]:
         contents = []
@@ -150,19 +167,19 @@ class GeminiClientProxy(LlmClientProxy):
                     contents.append(types.Content(
                         role="model", 
                         parts=[types.Part(function_call=types.FunctionCall(
-                            name=call.name,
-                            args=call.args or {},
-                            id=call.id or None
-                        )) for call in message.function_call]
+                            name=message.function_call.name,
+                            args=message.function_call.args or {},
+                            id=message.function_call.id or None
+                        ))]
                     ))
                 elif message.type == LlmMessageType.FUNCTION_RESPONSE:
                     contents.append(types.Content(
                         role="model", 
                         parts=[types.Part(function_response=types.FunctionResponse(
-                            name=call.name,
-                            response={"output": call.output or None, "error": call.error or None} if call.output or call.error else {},
-                            id=call.id or None
-                        )) for call in message.function_response]
+                            name=message.function_response.name,
+                            response={"output": message.function_response.output or None, "error": message.function_response.error or None} if message.function_response.output or message.function_response.error else {},
+                            id=message.function_response.id or None
+                        ))]
                     ))
                 elif message.type == LlmMessageType.STRUCTURED_OUTPUT:
                     if message.structured_output is not None:
