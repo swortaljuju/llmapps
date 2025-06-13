@@ -13,6 +13,8 @@ from db.models import (
     NewsSummaryExperimentStats,
     NewsSummaryEntry,
     NewsChunkingExperiment,
+    ConversationHistory,
+    ConversationType,
 )
 from utils.manage_session import GetUserInSession
 import os
@@ -33,7 +35,9 @@ from enum import Enum
 from llm.client_proxy import LlmMessageType
 from llm.news_summary_agent import (
     summarize_news, expand_news_summary)
+from llm.news_research_agent import (answer_user_question)
 from utils.date_helper import get_current_week_start_date, format_date, parse_date
+from utils.conversation_history import convert_to_api_conversation_history
 import enum
 from sqlalchemy import func, or_
 from datetime import datetime
@@ -621,4 +625,74 @@ async def expand_summary(
         if not summary_entry.expanded_content:
             raise HTTPException(status_code=500, detail="Failed to expand news summary")
     return __convert_to_api_news_summary_entry(summary_entry)
-    
+
+
+class NewsResearchAnswerQuestionRequest(BaseModel):
+    parent_message_id: str | None = None
+    thread_id: str | None = None
+    question: str
+
+class NewsResearchAnswerQuestionResponse(BaseModel):
+    question: ChatMessage
+    answer: ChatMessage
+
+@router.post("/news_research_answer_question", response_model=NewsResearchAnswerQuestionResponse)
+async def news_research_answer_question(
+    request: Request,
+    answer_question_request: NewsResearchAnswerQuestionRequest,
+    user: GetUserInSession,
+    sql_client: db.SqlClient
+):
+    if not user:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    request.state.api_latency_log.user_id = user.user_id
+    question_and_answer = answer_user_question(
+        user_id=user.user_id,
+        user_question = answer_question_request.question,
+        parent_message_id=answer_question_request.parent_message_id,
+        thread_id=answer_question_request.thread_id,
+        sql_client=sql_client,
+    )
+
+    return NewsResearchAnswerQuestionResponse(
+        question=ChatMessage(
+            thread_id=question_and_answer[0].thread_id,
+            message_id=question_and_answer[0].message_id,
+            parent_message_id=answer_question_request.parent_message_id,
+            content=question_and_answer[0].llm_message.text_content or "",
+            author=ChatAuthorType.USER,
+        ),
+        answer=ChatMessage(
+            thread_id=question_and_answer[1].thread_id,
+            message_id=question_and_answer[1].message_id,
+            parent_message_id=question_and_answer[0].message_id,
+            content=question_and_answer[1].llm_message.text_content or "",
+            author=ChatAuthorType.AI,
+        ),
+    )
+
+
+@router.get("/get_news_research_chat_history", response_model=list[ChatMessage])
+async def get_news_research_chat_history(
+    request: Request,
+    user: GetUserInSession,
+    sql_client: db.SqlClient):
+    if not user:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    request.state.api_latency_log.user_id = user.user_id
+    latest_chat = sql_client.query(ConversationHistory).filter(
+        ConversationHistory.user_id == user.user_id,
+        ConversationHistory.conversation_type == ConversationType.news_research,
+    ).order_by(ConversationHistory.created_at.desc()).limit(1).first()
+    if not latest_chat:
+        return []
+    db_chat_history = sql_client.query(ConversationHistory).filter(
+        ConversationHistory.user_id == user.user_id,
+        ConversationHistory.thread_id == latest_chat.thread_id,
+        ConversationHistory.conversation_type == ConversationType.news_research,
+    ).all()
+    api_chat_history = convert_to_api_conversation_history(db_chat_history)
+    return [
+        _from_api_conversation_history_item_to_chat_message(item)
+        for item in api_chat_history
+    ]
