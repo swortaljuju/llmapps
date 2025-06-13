@@ -293,7 +293,7 @@ export async function newsResearchAnswerQuestion(request: NewsResearchAnswerQues
 
     if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.detail || 'Failed to like/dislike news summary');
+        throw new Error(errorData.detail || 'Failed to submit question');
     }
 
     return await response.json();
@@ -310,7 +310,7 @@ export async function getNewsResearchChatHistory(): Promise<ChatMessage[]> {
 
     if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.detail || 'Failed to like/dislike news summary');
+        throw new Error(errorData.detail || 'Failed to load news research chat history');
     }
     return await response.json();
 }
