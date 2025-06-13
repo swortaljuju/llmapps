@@ -22,6 +22,7 @@ class EmbeddingTaskType(Enum):
     CLUSTERING = "clustering"  # embedding for clustering
     RETRIEVAL_DOCUMENT = "retrieval_document"  # embedding for document to be retrieved
     RETRIEVAL_QUERY = "retrieval_query"  # embedding for query to be retrieved
+    QUESTION_ANSWERING = "question_answering"  # embedding for question answering
 
 class FunctionCallMessage(BaseModel):
     """

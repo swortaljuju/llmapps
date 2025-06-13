@@ -203,6 +203,8 @@ class GeminiClientProxy(LlmClientProxy):
             return "RETRIEVAL_DOCUMENT"
         elif task_type == EmbeddingTaskType.RETRIEVAL_QUERY:
             return "RETRIEVAL_QUERY"
+        elif task_type == EmbeddingTaskType.QUESTION_ANSWERING:
+            return "QUESTION_ANSWERING"
         else:
             raise ValueError(f"Unsupported embedding task type: {task_type}")
     

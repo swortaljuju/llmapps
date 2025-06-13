@@ -1,36 +1,33 @@
-from .client_proxy import LlmMessage, LlmMessageType, FunctionCallMessage, FunctionResponseMessage, LlmClientProxy
-from collections.abc import Callable
-from typing import Any
+from .client_proxy import (
+    LlmMessage,
+    LlmMessageType,
+    FunctionCallMessage,
+    FunctionResponseMessage,
+    LlmClientProxy,
+    EmbeddingTaskType,
+)
 from .tracker import LlmTracker
 from sqlalchemy.orm import Session
 import re
 from .client_proxy_factory import get_default_client_proxy
 from pydantic import BaseModel, Field
-from sqlalchemy.orm import Session
-import redis.asyncio as redis
 from db.models.common import ConversationHistory, ConversationType, User, MessageType
-from db.models import ApiLatencyLog
-from db.db import SqlSessionLocal
 from utils.conversation_history import (
     ApiConversationHistoryItem,
     convert_to_api_conversation_history,
     create_thread_id,
     create_message_id,
-    convert_api_conversation_history_item_to_db_row,
 )
-from db.models.newssummary import (
+from db.models import (
     RssFeed,
-    NewsSummaryEntry,
-    NewsPreferenceVersion,
-    NewsPreferenceChangeCause,
+    NewsEntry,
 )
-import json
 from enum import Enum
-import datetime
-from datetime import date
-from sqlalchemy import select
+from datetime import  datetime, timedelta
 from utils.logger import logger
-from .common import from_db_conversation_history_to_llm_message
+from .common import from_db_conversation_history_to_llm_message, crawl_and_summarize_url
+from sqlalchemy import or_, and_
+import asyncio
 
 __system_prompt = """
     Answer a user's questions based on crawls news data. We have already crawled recent news from the user's subscribed channels.
@@ -76,20 +73,30 @@ class CollectAnswerMaterialForSubQuestions(BaseModel):
         description="Optional date range to search news data from. If user doesn't specify a date range, then set this to all_time. ",
     )
 
+
 def __collect_answer_material_for_sub_questions(
-    user_id: int,
+    subscribed_rss_feeds_ids: list[int],
     llm_client: LlmClientProxy,
     sql_client: Session,
     sub_questions: list[str],
-    period: Period | None = None
+    period: Period | None = None,
 ) -> str:
-    pass 
+    return __search_news_entries_by_text_embedding(
+        subscribed_rss_feeds_ids=subscribed_rss_feeds_ids,
+        llm_client=llm_client,
+        sql_client=sql_client,
+        query_list=sub_questions,
+        embedding_task_type=EmbeddingTaskType.QUESTION_ANSWERING,
+        period=period,
+    )
+
 
 class SearchTerms(BaseModel):
     """
     Search for news data based on the list of search terms.
     You MUST use this API when you want to search news data based on the search terms.
     """
+
     terms: list[str] = Field(
         description="list of search terms",
     )
@@ -97,14 +104,23 @@ class SearchTerms(BaseModel):
         description="Optional date range to search news data from. If user doesn't specify a date range, then set this to all_time. ",
     )
 
+
 def __search_terms(
-    user_id: int,
+    subscribed_rss_feeds_ids: list[int],
     llm_client: LlmClientProxy,
     sql_client: Session,
     terms: list[str],
-    period: Period | None = None
+    period: Period | None = None,
 ) -> str:
-    pass 
+    return __search_news_entries_by_text_embedding(
+        subscribed_rss_feeds_ids=subscribed_rss_feeds_ids,
+        llm_client=llm_client,
+        sql_client=sql_client,
+        query_list=terms,
+        embedding_task_type=EmbeddingTaskType.RETRIEVAL_QUERY,
+        period=period,
+    )
+
 
 class ExpandNewsUrl(BaseModel):
     """
@@ -116,16 +132,96 @@ class ExpandNewsUrl(BaseModel):
         description="news URL to expand",
     )
 
+
 def __expand_news_url(
-    user_id: int,
-    llm_client: LlmClientProxy,
-    sql_client: Session,
+    llm_tracker: LlmTracker,
     url: str,
 ) -> str:
-    pass 
+    return asyncio.run(crawl_and_summarize_url(url=url, llm_tracker=llm_tracker))
+
+
+TEXT_SEARCH_RESPONSE_TEMPLATE = """
+    News entries for {text}:
+    {news_entries}
+"""
+
+NEWS_ENTRY_LIMIT_PER_QUERY = 100
+
+
+def __search_news_entries_by_text_embedding(
+    subscribed_rss_feeds_ids: list[int],
+    llm_client: LlmClientProxy,
+    sql_client: Session,
+    query_list: list[str],
+    embedding_task_type: EmbeddingTaskType,
+    period: Period | None = None,
+) -> str:
+    embeddings = llm_client.embed_content(
+        contents=query_list, task_type=embedding_task_type
+    )
+    from_time = datetime.fromtimestamp(0)
+    if period == Period.LAST_WEEK:
+        from_time = datetime.now() - timedelta(weeks=1)
+    elif period == Period.LAST_MONTH:
+        from_time = datetime.now() - timedelta(days=30)
+    elif period == Period.LAST_QUARTER:
+        from_time = datetime.now() - timedelta(days=90)
+    elif period == Period.LAST_HALF_YEAR:
+        from_time = datetime.now() - timedelta(days=180)
+
+    response_list = []
+    for idx, query in enumerate(query_list):
+        embedding = embeddings[idx]
+        news_entry_list = (
+            sql_client.query(NewsEntry)
+            .filter(
+                NewsEntry.rss_feed_id.in_(subscribed_rss_feeds_ids),
+                NewsEntry.summary_document_retrieval_embedding.is_not(None),
+                or_(
+                    and_(NewsEntry.pub_time >= from_time),
+                    and_(
+                        NewsEntry.pub_time.is_(None),
+                        NewsEntry.crawl_time >= from_time,
+                    ),
+                ),
+            )
+            .order_by(
+                NewsEntry.summary_document_retrieval_embedding.cosine_distance(
+                    embedding
+                )
+            )
+            .limit(NEWS_ENTRY_LIMIT_PER_QUERY)
+            .all()
+        )
+        sorted_news_entry_list = sorted(
+            news_entry_list,
+            key=lambda news_entry: (news_entry.pub_time or news_entry.crawl_time),
+            reverse=True,
+        )
+        simple_news_entries = [
+            {
+                "title": news_entry.title,
+                "content": news_entry.content or "",
+                "description": news_entry.description or "",
+                "publish_time": (news_entry.pub_time or news_entry.crawl_time)
+                .date()
+                .isoformat(),
+                "url": news_entry.entry_url or "",
+            }
+            for news_entry in sorted_news_entry_list
+        ]
+
+        response_list.append(
+            TEXT_SEARCH_RESPONSE_TEMPLATE.format(
+                text=query, news_entries=simple_news_entries
+            )
+        )
+        return "\n".join(response_list)
+
 
 CHAT_HISTORY_LIMIT = 100
 MAX_REACT_MESSAGES = 100
+
 
 def answer_user_question(
     user_id: int,
@@ -165,39 +261,43 @@ def answer_user_question(
     if not thread_id:
         thread_id = create_thread_id()
     user_question_item = ConversationHistory(
-        user_id = user_id,
-        thread_id = thread_id,
-        message_id = create_message_id(),
-        parent_message_id = parent_message_id,
-        content = user_question,
-        message_type = MessageType.HUMAN,
-        conversation_type = ConversationType.news_research,
+        user_id=user_id,
+        thread_id=thread_id,
+        message_id=create_message_id(),
+        parent_message_id=parent_message_id,
+        content=user_question,
+        message_type=MessageType.HUMAN,
+        conversation_type=ConversationType.news_research,
     )
     sql_client.add(user_question_item)
     ai_answer_item = ConversationHistory(
-        user_id = user_id,
-        thread_id = thread_id,
-        message_id = create_message_id(),
-        parent_message_id = user_question_item.message_id,
-        content = final_answer, 
-        message_type = MessageType.AI,
-        conversation_type = ConversationType.news_research,
+        user_id=user_id,
+        thread_id=thread_id,
+        message_id=create_message_id(),
+        parent_message_id=user_question_item.message_id,
+        content=final_answer,
+        message_type=MessageType.AI,
+        conversation_type=ConversationType.news_research,
     )
     sql_client.add(ai_answer_item)
-    return convert_to_api_conversation_history(
-        [user_question_item, ai_answer_item])
+    return convert_to_api_conversation_history([user_question_item, ai_answer_item])
+
 
 def __answer_question_in_react_mode(
-    user_id: int, 
-    user_question: str, 
+    user_id: int,
+    user_question: str,
     chat_history: list[LlmMessage],
-    sql_client: Session) -> str:
+    sql_client: Session,
+) -> str:
+    subscribed_rss_feeds_ids = (
+        sql_client.query(User.subscribed_rss_feeds_id)
+        .filter(RssFeed.user_id == user_id)
+        .one_or_none()[0]
+    )
     react_intermediate_messages = [
         LlmMessage(type=LlmMessageType.HUMAN, text_content=user_question)
     ]
-    system_prompt = __system_prompt.format(
-        chat_history=chat_history
-    )
+    system_prompt = __system_prompt.format(chat_history=chat_history)
     llm_client = get_default_client_proxy()
     tracker = LlmTracker(user_id)
     tracker.start()
@@ -213,16 +313,22 @@ def __answer_question_in_react_mode(
             ],
         )
         # Remove previous function responses
-        while react_intermediate_messages.peek().type == LlmMessageType.FUNCTION_RESPONSE:
+        while (
+            react_intermediate_messages.peek().type == LlmMessageType.FUNCTION_RESPONSE
+        ):
             react_intermediate_messages.pop()
-        
+
         for llm_message in response_llm_messages:
             if llm_message.type == LlmMessageType.AI:
                 if not llm_message.text_content:
-                    raise ValueError("LLM non function call response does not contain text content.")
-                final_answer_match = re.search(r"Final Answer:\s*(.*)", llm_message.text_content, re.DOTALL).group(1)
+                    raise ValueError(
+                        "LLM non function call response does not contain text content."
+                    )
+                final_answer_match = re.search(
+                    r"Final Answer:\s*(.*)", llm_message.text_content, re.DOTALL
+                ).group(1)
                 if final_answer_match:
-                    tracker.end()   
+                    tracker.end()
                     return final_answer_match
                 react_intermediate_messages.append(llm_message)
             elif llm_message.type == LlmMessageType.FUNCTION_CALL:
@@ -232,19 +338,25 @@ def __answer_question_in_react_mode(
                     LlmMessage(
                         type=LlmMessageType.FUNCTION_RESPONSE,
                         function_response=__call_function_for_llm(
-                            user_id=user_id,
+                            subscribed_rss_feeds_ids=subscribed_rss_feeds_ids,
                             function_call_message=llm_message.function_call,
                             llm_client=llm_client,
                             sql_client=sql_client,
-                    )))
-    tracker.end()    
+                            llm_tracker=tracker,
+                        ),
+                    )
+                )
+    tracker.end()
     raise ValueError("No final answer generated from the LLM.")
 
-def __call_function_for_llm( 
-    user_id: int, 
+
+def __call_function_for_llm(
+    subscribed_rss_feeds_ids: list[int],
     function_call_message: FunctionCallMessage,
     llm_client: LlmClientProxy,
-    sql_client: Session) -> FunctionResponseMessage:
+    sql_client: Session,
+    llm_tracker: LlmTracker,
+) -> FunctionResponseMessage:
     function_response = FunctionResponseMessage(
         id=function_call_message.id,
         name=function_call_message.name,
@@ -254,33 +366,32 @@ def __call_function_for_llm(
             sub_questions = function_call_message.args.get("sub_questions", [])
             period = function_call_message.args.get("period", None)
             function_response.output = __collect_answer_material_for_sub_questions(
-                user_id=user_id,
+                subscribed_rss_feeds_ids=subscribed_rss_feeds_ids,
                 llm_client=llm_client,
                 sql_client=sql_client,
                 sub_questions=sub_questions,
-                period=period
+                period=period,
             )
         elif function_call_message.name == "SearchTerms":
             terms = function_call_message.args.get("terms", [])
             period = function_call_message.args.get("period", None)
             function_response.output = __search_terms(
-                user_id=user_id,
+                subscribed_rss_feeds_ids=subscribed_rss_feeds_ids,
                 llm_client=llm_client,
                 sql_client=sql_client,
                 terms=terms,
-                period=period
+                period=period,
             )
         elif function_call_message.name == "ExpandNewsUrl":
             url = function_call_message.args.get("url", "")
             function_response.output = __expand_news_url(
-                user_id=user_id,
-                llm_client=llm_client,
-                sql_client=sql_client,
-                url=url
+                llm_tracker=llm_tracker,
+                url=url,
             )
         else:
             raise ValueError(f"Unsupported function call: {function_call_message.name}")
     except Exception as e:
-        function_response.error = str(e)
+        logger.error(f"Error calling function {function_call_message.name}: {str(e)}")
+        function_response.error = "failed"
 
     return function_response

@@ -26,6 +26,7 @@ from sklearn.cluster import KMeans
 from llm.tracker import exceed_llm_token_limit, LlmTracker
 import traceback
 import asyncio
+from .common import crawl_and_summarize_url
 
 MAX_NEWS_SUMMARY_EACH_TURN = 25
 
@@ -660,16 +661,8 @@ async def __expand_single_news_summary(
     if news_summary.reference_urls:
         for url in news_summary.reference_urls:
             try:
-                response = requests.get(url, headers=__header, timeout=10)
-                response.raise_for_status()  # This will raise an exception for HTTP errors
-                content = response.text
                 # summarize the content
-                summary = (await get_default_client_proxy().generate_content_async(
-                        prompt=__raw_summary_prompt.format_map(
-                            {"content": content}
-                        ),
-                        tracker=llm_tracker,
-                    ))[0].text_content
+                summary = await crawl_and_summarize_url(url, llm_tracker)
 
                 if summary:
                     # update the content of the news summary
