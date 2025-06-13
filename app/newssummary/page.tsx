@@ -1,13 +1,14 @@
 // News summary app
 'use client';
 
-import { AppsLayout, SideSection, SideSectionItem } from "../common/appslayout";
+import { AppsLayout, SideSection } from "../common/appslayout";
 import { useState, useEffect } from 'react';
 import { InitializeResponse, initialize } from './store';
 import { EditPreference, NewsPreferenceChat } from "./preference";
 import { MainUiMode } from "./common";
 import FeedUpload from './feedupload';
 import SummaryContent from './summarycontent';
+import { NewsResearchChat } from "./newsresearch";
 
 const PREFERENCE_ID = 'preference';
 
@@ -56,6 +57,13 @@ export default function NewsSummary() {
         setMainUiMode(MainUiMode.Summary);
         return true;
     }
+    const onNewsResearchClick = async () => {
+        if (initData?.mode !== 'show_summary') {
+            return false;
+        }
+        setMainUiMode(MainUiMode.NewsResearch);
+        return true;
+    }
     const createCustomActionItem = () => {
         return [
             {
@@ -75,6 +83,12 @@ export default function NewsSummary() {
                 id: MainUiMode.Summary,
                 onClick: onSummaryClick,
                 selected: mainUiMode === MainUiMode.Summary
+            },
+            {
+                label: 'News Research',
+                id: MainUiMode.NewsResearch,
+                onClick: onNewsResearchClick,
+                selected: mainUiMode === MainUiMode.NewsResearch
             }
         ]
     };
@@ -124,7 +138,6 @@ export default function NewsSummary() {
     }
 
     useEffect(() => {
-        // Update the 'selected' property of each item in the chatList
         setCustomAction(prev => ({
             ...prev,
             items: createCustomActionItem()
@@ -159,7 +172,7 @@ export default function NewsSummary() {
         );
     }
     const chatList = {
-        title: 'News Research',
+        title: '',
         items: []
     } as SideSection;
     return (
@@ -196,6 +209,6 @@ function NewsSummaryMainUi({
         case MainUiMode.Summary:
             return <SummaryContent latestSummary={initData?.latest_summary} defaultOptions={initData?.default_news_summary_options} startDateList={initData?.available_period_start_date_str}/>;
         case MainUiMode.NewsResearch:
-            return <div className="flex items-center justify-center h-screen">News Research</div>;
+            return <NewsResearchChat />;
     }
 }

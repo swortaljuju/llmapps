@@ -24,7 +24,7 @@ export interface InitializeResponse {
 }
 
 export interface ChatMessage {
-    thread_id: string;
+    thread_id?: string;
     message_id?: string;
     parent_message_id?: string;
     content: string;
@@ -270,3 +270,47 @@ export async function expandSummary(summaryId: number): Promise<NewsSummaryItem>
     return await response.json();
 }
 
+export interface NewsResearchAnswerQuestionRequest {
+    parent_message_id?: string | null;
+    thread_id?: string | null;
+    question: string;
+}
+
+export interface  NewsResearchAnswerQuestionResponse{
+    question: ChatMessage;
+    answer: ChatMessage;
+}
+
+export async function newsResearchAnswerQuestion(request: NewsResearchAnswerQuestionRequest): Promise<NewsResearchAnswerQuestionResponse> {
+    const response = await fetch(getBackendApiUrl('/news_summary/news_research_answer_question'), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(request),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Failed to like/dislike news summary');
+    }
+
+    return await response.json();
+}
+
+export async function getNewsResearchChatHistory(): Promise<ChatMessage[]> {
+    const response = await fetch(getBackendApiUrl('/news_summary/get_news_research_chat_history'), {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Failed to like/dislike news summary');
+    }
+    return await response.json();
+}

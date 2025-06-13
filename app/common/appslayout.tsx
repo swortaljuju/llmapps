@@ -118,12 +118,12 @@ export function AppsLayout({
             <div className="flex-1 flex overflow-hidden relative">
                 {/* Backdrop for mobile - only visible when nav is open */}
                 {isNavOpen && (
-                    <div 
+                    <div
                         className="absolute inset-0 bg-black bg-opacity-50 z-10 md:hidden"
                         onClick={() => setIsNavOpen(false)}
                     />
                 )}
-                
+
                 {/* Navigation Sidebar - absolute positioned for mobile */}
                 <nav className={`w-64 border-r bg-gray-50 flex-shrink-0 flex flex-col transition-all duration-300 ease-in-out z-20
                     absolute md:relative h-full ${isNavOpen ? 'translate-x-0' : '-translate-x-full'}
@@ -165,31 +165,31 @@ export function AppsLayout({
                             <span className="font-small">{customActionItem.label}</span>
                         </button>
                     ))}
-
-                    <div className="border-b">
-                        <button
-                            onClick={() => toggleSection('chatList')}
-                            className="w-full p-2 flex items-center justify-between hover:bg-gray-100"
-                        >
-                            <span className="font-small">{chatList.title}</span>
-                            {expandedSections.chatList ? <MdExpandLess /> : <MdExpandMore />}
-                        </button>
-                        {expandedSections.chatList && (
-                            <div className="px-2 pb-1">
-                                {chatList.items
-                                    .map(chatListItem => (
-                                        <button
-                                            key={chatListItem.id}
-                                            onClick={() => onChatListItemClick(chatListItem)}
-                                            className={`w-full p-2 flex items-center justify-between hover:bg-gray-100 ${chatHighlights[chatListItem.id] ? 'bg-blue-100' : ''
-                                                }`}
-                                        >
-                                            <span className="font-small">{chatListItem.label}</span>
-                                        </button>
-                                    ))}
-                            </div>
-                        )}
-                    </div>
+                    {chatList && chatList.items.length > 0 && (
+                        <div className="border-b">
+                            <button
+                                onClick={() => toggleSection('chatList')}
+                                className="w-full p-2 flex items-center justify-between hover:bg-gray-100"
+                            >
+                                <span className="font-small">{chatList.title}</span>
+                                {expandedSections.chatList ? <MdExpandLess /> : <MdExpandMore />}
+                            </button>
+                            {expandedSections.chatList && (
+                                <div className="px-2 pb-1">
+                                    {chatList.items
+                                        .map(chatListItem => (
+                                            <button
+                                                key={chatListItem.id}
+                                                onClick={() => onChatListItemClick(chatListItem)}
+                                                className={`w-full p-2 flex items-center justify-between hover:bg-gray-100 ${chatHighlights[chatListItem.id] ? 'bg-blue-100' : ''
+                                                    }`}
+                                            >
+                                                <span className="font-small">{chatListItem.label}</span>
+                                            </button>
+                                        ))}
+                                </div>
+                            )}
+                        </div>)}
                 </nav>
 
                 {/* Main Content - full width */}
