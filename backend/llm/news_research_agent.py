@@ -6,7 +6,7 @@ from .client_proxy import (
     LlmClientProxy,
     EmbeddingTaskType,
 )
-from .tracker import LlmTracker
+from .tracker import LlmTracker, exceed_llm_token_limit
 from sqlalchemy.orm import Session
 import re
 from .client_proxy_factory import get_default_client_proxy
@@ -230,6 +230,8 @@ def answer_user_question(
     parent_message_id: str | None,
     sql_client: Session,
 ) -> list[ApiConversationHistoryItem]:
+    if exceed_llm_token_limit(user_id):
+        raise ValueError(f"User {user_id} has exceeded the LLM token limit this month.")
     user_ai_chat_history = []
     if thread_id:
         # Fetch chat history from the database
@@ -301,6 +303,7 @@ def __answer_question_in_react_mode(
     llm_client = get_default_client_proxy()
     tracker = LlmTracker(user_id)
     tracker.start()
+    logger.info("question answering react agent starts.")
     while len(react_intermediate_messages) < MAX_REACT_MESSAGES:
         response_llm_messages = llm_client.generate_content(
             prompt=react_intermediate_messages,
@@ -311,6 +314,9 @@ def __answer_question_in_react_mode(
                 SearchTerms,
                 ExpandNewsUrl,
             ],
+        )
+        logger.info(
+            f"LLM response messages: {[msg.type for msg in response_llm_messages]}"
         )
         # Remove previous function responses
         while (
@@ -329,6 +335,7 @@ def __answer_question_in_react_mode(
                 ).group(1)
                 if final_answer_match:
                     tracker.end()
+                    logger.info("Final answer generated from LLM.")
                     return final_answer_match
                 react_intermediate_messages.append(llm_message)
             elif llm_message.type == LlmMessageType.FUNCTION_CALL:
