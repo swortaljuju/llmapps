@@ -53,7 +53,7 @@ function AppsSummary({ onStateChange }: { onStateChange: (state: PageState) => v
         </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto mb-12">
-        {apps.map((app, index) => (
+        {apps.filter(app => app.launched).map((app, index) => (
           <div
             key={index}
             className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-all duration-300 group relative h-[120px] overflow-hidden"
@@ -64,7 +64,11 @@ function AppsSummary({ onStateChange }: { onStateChange: (state: PageState) => v
                 {app.name}
               </h2>
               <p className="text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-0 left-0">
-                {app.description}
+                <ul>
+                  {app.description.map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
+                </ul>
               </p>
             </div>
           </div>
