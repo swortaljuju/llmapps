@@ -6,7 +6,7 @@ from collections.abc import Callable
 from typing import Any
 from .tracker import LlmTracker
 from utils.logger import logger
-from .common import flatten_schema_and_remove_defs
+from .model_utils import flatten_schema_and_remove_defs
 class GeminiClientProxy(LlmClientProxy):
     __generation_model = "gemini-2.0-flash"
     __embedding_model = "text-embedding-004"
