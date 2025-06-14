@@ -25,7 +25,7 @@ from db.models import (
 from enum import Enum
 from datetime import  datetime, timedelta
 from utils.logger import logger
-from .common import from_db_conversation_history_to_llm_message, crawl_and_summarize_url
+from .agent_utils import from_db_conversation_history_to_llm_message, crawl_and_summarize_url
 from sqlalchemy import or_, and_
 import asyncio
 

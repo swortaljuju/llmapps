@@ -26,7 +26,7 @@ from sklearn.cluster import KMeans
 from llm.tracker import exceed_llm_token_limit, LlmTracker
 import traceback
 import asyncio
-from .common import crawl_and_summarize_url
+from .agent_utils import crawl_and_summarize_url
 
 MAX_NEWS_SUMMARY_EACH_TURN = 25
 
