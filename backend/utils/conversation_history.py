@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from collections import deque
 import uuid
 from llm.client_proxy import LlmMessage, LlmMessageType
-from backend.llm.agent_utils import from_db_conversation_history_to_llm_message
+from llm.agent_utils import from_db_conversation_history_to_llm_message
 class ApiConversationHistoryItem(BaseModel):
     user_id: int
     thread_id: str

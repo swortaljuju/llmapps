@@ -646,7 +646,7 @@ async def news_research_answer_question(
     if not user:
         raise HTTPException(status_code=401, detail="Unauthorized")
     request.state.api_latency_log.user_id = user.user_id
-    question_and_answer = answer_user_question(
+    question_and_answer = await answer_user_question(
         user_id=user.user_id,
         user_question = answer_question_request.question,
         parent_message_id=answer_question_request.parent_message_id,

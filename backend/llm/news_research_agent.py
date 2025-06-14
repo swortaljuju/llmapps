@@ -19,7 +19,6 @@ from utils.conversation_history import (
     create_message_id,
 )
 from db.models import (
-    RssFeed,
     NewsEntry,
 )
 from enum import Enum
@@ -27,12 +26,12 @@ from datetime import  datetime, timedelta
 from utils.logger import logger
 from .agent_utils import from_db_conversation_history_to_llm_message, crawl_and_summarize_url
 from sqlalchemy import or_, and_
-import asyncio
 
 __system_prompt = """
     Answer a user's questions based on crawls news data. We have already crawled recent news from the user's subscribed channels.
     You generate sub questions and search terms to search in the crawled news data and answer the user's question. 
     You can generate more sub questions and search terms based on previous search results until enough news are retrieved to answer user's question.
+    If you need more information, you can call provided tool to expand the news URL to get detailed content of a news article.
     You should understand the user's question context based on chat history.
     {chat_history}
 
@@ -43,7 +42,8 @@ __system_prompt = """
     Action: execute a function call
     Observation: a summary of the action response.
     ... (this Thought/Action/Observation can repeat N times)
-    Final Answer: the final answer to the original input question
+    Final Answer: the final answer to the original input question. 
+    You can put at most 5 reference URL links in the final answer.
 
     Begin!
     
@@ -133,11 +133,11 @@ class ExpandNewsUrl(BaseModel):
     )
 
 
-def __expand_news_url(
+async def __expand_news_url(
     llm_tracker: LlmTracker,
     url: str,
 ) -> str:
-    return asyncio.run(crawl_and_summarize_url(url=url, llm_tracker=llm_tracker))
+    return await crawl_and_summarize_url(url=url, llm_tracker=llm_tracker)
 
 
 TEXT_SEARCH_RESPONSE_TEMPLATE = """
@@ -193,6 +193,9 @@ def __search_news_entries_by_text_embedding(
             .limit(NEWS_ENTRY_LIMIT_PER_QUERY)
             .all()
         )
+        logger.info(
+            f"Search query: {query}, found {len(news_entry_list)} news entries."
+        )
         sorted_news_entry_list = sorted(
             news_entry_list,
             key=lambda news_entry: (news_entry.pub_time or news_entry.crawl_time),
@@ -216,14 +219,15 @@ def __search_news_entries_by_text_embedding(
                 text=query, news_entries=simple_news_entries
             )
         )
-        return "\n".join(response_list)
+    
+    return "\n".join(response_list)
 
 
 CHAT_HISTORY_LIMIT = 100
 MAX_REACT_MESSAGES = 100
 
 
-def answer_user_question(
+async def answer_user_question(
     user_id: int,
     user_question: str,
     thread_id: str | None,
@@ -254,7 +258,7 @@ def answer_user_question(
             from_db_conversation_history_to_llm_message(item)
             for item in db_conversation_history.reverse()
         ]
-    final_answer = __answer_question_in_react_mode(
+    final_answer = await __answer_question_in_react_mode(
         user_id=user_id,
         user_question=user_question,
         chat_history=user_ai_chat_history,
@@ -285,7 +289,7 @@ def answer_user_question(
     return convert_to_api_conversation_history([user_question_item, ai_answer_item])
 
 
-def __answer_question_in_react_mode(
+async def __answer_question_in_react_mode(
     user_id: int,
     user_question: str,
     chat_history: list[LlmMessage],
@@ -293,7 +297,7 @@ def __answer_question_in_react_mode(
 ) -> str:
     subscribed_rss_feeds_ids = (
         sql_client.query(User.subscribed_rss_feeds_id)
-        .filter(RssFeed.user_id == user_id)
+        .filter(User.id == user_id)
         .one_or_none()[0]
     )
     react_intermediate_messages = [
@@ -305,7 +309,7 @@ def __answer_question_in_react_mode(
     tracker.start()
     logger.info("question answering react agent starts.")
     while len(react_intermediate_messages) < MAX_REACT_MESSAGES:
-        response_llm_messages = llm_client.generate_content(
+        response_llm_messages = await llm_client.generate_content_async(
             prompt=react_intermediate_messages,
             system_prompt=system_prompt,
             tracker=tracker,
@@ -316,11 +320,11 @@ def __answer_question_in_react_mode(
             ],
         )
         logger.info(
-            f"LLM response messages: {[msg.type for msg in response_llm_messages]}"
+            f"LLM response messages: {response_llm_messages}"
         )
         # Remove previous function responses
         while (
-            react_intermediate_messages.peek().type == LlmMessageType.FUNCTION_RESPONSE
+            react_intermediate_messages[-1].type == LlmMessageType.FUNCTION_RESPONSE
         ):
             react_intermediate_messages.pop()
 
@@ -332,11 +336,11 @@ def __answer_question_in_react_mode(
                     )
                 final_answer_match = re.search(
                     r"Final Answer:\s*(.*)", llm_message.text_content, re.DOTALL
-                ).group(1)
+                )
                 if final_answer_match:
                     tracker.end()
                     logger.info("Final answer generated from LLM.")
-                    return final_answer_match
+                    return final_answer_match.group(1)
                 react_intermediate_messages.append(llm_message)
             elif llm_message.type == LlmMessageType.FUNCTION_CALL:
                 # Handle function calls here if needed
@@ -344,7 +348,7 @@ def __answer_question_in_react_mode(
                 react_intermediate_messages.append(
                     LlmMessage(
                         type=LlmMessageType.FUNCTION_RESPONSE,
-                        function_response=__call_function_for_llm(
+                        function_response=await __call_function_for_llm(
                             subscribed_rss_feeds_ids=subscribed_rss_feeds_ids,
                             function_call_message=llm_message.function_call,
                             llm_client=llm_client,
@@ -357,7 +361,7 @@ def __answer_question_in_react_mode(
     raise ValueError("No final answer generated from the LLM.")
 
 
-def __call_function_for_llm(
+async def __call_function_for_llm(
     subscribed_rss_feeds_ids: list[int],
     function_call_message: FunctionCallMessage,
     llm_client: LlmClientProxy,
@@ -391,14 +395,17 @@ def __call_function_for_llm(
             )
         elif function_call_message.name == "ExpandNewsUrl":
             url = function_call_message.args.get("url", "")
-            function_response.output = __expand_news_url(
+            function_response.output = await __expand_news_url(
                 llm_tracker=llm_tracker,
                 url=url,
             )
+            logger.info(f"Expanded URL: {function_response.output[0:50]}...")
         else:
             raise ValueError(f"Unsupported function call: {function_call_message.name}")
     except Exception as e:
         logger.error(f"Error calling function {function_call_message.name}: {str(e)}")
-        function_response.error = "failed"
+        function_response.error = "failed. "
+        if function_call_message.name == "ExpandNewsUrl":
+            function_response.error += "Expand the URL yourself and summarize it."
 
     return function_response

@@ -35,7 +35,8 @@ class User(Base):
     preferred_news_summary_period_type = Column(Enum(NewsSummaryPeriod), default=NewsSummaryPeriod.weekly)
     
 class ConversationType(enum.Enum):
-    news_preference_survey = "news_preference_survey"  
+    news_preference_survey = "news_preference_survey" 
+    news_research = "news_research" 
     
 # Only record ai and human conversation history. It won't record system messages or tool calls.
 class ConversationHistory(Base):
