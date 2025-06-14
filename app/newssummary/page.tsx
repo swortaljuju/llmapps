@@ -18,7 +18,7 @@ export default function NewsSummary() {
     const [apiError, setApiError] = useState<string | null>(null);
     const [initData, setInitData] = useState<InitializeResponse | null>(null);
 
-    const [mainUiMode, setMainUiMode] = useState<MainUiMode>(MainUiMode.Summary);
+    const [mainUiMode, setMainUiMode] = useState<MainUiMode>(MainUiMode.Empty);
     const refreshInitData = async () => {
         setIsLoading(true);
         setApiError(null);
@@ -198,7 +198,6 @@ function NewsSummaryMainUi({
     fromFeedUploadToCreatePreference,
     fromCreatePreferenceToNewsSummary,
 }: NewsSummaryMainUiProps) {
-
     switch (mainUiMode) {
         case MainUiMode.CreatePreference:
             return <NewsPreferenceChat preferenceConversationHistory={initData!.preference_conversation_history} fromCreatePreferenceToNewsSummary={fromCreatePreferenceToNewsSummary}></NewsPreferenceChat>;
@@ -210,5 +209,8 @@ function NewsSummaryMainUi({
             return <SummaryContent latestSummary={initData?.latest_summary} defaultOptions={initData?.default_news_summary_options} startDateList={initData?.available_period_start_date_str}/>;
         case MainUiMode.NewsResearch:
             return <NewsResearchChat />;
+        case MainUiMode.Empty:
+        default:
+            return <div>Initializing....</div>;    
     }
 }

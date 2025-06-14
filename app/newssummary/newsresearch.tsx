@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { ChatMessage, ChatAuthorType, NewsResearchAnswerQuestionRequest, newsResearchAnswerQuestion, NewsResearchAnswerQuestionResponse,  getNewsResearchChatHistory} from './store';
+import { ChatMessage, ChatAuthorType, NewsResearchAnswerQuestionRequest, newsResearchAnswerQuestion, getNewsResearchChatHistory} from './store';
 import { TypewriterText } from '../common/typewriter';
 
 
@@ -58,12 +58,14 @@ export function NewsResearchChat() {
             thread_id: threadId,
             parent_message_id: parentMessageId,
             content: userInput,
-            author: 'user' as ChatAuthorType
+            author: 'user' as ChatAuthorType,
+            isInitData: false
         };
 
         setMessages(prev => [...prev, userMessage]);
         setUserInput('');
         setIsLoading(true);
+        setError('');
 
         try {
             // Prepare request payload
@@ -83,7 +85,8 @@ export function NewsResearchChat() {
                     message_id: response.answer.message_id,
                     parent_message_id: response.answer.parent_message_id,
                     content: response.answer.content,
-                    author: 'ai' as ChatAuthorType
+                    author: 'ai' as ChatAuthorType,
+                    isInitData: false
                 } as ChatMessage];
             });
 
@@ -98,7 +101,6 @@ export function NewsResearchChat() {
     };
 
     return (
-
         <div className="flex flex-col h-full">
             {/* Error alert */}
             {error && (
@@ -124,10 +126,14 @@ export function NewsResearchChat() {
                             : 'bg-gray-100 mr-auto' // Left align AI messages
                             }`}
                     >
-                        <TypewriterText text={message.content} showEffect={message.author == 'ai' && index == messages.length - 1} />
+                        <TypewriterText text={message.content} showEffect={!message.isInitData && message.author == 'ai' && index == messages.length - 1} />
                     </div>
                 ))}
-
+                {isLoading && (
+                    <div className="flex justify-center items-center">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                    </div>
+                )}
                 {/* Invisible element for scrolling */}
                 <div ref={messagesEndRef} />
             </div>

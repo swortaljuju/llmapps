@@ -15,6 +15,7 @@ from db.models.common import ConversationHistory, ConversationType, User, Messag
 from utils.conversation_history import (
     ApiConversationHistoryItem,
     convert_to_api_conversation_history,
+    convert_db_conversation_history_item_to_api_object,
     create_thread_id,
     create_message_id,
 )
@@ -24,7 +25,7 @@ from db.models import (
 from enum import Enum
 from datetime import  datetime, timedelta
 from utils.logger import logger
-from .agent_utils import from_db_conversation_history_to_llm_message, crawl_and_summarize_url
+from .agent_utils import crawl_and_summarize_url
 from sqlalchemy import or_, and_
 
 __system_prompt = """
@@ -255,8 +256,8 @@ async def answer_user_question(
                 "Parent message ID does not match the last message in the thread."
             )
         user_ai_chat_history = [
-            from_db_conversation_history_to_llm_message(item)
-            for item in db_conversation_history.reverse()
+            item.llm_message
+            for item in convert_to_api_conversation_history(db_conversation_history)
         ]
     final_answer = await __answer_question_in_react_mode(
         user_id=user_id,
@@ -286,7 +287,7 @@ async def answer_user_question(
         conversation_type=ConversationType.news_research,
     )
     sql_client.add(ai_answer_item)
-    return convert_to_api_conversation_history([user_question_item, ai_answer_item])
+    return[convert_db_conversation_history_item_to_api_object(user_question_item), convert_db_conversation_history_item_to_api_object(ai_answer_item)]
 
 
 async def __answer_question_in_react_mode(
@@ -395,10 +396,13 @@ async def __call_function_for_llm(
             )
         elif function_call_message.name == "ExpandNewsUrl":
             url = function_call_message.args.get("url", "")
-            function_response.output = await __expand_news_url(
+            expand_response = await __expand_news_url(
                 llm_tracker=llm_tracker,
                 url=url,
             )
+            if not expand_response:
+                raise ValueError("Expanded response is empty.")
+            function_response.output = expand_response
             logger.info(f"Expanded URL: {function_response.output[0:50]}...")
         else:
             raise ValueError(f"Unsupported function call: {function_call_message.name}")

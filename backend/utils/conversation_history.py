@@ -29,20 +29,22 @@ def convert_to_api_conversation_history(db_conversation_history: list[Conversati
         while current_message_id is not None and (not api_conversation_history or len(api_conversation_history) > 0 and api_conversation_history[-1].message_id != current_message_id):
             current_item = message_id_map[current_message_id]
             del message_id_map[current_message_id]
-            api_conversation_history_item = ApiConversationHistoryItem(
-                user_id=current_item.user_id,
-                thread_id=current_item.thread_id,
-                message_id=current_item.message_id,
-                parent_message_id=current_item.parent_message_id
-            )
-            llm_message = from_db_conversation_history_to_llm_message(current_item)
-            
-            api_conversation_history_item.llm_message = llm_message
+            api_conversation_history_item = convert_db_conversation_history_item_to_api_object(current_item)
             api_sub_conversation_history.appendleft(api_conversation_history_item)
             current_message_id = current_item.parent_message_id
         api_conversation_history.extend(api_sub_conversation_history)    
     
     return api_conversation_history
+
+def convert_db_conversation_history_item_to_api_object(db_conversation_history: ConversationHistory) -> ApiConversationHistoryItem:
+    api_conversation_history_item = ApiConversationHistoryItem(
+        user_id=db_conversation_history.user_id,
+        thread_id=db_conversation_history.thread_id,
+        message_id=db_conversation_history.message_id,
+        parent_message_id=db_conversation_history.parent_message_id
+    )    
+    api_conversation_history_item.llm_message = from_db_conversation_history_to_llm_message(db_conversation_history)
+    return api_conversation_history_item
 
 def convert_api_conversation_history_item_to_db_row(
     item: ApiConversationHistoryItem,

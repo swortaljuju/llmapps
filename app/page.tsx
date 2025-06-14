@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { apps } from './common/constants';
 import { BiLoaderAlt } from 'react-icons/bi';
 import { useRouter } from "next/navigation";
-import {getBackendApiUrl} from "./common/utils"
+import { getBackendApiUrl } from "./common/utils"
 
 enum PageState {
   AppsSummary = 'AppsSummary',
@@ -37,7 +37,9 @@ function AppsSummary({ onStateChange }: { onStateChange: (state: PageState) => v
 
   return (
     <div className="min-h-screen p-8 bg-gray-100">
-      <h1 className="text-4xl font-bold text-center mb-8">LLM App Portfolio</h1>
+      <h1 className="text-3xl font-extrabold text-center text-gray-900 mb-8 tracking-tight leading-tight">
+        AI Apps That Supercharge Your Learning And Information Assimilation
+      </h1>
       <div className="max-w-2xl mx-auto mb-8 bg-blue-50 border border-blue-200 rounded-lg p-4 text-blue-700 text-center">
         Sign in to unlock personalized recommendations and save your preferences
       </div>
@@ -52,24 +54,22 @@ function AppsSummary({ onStateChange }: { onStateChange: (state: PageState) => v
           Sign In
         </button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto mb-12">
+      <div className="flex flex-wrap justify-center gap-6 max-w-7xl mx-auto mb-12">
         {apps.filter(app => app.launched).map((app, index) => (
           <div
             key={index}
-            className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-all duration-300 group relative h-[120px] overflow-hidden"
+            className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-all duration-300"
+            style={{ maxWidth: '600px' }}
           >
-            <app.icon className="absolute right-4 bottom-4 text-gray-100 text-6xl" />
             <div className="relative z-10">
-              <h2 className="text-xl font-semibold mb-2 text-gray-800 group-hover:opacity-0 transition-opacity duration-300">
+              <h2 className="text-xl font-semibold mb-2 text-gray-800">
                 {app.name}
               </h2>
-              <p className="text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-0 left-0">
-                <ul>
-                  {app.description.map((item, index) => (
-                    <li key={index}>{item}</li>
-                  ))}
-                </ul>
-              </p>
+                <ul className="text-gray-600 list-disc list-inside">
+                {app.description.map((item, index) => (
+                  <li  key={index}>{item}</li>
+                ))}
+              </ul>
             </div>
           </div>
         ))}
@@ -94,7 +94,7 @@ function SignInForm({ onStateChange }: { onStateChange: (state: PageState) => vo
     setError('');
 
     try {
-      const response = await fetch( getBackendApiUrl('/users/signin'), {
+      const response = await fetch(getBackendApiUrl('/users/signin'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

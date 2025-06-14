@@ -43,7 +43,8 @@ export function NewsPreferenceChat({
             thread_id: messages[0].thread_id,
             parent_message_id: parentMessageId,
             content: userInput,
-            author: 'user' as ChatAuthorType
+            author: 'user' as ChatAuthorType,
+            isInitData: true
         };
 
         setMessages(prev => [...prev, userMessage]);
@@ -69,7 +70,8 @@ export function NewsPreferenceChat({
                         message_id: response.next_question_message_id,
                         parent_message_id: response.parent_message_id,
                         content: response.next_question,
-                        author: 'ai' as ChatAuthorType
+                        author: 'ai' as ChatAuthorType,
+                        isInitData: true
                     } as ChatMessage];
                 });
             }
@@ -111,7 +113,7 @@ export function NewsPreferenceChat({
                             : 'bg-gray-100 mr-auto' // Left align AI messages
                             }`}
                     >
-                        <TypewriterText text={message.content} showEffect={message.author == 'ai' && index == messages.length - 1} />
+                        <TypewriterText text={message.content} showEffect={!message.isInitData && message.author == 'ai' && index == messages.length - 1} />
                     </div>
                 ))}
 

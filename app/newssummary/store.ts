@@ -1,3 +1,4 @@
+import { init } from "next/dist/compiled/webpack/webpack";
 import { getBackendApiUrl } from "../common/utils"
 
 export interface NewsSummaryItem {
@@ -29,6 +30,7 @@ export interface ChatMessage {
     parent_message_id?: string;
     content: string;
     author: ChatAuthorType;
+    isInitData: boolean;
 }
 
 // You'll need to define ChatAuthorType as well, for example:
@@ -62,7 +64,15 @@ export async function initialize(): Promise<InitializeResponse> {
         throw new Error(errorData.detail || 'Failed to initialize news summary');
     }
 
-    return await response.json();
+    const initializeResponse =  await response.json();
+
+    if (initializeResponse.preference_conversation_history) {
+        initializeResponse.preference_conversation_history = initializeResponse.preference_conversation_history.map((msg: any) => ({
+            ...msg,
+            isInitData: true,
+        })) as ChatMessage[];
+    }
+    return initializeResponse;
 }
 
 export interface PreferenceSurveyRequest {
@@ -312,5 +322,10 @@ export async function getNewsResearchChatHistory(): Promise<ChatMessage[]> {
         const errorData = await response.json();
         throw new Error(errorData.detail || 'Failed to load news research chat history');
     }
-    return await response.json();
+    const chatHistory =  await response.json();
+
+    return chatHistory.map((msg: any) => ({
+        ...msg,
+        isInitData: true,
+    })) as ChatMessage[];
 }

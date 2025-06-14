@@ -15,14 +15,16 @@ class LlmTracker:
         self.__usage_log = LlmUsageLog(
             user_id=self.__user_id)
         
-    def log_usage(self, input_token_count: int, output_token_count: int) -> None:
+    def log_usage(self, input_token_count: int | None, output_token_count: int | None) -> None:
         if not self.__usage_log.llm_input_token_count:
             self.__usage_log.llm_input_token_count = 0
         if not self.__usage_log.llm_output_token_count:
             self.__usage_log.llm_output_token_count = 0
         logger.info(f"Logging LLM usage for user {self.__user_id}: input tokens: {input_token_count}, output tokens: {output_token_count}")
-        self.__usage_log.llm_input_token_count += input_token_count
-        self.__usage_log.llm_output_token_count += output_token_count
+        if input_token_count is not None:
+            self.__usage_log.llm_input_token_count += input_token_count
+        if output_token_count is not None:    
+            self.__usage_log.llm_output_token_count += output_token_count
 
     def end(self) -> bool:
         with SqlSessionLocal() as db:

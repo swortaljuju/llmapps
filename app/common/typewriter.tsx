@@ -13,7 +13,7 @@ export function TypewriterText({
     showEffect = false,  // Default to false if not provided
     speed = 150,  // Default speed: 150ms per word
     onComplete,
-} : TypewriterProps )  {
+}: TypewriterProps) {
     const [displayedText, setDisplayedText] = useState(showEffect ? '' : text);
     const [currentWordIndex, setCurrentWordIndex] = useState(0);
     useEffect(() => {
@@ -48,11 +48,19 @@ export function TypewriterText({
 
         // Cleanup timeout on component unmount or when effect re-runs
         return () => clearTimeout(timer);
-    }, [currentWordIndex, displayedText, text, speed, onComplete, showEffect]);    
-    
-    
+    }, [currentWordIndex, displayedText, text, speed, onComplete, showEffect]);
+
+
     return (
-        <ReactMarkdown>{displayedText}</ReactMarkdown>
+        <ReactMarkdown components={{
+            a: ({ node, ...props }) => (
+                <a
+                    {...props}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                />
+            ),
+        }}>{displayedText}</ReactMarkdown>
     );
 };
 
