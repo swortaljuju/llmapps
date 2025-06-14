@@ -190,14 +190,22 @@ function SignUpForm({ onStateChange }: { onStateChange: (state: PageState) => vo
     name: '',
     email: '',
     password: '',
+    confirmPassword: '',
     invitation_code: ''
   });
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState('');
-
+  const validatePasswordMatch = () => {
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      return false;
+    }
+    return true;
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validatePasswordMatch()) return;
     setIsLoading(true);
     setError('');
 
@@ -269,7 +277,7 @@ function SignUpForm({ onStateChange }: { onStateChange: (state: PageState) => vo
               Password
             </label>
             <input
-              type="text"
+              type="password"
               value={formData.password}
               onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
               disabled={isLoading || isSuccess}
@@ -277,7 +285,19 @@ function SignUpForm({ onStateChange }: { onStateChange: (state: PageState) => vo
               required
             />
           </div>
-
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              value={formData.confirmPassword}
+              onChange={(e) => setFormData(prev => ({ ...prev, confirmPassword: e.target.value }))}
+              disabled={isLoading || isSuccess}
+              className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+              required
+            />
+          </div>
           <div className="mb-6">
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Invitation Code
