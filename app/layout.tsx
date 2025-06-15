@@ -4,8 +4,8 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "LLM Apps",
-  description: "Swortal's LLM Apps",
+  title: "Mind Supercharge",
+  description: " AI Apps That Supercharge Your Learning And Information Assimilation",
 };
 
 export default function RootLayout({
