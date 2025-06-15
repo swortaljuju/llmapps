@@ -1,0 +1,59 @@
+Title: As India-Pak Tensions 'Ease', Here Are The Countries Holding The World's Nuclear Arsenal\Content: Following recent tensions and a ceasefire, India and Pakistan each hold around 170 nuclear warheads. Globally, Russia and the U.S. possess the largest nuclear arsenals, with smaller stockpiles held by other nations. 
+
+Title: Trump Administration's Middle East Diplomacy: Audacious Moves and Reactions\Content: President Trump's recent foreign policy moves in the Middle East, including meeting with Syrian President Ahmed al-Sharaa and a potential nuclear deal with Iran, have drawn varied reactions. These actions break from traditional diplomatic norms, generating awe and concern among Biden administration veterans. The new approach involves direct talks with adversaries and surprising alliances, reflecting Trump's transactional style. The potential nuclear deal with Iran is progressing with written proposals exchanged, while the U.S. is normalizing relations with Syria. However, these moves have also led to concerns about excluding Israel and potentially destabilizing regional dynamics. Reference URLs Summaries:
+- Axios: The Trump administration's unorthodox Middle East policies, including engaging with Syrian President Ahmed al-Sharaa and pursuing a nuclear deal with Iran, have surprised and impressed some Biden officials due to their boldness and speed.
+- Axios: The Trump administration has presented Iran with a written proposal for a nuclear deal, marking the first time a written proposal has been exchanged. The proposal outlines parameters for Iran's nuclear program, including uranium enrichment, monitoring, and verification.
+- Axios: Secretary of State Marco Rubio met with Syrian Foreign Minister Asaad al-Shaibani in Turkey, signaling further normalization of relations between the U.S. and Syria, following Trump's meeting with President Sharaa and the lifting of sanctions.
+
+Title: Supreme Court Hears Arguments on Birthright Citizenship and Executive Power\Content: The Supreme Court is considering the legality of President Trump's executive order to redefine birthright citizenship, specifically questioning whether a single district court can halt a federal policy nationwide. The debate centers on the 14th Amendment and its interpretation regarding children born in the U.S. to non-citizen parents. Justices are grappling with the balance between executive power and the potential impact on children denied citizenship if Trump's policy proceeds while its legality is debated. Reference URLs Summaries:
+- Axios: The Supreme Court heard arguments on whether to let President Trump proceed with his plan to redefine birthright citizenship, focusing on the power of a single district court to freeze an entire federal policy.
+- Axios: The Supreme Court will hear oral arguments over President Trump's efforts to restrict birthright citizenship, which is a key part of his administration's immigration crackdown.
+- NYTimes: The Supreme Court is hearing a case on birthright citizenship, specifically regarding the power of one judge to set national policy.
+
+Title: Zerohedge: Former FBI Director Comey's Controversial Social Media Post Investigated\Content: Former FBI Director James Comey posted an image of seashells arranged to read '86 47', which many interpreted as a threat against President Trump. The post was quickly deleted, but has sparked an investigation by the Secret Service and criticism from Republicans. Reference URLs Summaries:
+- ZeroHedge: Former FBI Director James Comey posted and then deleted a photo on Instagram of seashells that read "86 47," which many interpreted as a veiled threat to President Trump.
+- SCMP: The US Secret Service is investigating former FBI Director James Comey's Instragram post which is seen as a 'threat' against President Trump.
+- The Guardian: The US Secret Service is investigating James Comey over a seashell photo claimed to be a ‘threat’ against Trump
+
+Title: Google Leads in AI Patent Applications, Surpassing IBM\Content: Google has become the leader in generative AI-related patents, surpassing IBM, and also dominates in agentic AI patents. Patent filings in the U.S. for generative AI have significantly increased, signaling companies' active pursuit of protecting their AI technologies. While Google and Nvidia lead in agentic patents, Chinese universities also hold prominent positions globally. Meta and OpenAI, despite their significant contributions, are not among the top patent holders, as Meta focuses on open-source development and OpenAI uses its patents defensively. Reference URLs Summaries:
+- Axios: Google has surpassed IBM as the leader in generative AI-related patents and leads in agentic AI. Generative AI patent applications in the U.S. surged 56% last year.
+
+Title: Trump Administration Intensifies Immigration Enforcement, Considers National Guard Deployment\Content: The Trump administration is reportedly considering deploying 20,000 National Guard troops for interior immigration enforcement, a move criticized by Democrats as a step too far. This comes amid ongoing efforts to restrict birthright citizenship and crack down on immigration, with some Mexican politicians facing travel restrictions due to alleged links to drug corruption. These policies reflect a broader effort to tighten border security and prioritize deportations, raising concerns about due process and potential conflicts with state and local governments. 
+
+Title: Trump's Trade Policies and Their Impact: Boeing Secures Major Order, Tariffs Affect Various Sectors\Content: Despite a sometimes strained relationship with President Trump, Boeing secured a massive order from Qatar Airways. Simultaneously, Trump's trade policies, including tariffs, continue to affect various sectors, with Walmart warning of impending price hikes. A trade deal with China has ended a ban on Boeing deliveries, but the broader impact of tariffs on economic growth and inflation remains a concern. Sector's financial performance could be highly volatile. This could result in market correction. 
+
+Title: India-Pakistan Ceasefire\Content: India and Pakistan are currently experiencing a ceasefire after recent border clashes. Water resources are an important factor between the two countries. The Indus Waters Treaty (IWT) divides the six main rivers of the Indus basin between the two nations. India has suspended the treaty and refused to share data on river flows with Pakistan, raising concerns about water supply. 
+
+Title: Google and Nvidia top the list of AI-related US patents\Content: Google and Nvidia are at the top of the list of patents for AI-related in the U.S.. Globablly, Google was also the leader followed by Huawei and Samsung. 
+
+Title: China's Economic Slowdown: Contraction in GDP and Trade War Concerns\Content: Japan's economy contracted for the first time in a year, with GDP declining by 0.2% due to tariff woes. Weak exports and persistent inflation are also hurting Japan's economy. In response to these challenges, Japanese officials are seeking to renegotiate trade deals with the U.S. amid concerns that tariffs and domestic economic weakness are threatening growth. 
+
+Title: ZeroHedge: NY Tops London as World's Leading Financial Center\Content: New York has surpassed London to become the world's leading financial center in 2025, according to the Global Financial Centres Index. The index assesses cities based on business environment, human capital, infrastructure, financial sector development, and reputation. 
+
+Title: ZeroHedge: Montana Bans Lab-Grown Meat Amid Labeling Concerns\Content: Montana has become the fifth state to ban lab-grown meat, citing labeling concerns and support for local ranchers. This decision aligns with a broader debate over the safety and regulation of lab-cultivated proteins, amid concerns they are getting unfair competitive advantages. 
+
+Title: NY to Send 'Inflation Refund' Checks to Residents\Content: New York will issue one-time 'inflation refund' checks to eligible residents, totaling $2 billion, to offset increased costs. Single filers earning up to $75,000 will receive $200, while joint filers earning up to $150,000 will get $400. Additionally, families will receive annual tax credits per child. 
+
+Title: US Lawmakers Seek to Block Smuggling of Nvidia's AI Chips to China\Content: US lawmakers are introducing a bill to prevent the smuggling of Nvidia's AI chips to China. Even with the US seeking to clamp down on their export, some chips have continued to flow to China. 
+
+Title: Axios: FAA Probes Radio Failure at Denver Airport\Content: The FAA is investigating a radio failure at Denver International Airport, during which some pilots couldn't contact air traffic control. This incident adds to concerns about technology failures in the air traffic control system amid increased travel. 
+
+Title: Wired: After Two SpaceX Explosions, U.K. Asks FAA to Change Starship Flight Plans\Content: British officials have asked the U.S. to consider changing the launch site or trajectory of Starship 9 after debris fell on British territories following two SpaceX explosions. The FAA has approved Starship 9's launch pending completion of an investigation. 
+
+Title: South China Morning Post: The Middle East Has Entered the AI Group Chat\Content: The UAE and Saudi Arabia are investing billions in US AI infrastructure, which could help the US in the AI race against China. 
+
+Title: ZeroHedge: "I Can't Understand My Professor"\Content: An opinion piece discusses the increasing reliance on foreign-born professors in American universities, particularly in fields like mathematics, engineering, and the hard sciences, and how language barriers can hinder students' ability to learn. 
+
+Title: ZeroHedge: Water Wars: India-Pakistan Tensions Rise Over Water Resources\Content: Tensions between India and Pakistan have risen after India suspended the Indus Waters Treaty, which could impact Pakistan's water supply for drinking, agriculture, and power generation. Water resources are an important part of the equation between the two countries. 
+
+Title: The Middle East Has Entered the AI Group Chat\Content: The UAE and Saudi Arabia are investing billions in US AI infrastructure. The deals could help the US in the AI race against China. 
+
+Title: 9to5Google: Google One Now Has 150 Million Subscribers\Content: Google One now has 150 million subscribers, up 50% from February of last year, with 'millions' subscribing to the AI Premium plan. 
+
+Title: 9to5Google: Microsoft Will Shut Down Bing Search APIs, To Be Replaced With AI\Content: Microsoft will discontinue Bing Search APIs later this year, replacing them with AI services. 
+
+Title: 9to5Google: Xiaomi Joins Google Pixel in Making Its Own Smartphone Chip\Content: Xiaomi is releasing its own smartphone chip, the XRING 01, to debut in future devices. 
+
+Title: Statista: How Widespread Are Food Intolerances?\Content: A survey indicates that food intolerances, confirmed by health professionals, are most prevalent in the U.S. Awareness has risen around food insensitivities, with many people cutting specific foods from their diets. 
+
+Title: Bloomberg: China's Defense Chief Tours Europe\Content: China's defense chief is undertaking a tour of Europe, with stops in Paris and Berlin, and a pledge to the UN for peace. 

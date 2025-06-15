@@ -13,7 +13,6 @@ from db.models import (
 )
 from datetime import datetime, date, timedelta
 from utils.http import ua
-import requests
 from utils.logger import logger
 from db.db import get_sql_db, SqlSessionLocal
 from sqlalchemy import select
