@@ -68,7 +68,7 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
                 if (selectedOptions.period_type === NewsSummaryPeriod.DAILY) {
                     return date !== TODAY_STR; // Remove 'Today' if it exists
                 } else if (selectedOptions.period_type === NewsSummaryPeriod.WEEKLY) {
-                    const dateObj = new Date(date);
+                    const dateObj = new Date(date + 'T00:00:00');
                     const dayOfWeek = dateObj.getDay();
                     return dayOfWeek === 1 && date !== CURRENT_WEEK_STR; // Keep only Mondays and remove 'Current Week'
                 }
@@ -217,9 +217,10 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
             {/* Upper Panel: News Summary Entry List */}
             <div className="flex-1 overflow-y-auto p-4">
                 {isSummaryEntryLoading ? (
-                    <div className="flex justify-center items-center">
+                    <div className="justify-center text-center">
                         <p className="text-lg font-semibold mb-4">Generating news summaries... It may take several minutes....</p>
-                        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+                        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
+
                     </div>
                 ) : summaryItems.length === 0 ? (
                     <p>No news summaries available.</p>
@@ -333,6 +334,7 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
                             onClick={() => handleLikeDislike(NewsSummaryLikeDislikeAction.LIKE)}
                             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2"
                             title="Like the news summary given the selected options"
+                            disabled={summaryItems.length === 0}
                         >
                             Like
                         </button>
@@ -340,6 +342,7 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
                             onClick={() => handleLikeDislike(NewsSummaryLikeDislikeAction.DISLIKE)}
                             className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                             title="Dislike the news summary given the selected options"
+                            disabled={summaryItems.length === 0}
                         >
                             Dislike
                         </button>

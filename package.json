@@ -3,12 +3,13 @@
   "version": "0.2.0",
   "private": true,
   "scripts": {
-    "fastapi-dev": "pip3 install -r requirements.txt && cd backend && python3 -m uvicorn index:app --reload",
+    "fastapi-dev": "cd backend && python3 -m uvicorn index:app --reload",
     "next-dev": "NODE_OPTIONS='--inspect' next dev",
     "dev": "concurrently \"node server.js\" \"npm run fastapi-dev\"",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prod": "NODE_ENV=production concurrently \"node server.js\" \"npm run fastapi-dev\""
   },
   "dependencies": {
     "@types/node": "22.5.5",

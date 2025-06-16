@@ -486,7 +486,7 @@ async def __cluster_and_summarize_news(
         if embeddings_list and len(embeddings_list) > 1:
             all_embeddings = np.array(embeddings_list)
             cluster_labels = KMeans(
-                    n_clusters=CLUSTER_NUMBER,
+                    n_clusters=min(CLUSTER_NUMBER, len(all_embeddings)),
                 ).fit_predict(all_embeddings)
 
             # Group news entries by cluster
