@@ -40,7 +40,7 @@ def exceed_llm_token_limit(
     sql_client = get_sql_db()
     user_tier = sql_client.query(
         User.user_tier
-    ).filter(User.id == user_id).first()
+    ).filter(User.id == user_id).first()[0]
     if user_tier == UserTier.UNLIMITED:
         return False
     now = datetime.now()

@@ -5,13 +5,13 @@ import enum
 # and we need to chunk them into smaller pieces
 class NewsChunkingExperiment(enum.Enum):
     # Summarize news every day and then summarize the daily summaries every week
-    AGGREGATE_DAILY = "aggregate_daily"
+    AGGREGATE_DAILY = "AGGREGATE_DAILY"
     # Cluster news entries based on their embeddings and summarize each cluster
-    EMBEDDING_CLUSTERING = "embedding_clustering"
+    EMBEDDING_CLUSTERING = "EMBEDDING_CLUSTERING"
 
 # Experiment on how user preferences are applied to the news summary in the LLM
 class NewsPreferenceApplicationExperiment(enum.Enum):
     # Apply user preference 
-    APPLY_PREFERENCE = "apply_preference"
+    APPLY_PREFERENCE = "APPLY_PREFERENCE"
     # Not apply preference at all
-    NO_PREFERENCE = "no_preference"
+    NO_PREFERENCE = "NO_PREFERENCE"

@@ -9,14 +9,14 @@ class UserStatus(enum.Enum):
     pending = "pending"
     active = "active"
 class MessageType(enum.Enum):
-    HUMAN = "human"
-    AI = "ai"
-    UNKNOWN = "unknown"
+    HUMAN = "HUMAN"
+    AI = "AI"
+    UNKNOWN = "UNKNOWN"
 
 class UserTier(enum.Enum):
-    UNLIMITED = "unlimited"
-    FULL_EXPERIMENTATION = "full_experimentation"
-    BASIC = "basic"
+    UNLIMITED = "UNLIMITED"
+    FULL_EXPERIMENTATION = "FULL_EXPERIMENTATION"
+    BASIC = "BASIC"
 class User(Base):
     __tablename__ = "users"
 
