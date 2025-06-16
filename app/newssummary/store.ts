@@ -39,13 +39,13 @@ export type ChatAuthorType = 'user' | 'ai'; // Adjust based on your actual types
 export type NewsSummaryMode = 'collect_rss_feeds' | 'collect_news_preference' | 'show_summary';
 
 export enum NewsChunkingExperiment {
-    AGGREGATE_DAILY = "aggregate_daily",
-    EMBEDDING_CLUSTERING = "embedding_clustering"
+    AGGREGATE_DAILY = "AGGREGATE_DAILY",
+    EMBEDDING_CLUSTERING = "EMBEDDING_CLUSTERING"
 }
 
 export enum NewsPreferenceApplicationExperiment {
-    APPLY_PREFERENCE = "apply_preference",
-    NO_PREFERENCE = "no_preference"
+    APPLY_PREFERENCE = "APPLY_PREFERENCE",
+    NO_PREFERENCE = "NO_PREFERENCE"
 }
 
 export enum NewsSummaryPeriod {

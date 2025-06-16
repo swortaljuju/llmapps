@@ -26,6 +26,7 @@ from llm.tracker import exceed_llm_token_limit, LlmTracker
 import traceback
 import asyncio
 from .agent_utils import crawl_and_summarize_url
+from utils.exceptions import UserErrorCode, ApiErrorType, ApiException
 
 MAX_NEWS_SUMMARY_EACH_TURN = 25
 
@@ -117,8 +118,6 @@ async def summarize_news(
     start_date: date,
     period: NewsSummaryPeriod,
 ) -> list[NewsSummaryEntry]:
-    if exceed_llm_token_limit(user_id):
-        raise ValueError(f"User {user_id} has exceeded the LLM token limit this month.")
     if period == NewsSummaryPeriod.monthly:
         raise NotImplementedError("Monthly summary is not supported yet")
     if not is_valid_period_start_date(start_date, period):
@@ -292,6 +291,11 @@ async def __chunk_and_summarize_news_per_period(
             # If existing summaries are found, return them
             logger.info(f"Using existing summaries for {start_date} to {end_date}")
             return existing_summary
+        if exceed_llm_token_limit(user_id):
+            raise ApiException(
+                user_error_code=UserErrorCode.TOKEN_LIMIT_EXCEEDED,
+                type=ApiErrorType.CLIENT_ERROR,
+            )
         formatted_entries = []
         if for_base_period:
             # Query news entries for this chunk period
@@ -460,6 +464,11 @@ async def __cluster_and_summarize_news(
             # If existing summaries are found, return them
             logger.info(f"Using existing summaries for {start_date} to {end_date}")
             return existing_summary
+        if exceed_llm_token_limit(user_id):
+            raise ApiException(
+                user_error_code=UserErrorCode.TOKEN_LIMIT_EXCEEDED,
+                type=ApiErrorType.CLIENT_ERROR,
+            )
         news_entry_id_and_embeddings = (
             session.query(NewsEntry.id, NewsEntry.summary_clustering_embedding)
             .filter(
@@ -715,7 +724,10 @@ async def expand_news_summary(
     Expand the news summary if necessary.
     """
     if exceed_llm_token_limit(summary_entry.user_id):
-        raise ValueError(f"User {summary_entry.user_id} has exceeded the LLM token limit this month.")
+        raise ApiException(
+            user_error_code=UserErrorCode.TOKEN_LIMIT_EXCEEDED,
+            type=ApiErrorType.CLIENT_ERROR,
+        )
     
     llm_tracker = LlmTracker(summary_entry.user_id)
     llm_tracker.start()

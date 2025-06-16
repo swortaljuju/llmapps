@@ -19,6 +19,7 @@ import time
 from sqlalchemy import select
 from .client_proxy import LlmMessage, LlmMessageType
 from utils.logger import logger
+from utils.exceptions import UserErrorCode, ApiErrorType, ApiException
 
 class NewsPreferenceAgentOutput(BaseModel):
     """
@@ -137,8 +138,9 @@ async def load_subscribed_rss_feed_list_for_preference_prompt(
     )
 
     if not subscribed_rss_feeds_id:
-        raise ValueError(
-            error_type=NewsPreferenceAgentError.NO_SUBSCRIBED_RSS_FEED,
+        raise ApiException(
+            type=ApiErrorType.CLIENT_ERROR,
+            user_error_code=UserErrorCode.NO_RSS_FEED_SUBSCRIBED,
             message="User has no subscribed rss feed list",
         )
     subscribed_rss_feed_title_list = [
@@ -218,12 +220,16 @@ async def save_answer_and_generate_next_question(
         or chat_history
         and (not parent_message_id or chat_history[-1].message_id != parent_message_id)
     ):
-        raise ValueError(
-            error_type=NewsPreferenceAgentError.MISSING_QUESTION_FOR_ANSWER
+        raise ApiException(
+            type=ApiErrorType.SERVER_ERROR,
+            message="news preference agent, missing question for answer."
         )
     elif answer is None and chat_history:
         # If the last message ID does not match the parent message ID, raise an error
-        raise ValueError(error_type=NewsPreferenceAgentError.PARENT_MESSAGE_NOT_MATCH)
+        raise ApiException(
+            type=ApiErrorType.SERVER_ERROR,
+            message="parent message not matched."
+        )
     if chat_history:
         thread_id = chat_history[0].thread_id
     else:

@@ -222,10 +222,10 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
                         <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
 
                     </div>
+                ) : summaryLoadingError ? (
+                    <p className="text-red-500">Error: {summaryLoadingError}</p>
                 ) : summaryItems.length === 0 ? (
                     <p>No news summaries available.</p>
-                ) : summaryLoadingError ? (
-                    <p>{summaryLoadingError}</p>
                 ) : (
                     summaryItems.map(item => (
                         <div key={item.id} className="mb-4 p-4 border rounded-md">

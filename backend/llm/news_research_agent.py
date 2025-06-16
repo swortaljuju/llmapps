@@ -27,6 +27,7 @@ from datetime import  datetime, timedelta
 from utils.logger import logger
 from .agent_utils import crawl_and_summarize_url
 from sqlalchemy import or_, and_
+from utils.exceptions import UserErrorCode, ApiErrorType, ApiException
 
 __system_prompt = """
     Answer a user's questions based on crawls news data. We have already crawled recent news from the user's subscribed channels.
@@ -236,7 +237,10 @@ async def answer_user_question(
     sql_client: Session,
 ) -> list[ApiConversationHistoryItem]:
     if exceed_llm_token_limit(user_id):
-        raise ValueError(f"User {user_id} has exceeded the LLM token limit this month.")
+        raise ApiException(
+            user_error_code=UserErrorCode.TOKEN_LIMIT_EXCEEDED,
+            type=ApiErrorType.CLIENT_ERROR,
+        )
     user_ai_chat_history = []
     if thread_id:
         # Fetch chat history from the database

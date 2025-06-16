@@ -61,7 +61,6 @@ class NewsSummaryEntry(Base):
     __table_args__ = (
         Index("news_summary_entry_logical_key", "user_id", "start_date", "period_type", "news_chunking_experiment", "news_preference_application_experiment", "display_order_within_period", unique=True),
     )
-    # TODO add category embeddings up to 3
 
 class NewsSummaryExperimentStats(Base):
     __tablename__ = "news_summary_experiment_stats"
