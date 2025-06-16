@@ -1,3 +1,4 @@
+conda activate llmapps
 git fetch origin
 git rebase origin/main
 npm install
