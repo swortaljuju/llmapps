@@ -230,7 +230,10 @@ def get_subscribed_feed_ids():
     sql_session = get_sql_db()
     unlimited_user_subscribed_feed_ids = (
         sql_session.query(User.subscribed_rss_feeds_id)
-        .filter(User.email.in_(UNLIMITED_USER_EMAILS))
+        .filter(
+            User.email.in_(UNLIMITED_USER_EMAILS),
+            User.subscribed_rss_feeds_id.is_not(None),
+            )
         .all()
     )
     subscribed_feed_ids = set(

@@ -1,3 +1,3 @@
-0 18 * * *	cd ~/llmapps && ~/miniconda3/bin/python3 backend/cron/crawl_news.py >/tmp/logs/crawl_news.log 2>&1
-0 20 * * 7	cd ~/llmapps && ~/miniconda3/bin/python3 backend/cron/summarize_news.py >/tmp/logs/summarize_news.log 2>&1
-0 20 1 * *	cd ~/llmapps && ~/miniconda3/bin/python3 backend/cron/update_preference.py >/tmp/logs/update_preference.log 2>&1
+0 18 * * *	cd ~/llmapps && ~/miniconda3/bin/python3 backend/cron/crawl_news.py >> /tmp/logs/crawl_news.log 2>&1
+0 20 * * 7	cd ~/llmapps && ~/miniconda3/bin/python3 backend/cron/summarize_news.py >> /tmp/logs/summarize_news.log 2>&1
+0 20 1 * *	cd ~/llmapps && ~/miniconda3/bin/python3 backend/cron/update_preference.py >> /tmp/logs/update_preference.log 2>&1
