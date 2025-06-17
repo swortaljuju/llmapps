@@ -48,8 +48,8 @@ class LlmMessage(BaseModel):
     type: LlmMessageType
     text_content: str = None
     structured_output: BaseModel | list[BaseModel] | None = None
-    function_call: FunctionCallMessage = None
-    function_response: FunctionResponseMessage = None
+    function_call: FunctionCallMessage | None = None
+    function_response: FunctionResponseMessage | None = None
 
 class SafeDict(dict):
     def __missing__(self, key):

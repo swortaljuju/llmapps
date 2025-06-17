@@ -188,7 +188,7 @@ async def signup(
 async def verify(
     verification_token: str, db: db.SqlClient, redis_client: db.RedisClient
 ):
-    user_id = int(await redis_client.get(f"verification:{verification_token}"))
+    user_id = await redis_client.get(f"verification:{verification_token}")
 
     if not user_id:
         logger.error(f"Verification token expired or invalid: {verification_token}")
@@ -209,7 +209,7 @@ async def verify(
                 </html>
             """
         )
-
+    user_id = int(user_id)
     user = db.query(User).filter(User.id == user_id).first()
 
     if not user:
