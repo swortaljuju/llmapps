@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, Enum, Boolean, Date, Index
+from sqlalchemy import Column, Integer, String, DateTime, Enum, Boolean, Date, Index, func
 from datetime import datetime
 import enum
 from .base import Base
@@ -25,7 +25,7 @@ class NewsEntry(Base):
     entry_rss_guid = Column(String)
     # might be empty
     entry_url = Column(String)
-    crawl_time = Column(DateTime, default=datetime.now())
+    crawl_time = Column(DateTime, server_default=func.now())
     title = Column(String)
     description = Column(String)
     content = Column(String)
@@ -56,7 +56,7 @@ class NewsSummaryEntry(Base):
     clicked_time = Column(DateTime, nullable=True)  # time when the user clicked this summary
     # The order of the entry in the summary list for a given period by start_date and end_date
     display_order_within_period = Column(Integer)
-    creation_time = Column(DateTime, default=datetime.now())
+    creation_time = Column(DateTime, server_default=func.now())
     
     __table_args__ = (
         Index("news_summary_entry_logical_key", "user_id", "start_date", "period_type", "news_chunking_experiment", "news_preference_application_experiment", "display_order_within_period", unique=True),
@@ -99,4 +99,4 @@ class NewsPreferenceVersion(Base):
     causal_clicked_news_summary_entry_id = Column(
         ARRAY(Integer), nullable=True
     )  # clicked news summary which caused the change. empty if no change.
-    created_at = Column(DateTime, default=datetime.now())
+    created_at = Column(DateTime, server_default=func.now())

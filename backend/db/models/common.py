@@ -1,6 +1,5 @@
-from sqlalchemy import Column, Integer, String, DateTime, Enum
+from sqlalchemy import Column, Integer, String, DateTime, Enum, func
 from sqlalchemy.dialects.postgresql import  ARRAY
-from datetime import datetime
 import enum
 from .base import Base
 from .experiment import NewsChunkingExperiment, NewsPreferenceApplicationExperiment
@@ -24,7 +23,7 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     name = Column(String, unique=True, index=True)
     hashed_password = Column(String)
-    created_at = Column(DateTime, default=datetime.now())
+    created_at = Column(DateTime, server_default=func.now())
     status = Column(Enum(UserStatus), default=UserStatus.pending)
     news_preference = Column(String)
     current_news_preference_version_id = Column(Integer)
@@ -48,5 +47,5 @@ class ConversationHistory(Base):
     parent_message_id = Column(String, nullable=True)
     content =  Column(String) # text content of the message
     message_type = Column(Enum(MessageType), default=MessageType.UNKNOWN)
-    created_at = Column(DateTime, default=datetime.now())
+    created_at = Column(DateTime, server_default=func.now())
     conversation_type = Column(Enum(ConversationType), default=ConversationType.news_preference_survey)

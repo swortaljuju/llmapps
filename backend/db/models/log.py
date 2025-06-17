@@ -1,11 +1,10 @@
-from sqlalchemy import Column, Integer, String, DateTime, Interval
-from datetime import datetime
+from sqlalchemy import Column, Integer, String, DateTime, func
 from .base import Base
 
 class ApiLatencyLog(Base):
     __tablename__ = "api_latency_log"
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    created_at = Column(DateTime, default=datetime.now())
+    created_at = Column(DateTime, server_default=func.now())
     api_path = Column(String)
     total_elapsed_time_ms = Column(Integer)
     llm_input_token_count = Column(Integer)
@@ -16,7 +15,7 @@ class ApiLatencyLog(Base):
 class LlmUsageLog(Base):
     __tablename__ = "llm_usage_log"
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    created_at = Column(DateTime, default=datetime.now())
+    created_at = Column(DateTime, server_default=func.now())
     user_id = Column(Integer)
     llm_input_token_count = Column(Integer)
     llm_output_token_count = Column(Integer)

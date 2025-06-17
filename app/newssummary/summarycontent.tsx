@@ -23,11 +23,22 @@ interface SummaryContentProps {
 
 function getCurrentWeekStartDateStr(): string {
     const today = new Date();
-    return new Date(today.setDate(today.getDate() - today.getDay() + 1)).toISOString().slice(0, 10);
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-based, so add 1
+    const dayOfWeek = today.getDay();
+    today.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1)); // Set to the previous Monday
+    const day = String(today.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
 }
 
 function getTodayStr(): string {
-    return new Date().toISOString().slice(0, 10);
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-based, so add 1
+    const day = String(today.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
 }
 
 interface UiNewsSummaryItem extends NewsSummaryItem {
@@ -68,7 +79,9 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
                 if (selectedOptions.period_type === NewsSummaryPeriod.DAILY) {
                     return date !== TODAY_STR; // Remove 'Today' if it exists
                 } else if (selectedOptions.period_type === NewsSummaryPeriod.WEEKLY) {
-                    const dateObj = new Date(date + 'T00:00:00');
+                    var date_components = date.split('-');
+                    const dateObj = new Date();
+                    dateObj.setFullYear(parseInt(date_components[0]), parseInt(date_components[1]) - 1, parseInt(date_components[2]));
                     const dayOfWeek = dateObj.getDay();
                     return dayOfWeek === 1 && date !== CURRENT_WEEK_STR; // Keep only Mondays and remove 'Current Week'
                 }

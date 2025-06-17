@@ -216,6 +216,9 @@ def __get_existing_news_summary_entries(
             for summary in existing_summaries:
                 session.delete(summary)
                 session.flush()
+            return []
+        else:
+            return existing_summaries
     return []
 
 
