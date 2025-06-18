@@ -7,8 +7,9 @@ from fastapi import FastAPI, Request, HTTPException
 from routers import user_management, news_summary
 from utils.middleware import ApiLatencyLogMiddleware, DbLifeCycleMiddleware
 from utils.exceptions import ApiException, ApiErrorType, UserErrorCode
-from utils.logger import logger
+from utils.logger import logger, setup_logger
 
+setup_logger("fastapi")
 ### Create FastAPI instance with custom docs and openapi url
 app = FastAPI(docs_url="/api/py/docs", openapi_url="/api/py/openapi.json")
 

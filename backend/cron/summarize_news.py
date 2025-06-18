@@ -14,24 +14,13 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from db.db import get_sql_db
 from db.models import User, NewsChunkingExperiment, NewsPreferenceApplicationExperiment, NewsSummaryPeriod, UserTier
 from datetime import timedelta, date
-from loguru import logger
 from llm.news_summary_agent import summarize_news 
 from constants import SQL_BATCH_SIZE
 from datetime import datetime
 import asyncio
+from utils.logger import setup_logger, logger
 
-# Clear default handlers
-logger.remove()
-LOG_DIR = os.getenv("LOG_DIR", "/tmp/logs")
-os.makedirs(LOG_DIR, exist_ok=True)
-logger.add(
-    f"{LOG_DIR}/summarize_news.log",
-    rotation="1 day",
-    retention="30 days",
-    level=os.getenv("LOG_LEVEL", "INFO"),
-    compression="zip",
-    encoding="utf-8",
-)
+setup_logger("summarize_news")
 
 async def summarize_news_for_unlimited_users():
     sql_session = get_sql_db()

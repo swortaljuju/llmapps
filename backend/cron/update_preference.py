@@ -15,21 +15,10 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from db.db import get_sql_db
 from db.models import User, UserStatus
 import traceback
-from loguru import logger
 from llm.news_preference_agent import update_preference_based_on_clicked_news
+from utils.logger import logger, setup_logger
 
-logger.remove()
-LOG_DIR = os.getenv("LOG_DIR", "/tmp/logs")
-os.makedirs(LOG_DIR, exist_ok=True)
-logger.add(
-    f"{LOG_DIR}/update_preference.log",
-    rotation="1 day",
-    retention="30 days",
-    level=os.getenv("LOG_LEVEL", "INFO"),
-    compression="zip",
-    encoding="utf-8",
-)
-
+setup_logger("update_preference")
 
 def main():
     sql_client = get_sql_db()

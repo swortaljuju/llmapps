@@ -20,27 +20,17 @@ from sqlalchemy import func
 import random
 import xml.etree.ElementTree as ET
 import traceback
-from loguru import logger
 from constants import HTTP_HEADER_USER_AGENT, SQL_BATCH_SIZE
 from dateutil import parser
 from enum import Enum
 import time
 from cron.news_entry_embedding_backfill import backfill_embedding
 from utils.rss import get_atom_tag, is_valid_rss_type
+from utils.logger import setup_logger, logger
 
 
 # Clear default handlers
-logger.remove()
-LOG_DIR = os.getenv("LOG_DIR", "/tmp/logs")
-os.makedirs(LOG_DIR, exist_ok=True)
-logger.add(
-    f"{LOG_DIR}/crawl_news.log",
-    rotation="1 day",
-    retention="30 days",
-    level=os.getenv("LOG_LEVEL", "INFO"),
-    compression="zip",
-    encoding="utf-8",
-)
+setup_logger("crawl_news")
 
 UNLIMITED_USER_EMAILS = os.getenv("UNLIMITED_USER_EMAILS", "").split(",")
 LIMITED_USER_SIZE = 20
