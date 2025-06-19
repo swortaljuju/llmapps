@@ -73,6 +73,8 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
         period_type: NewsSummaryPeriod.WEEKLY,
     });
 
+    const [isOptionsVisible, setIsOptionsVisible] = useState(true);
+
     const filterAvailableStartDate = () => {
         if (startDateList) {
             const tempStartDateList = startDateList.filter(date => {
@@ -282,57 +284,65 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
 
             {/* Bottom Panel: Options and Buttons */}
             <div className="p-4 border-t">
-                <div className="flex flex-row items-center gap-10">
-                    {/* Option Pickers */}
-                    <div className="mb-4">
-                        <label className="block text-lg font-bold text-gray-700">Summarization Strategy</label>
-                        <select
-                            className="mt-1 block w-full rounded-md border-gray-300 text-lg shadow-sm bg-white h-12 text-center focus:border-indigo-500 focus:ring-indigo-500"
-                            value={selectedOptions?.news_chunking_experiment}
-                            onChange={e => handleOptionChange('news_chunking_experiment', e.target.value)}
-                        >
-                            <option value={NewsChunkingExperiment.AGGREGATE_DAILY}>Aggregate Daily</option>
-                            <option value={NewsChunkingExperiment.EMBEDDING_CLUSTERING}>Cluster by Content</option>
-                        </select>
-                    </div>
+                <button
+                    onClick={() => setIsOptionsVisible(!isOptionsVisible)}
+                    className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mb-4"
+                >
+                    {isOptionsVisible ? 'Hide Options' : 'Show Options'}
+                </button>
+                {isOptionsVisible && (
+                    <div className="flex flex-wrap gap-10">
+                        {/* Option Pickers */}
+                        <div className="mb-4">
+                            <label className="block text-lg font-bold text-gray-700">Summarization Strategy</label>
+                            <select
+                                className="mt-1 block w-full rounded-md border-gray-300 text-lg shadow-sm bg-white h-12 text-center focus:border-indigo-500 focus:ring-indigo-500"
+                                value={selectedOptions?.news_chunking_experiment}
+                                onChange={e => handleOptionChange('news_chunking_experiment', e.target.value)}
+                            >
+                                <option value={NewsChunkingExperiment.AGGREGATE_DAILY}>Aggregate Daily</option>
+                                <option value={NewsChunkingExperiment.EMBEDDING_CLUSTERING}>Cluster by Content</option>
+                            </select>
+                        </div>
 
-                    <div className="mb-4">
-                        <label className="block text-lg font-bold text-gray-700">Apply Preference</label>
-                        <select
-                            className="mt-1 block w-full rounded-md border-gray-300 text-lg shadow-sm bg-white h-12 text-center focus:border-indigo-500 focus:ring-indigo-500"
-                            value={selectedOptions?.news_preference_application_experiment}
-                            onChange={e => handleOptionChange('news_preference_application_experiment', e.target.value)}
-                        >
-                            <option value={NewsPreferenceApplicationExperiment.APPLY_PREFERENCE}>Use Preference</option>
-                            <option value={NewsPreferenceApplicationExperiment.NO_PREFERENCE}>No Preference</option>
-                        </select>
-                    </div>
+                        <div className="mb-4">
+                            <label className="block text-lg font-bold text-gray-700">Apply Preference</label>
+                            <select
+                                className="mt-1 block w-full rounded-md border-gray-300 text-lg shadow-sm bg-white h-12 text-center focus:border-indigo-500 focus:ring-indigo-500"
+                                value={selectedOptions?.news_preference_application_experiment}
+                                onChange={e => handleOptionChange('news_preference_application_experiment', e.target.value)}
+                            >
+                                <option value={NewsPreferenceApplicationExperiment.APPLY_PREFERENCE}>Use Preference</option>
+                                <option value={NewsPreferenceApplicationExperiment.NO_PREFERENCE}>No Preference</option>
+                            </select>
+                        </div>
 
-                    <div className="mb-4">
-                        <label className="block text-lg font-bold text-gray-700" title="The period during which news are summarized">Period Type</label>
-                        <select
-                            className="mt-1 block w-full rounded-md border-gray-300 text-lg shadow-sm bg-white h-12 text-center focus:border-indigo-500 focus:ring-indigo-500"
-                            value={selectedOptions?.period_type}
-                            onChange={e => handleOptionChange('period_type', e.target.value)}
-                        >
-                            <option value={NewsSummaryPeriod.DAILY}>Daily</option>
-                            <option value={NewsSummaryPeriod.WEEKLY}>Weekly</option>
-                        </select>
-                    </div>
+                        <div className="mb-4">
+                            <label className="block text-lg font-bold text-gray-700" title="The period during which news are summarized">Period Type</label>
+                            <select
+                                className="mt-1 block w-full rounded-md border-gray-300 text-lg shadow-sm bg-white h-12 text-center focus:border-indigo-500 focus:ring-indigo-500"
+                                value={selectedOptions?.period_type}
+                                onChange={e => handleOptionChange('period_type', e.target.value)}
+                            >
+                                <option value={NewsSummaryPeriod.DAILY}>Daily</option>
+                                <option value={NewsSummaryPeriod.WEEKLY}>Weekly</option>
+                            </select>
+                        </div>
 
-                    <div className="mb-4">
-                        <label className="block text-lg font-bold text-gray-700">Period start date</label>
-                        <select
-                            className="mt-1 block w-full rounded-md border-gray-300 text-lg shadow-sm bg-white h-12 text-center focus:border-indigo-500 focus:ring-indigo-500"
-                            value={periodStartDate}
-                            onChange={e => setPeriodStartDate(e.target.value)}
-                        >
-                            {availableStartDateList.map(date => (
-                                <option key={date} value={date}>{date}</option>
-                            ))}
-                        </select>
+                        <div className="mb-4">
+                            <label className="block text-lg font-bold text-gray-700">Period start date</label>
+                            <select
+                                className="mt-1 block w-full rounded-md border-gray-300 text-lg shadow-sm bg-white h-12 text-center focus:border-indigo-500 focus:ring-indigo-500"
+                                value={periodStartDate}
+                                onChange={e => setPeriodStartDate(e.target.value)}
+                            >
+                                {availableStartDateList.map(date => (
+                                    <option key={date} value={date}>{date}</option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
-                </div>
+                )}
                 {/* Buttons */}
                 <div className="flex gap-4 mt-4">
                     <button
