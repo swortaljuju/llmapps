@@ -60,7 +60,7 @@ class NewsSummaryUiMode(Enum):
 class ApiNewsSummaryEntry(BaseModel):
     id: int
     title: str
-    content: str
+    content: Optional[str] = None
     expanded_content: Optional[str] = None
     reference_urls: list[str] = []
     display_order: int = 0
