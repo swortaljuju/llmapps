@@ -14,16 +14,16 @@ It includes the following apps:
     - [👤 User Flow](#user-flow)
     - [🏗️ System Architecture](#system-architecture)
     - [🗄️ Database Schema](#database-schema-design)
-  - [🔍 Detailed Solution and Challenges](#detailed-solution-and-challenges)
+  - [🔍 Detailed Solutions](#detailed-solution-and-challenges)
     - [🔗 Langchain vs Simple Proxy](#langchain-vs-simple-proxy)
     - [📝 Summary Generation Agent](#summary-generation-agent)
     - [📚 News Research Agent](#news-research-agent)
-  - [📊 Agent Evaluation](#news-summary-agent-and-research-agent-evaluation)
+  - [📊 Agent Evaluation](#agent-evaluation)
   - [🚀 Future Improvement](#future-improvement)
 
 ---
 
-# 🛠️ Tech Stack
+# Tech Stack
 - **Frontend:** NextJs + custom ExpressJs server + Tailwind CSS  
   - Avoid server components to simplify client-side state interaction logic.  
   - Use server components only when components are mostly independent (e.g., signin/signup page vs news summary app page).  
@@ -41,14 +41,14 @@ It includes the following apps:
 
 ---
 
-# 📰 News Summary LLM App
+# News Summary LLM App
 
-## ❓ Problem to Solve
+## Problem to Solve
 Every day, countless news articles are generated from various sources. Many are duplicates or irrelevant to individual interests. Additionally, people often lack time to read the news but still want to stay informed about trends. This app addresses these challenges by leveraging LLM technology to summarize and research news effectively.
 
 ---
 
-## 🌟 Major Features and Demo
+## Major Features and Demo
 - **RSS Subscription:** Users can subscribe to RSS channels.  
 - **Daily News Crawl:** Automatically crawls news entries from RSS channels daily.  
 - **Preference Survey:** LLM surveys users to understand their news preferences.  
@@ -69,9 +69,9 @@ Every day, countless news articles are generated from various sources. Many are 
 
 ---
 
-## 📈 High-Level Design
+## High-Level Design
 
-### 👤 User Flow
+### User Flow
 ```mermaid
 flowchart LR
     A[User Signup] --> B[Upload RSS subscriptions]
@@ -104,7 +104,7 @@ flowchart LR
 
 ---
 
-### 🏗️ System Architecture
+### System Architecture
 ```mermaid
 flowchart TD
     A[User] --> B(React Frontend App)
@@ -122,7 +122,7 @@ flowchart TD
 
 ---
 
-### 🗄️ Database Schema Design
+### Database Schema Design
 ```mermaid
 flowchart TD
   A[User] --> B[NewsPreferenceVersion]
@@ -155,9 +155,9 @@ flowchart TD
 
 ---
 
-## 🔍 Detailed Solution and Challenges
+## Detailed Solutions
 
-### 🔗 Langchain vs Simple Proxy
+### Langchain vs Simple Proxy
 I decided to use Gemini as primary LLM model because its large context window and cheap price is suitable for news summary app's use case where the input token size (all news entries from different channels in a week) is huge. But I also want to have the flexibility to switch to different LLM model in the future or use different LLM models for different tasks. Therefore I need a proxy to the LLM model. 
 
 At the very beginning, I picked Langchain as my proxy. But then I switched to develop my own simple LLM proxy. See [LLM client proxy](backend/llm/client_proxy.py). The main reasons are:
@@ -169,7 +169,7 @@ At the very beginning, I picked Langchain as my proxy. But then I switched to de
 
 ---
 
-### 📝 Summary Generation Agent
+### Summary Generation Agent
 [News summary agent](backend/llm/news_summary_agent.py)
 **Pseudo Code:** 
 ```pseudo
@@ -240,7 +240,7 @@ Gemini only allows 8k token output for each call. If structured output is provid
 
 ---
 
-### 📚 News Research Agent
+### News Research Agent
 [News research agent](backend/llm/news_research_agent.py)
 This agent is implemented with React prompt and RAG algorithm. 
 ```mermaid
@@ -266,12 +266,12 @@ The news research agent has 3 optional tools to call. Sometimes Gemini api doesn
 
 ---
 
-### 📊 Agent Evaluation
+### Agent Evaluation
 See [detailed analysis](backend/llm/evaluation/analysis.md)
 
 ---
 
-## 🚀 Future Improvement
+## Future Improvement
 - Reduce news summarization and news research latency by improving llm call and function call parallelism
 - Further tune summarization prompt to generate more abstract summary
 - Use docker and k8s at the very beginning of the project for large scale deployment.
