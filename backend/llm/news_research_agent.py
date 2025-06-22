@@ -46,6 +46,7 @@ __system_prompt = """
     ... (this Thought/Action/Observation can repeat N times)
     Final Answer: the final answer to the original input question. 
     You can put at most 5 reference URL links in the final answer.
+    You must mark the final answer with "Final Answer: " and then the answer text.
 
     Begin!
     
@@ -126,20 +127,20 @@ def __search_terms(
 
 class ExpandNewsUrl(BaseModel):
     """
-    Expand the news URL to get summarized content of the news article.
+    Expand the news URLs to get summarized content of the news article.
     You MUST use this API when you want to dig into detailed content in URL.
     """
 
-    url: str = Field(
-        description="news URL to expand",
+    url_list: list[str] = Field(
+        description="news URL list to expand",
     )
 
 
 async def __expand_news_url(
     llm_tracker: LlmTracker,
-    url: str,
+    url_list: list[str],
 ) -> str:
-    return await crawl_and_summarize_url(url=[url], llm_tracker=llm_tracker)
+    return await crawl_and_summarize_url(url_list=url_list, llm_tracker=llm_tracker)
 
 
 TEXT_SEARCH_RESPONSE_TEMPLATE = """
@@ -313,6 +314,7 @@ async def __answer_question_in_react_mode(
     tracker = LlmTracker(user_id)
     tracker.start()
     logger.info("question answering react agent starts.")
+    empty_response_count = 0
     while len(react_intermediate_messages) < MAX_REACT_MESSAGES:
         response_llm_messages = await llm_client.generate_content_async(
             prompt=react_intermediate_messages,
@@ -327,6 +329,22 @@ async def __answer_question_in_react_mode(
         logger.info(
             f"LLM response messages: {response_llm_messages}"
         )
+        if response_llm_messages:
+            empty_response_count = 0
+        else:
+            empty_response_count += 1
+            if empty_response_count >= 3:
+                logger.warning(
+                    "LLM response is empty for 3 consecutive times, stopping the loop."
+                )
+                last_message = react_intermediate_messages[-1]
+                tracker.end()
+                if  last_message == LlmMessageType.AI and last_message.text_content:
+                    # If the last message is AI and has text content, return it
+                    return last_message.text_content
+                raise ValueError(
+                    "LLM response is empty for 3 consecutive times, no final answer generated."
+                )
         # Remove previous function responses
         while (
             react_intermediate_messages[-1].type == LlmMessageType.FUNCTION_RESPONSE
@@ -399,10 +417,10 @@ async def __call_function_for_llm(
                 period=period,
             )
         elif function_call_message.name == "ExpandNewsUrl":
-            url = function_call_message.args.get("url", "")
+            url_list = function_call_message.args.get("url_list", "")
             expand_response = await __expand_news_url(
                 llm_tracker=llm_tracker,
-                url=url,
+                url_list=url_list,
             )
             if not expand_response:
                 raise ValueError("Expanded response is empty.")
