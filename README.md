@@ -273,5 +273,4 @@ See [detailed analysis](backend/llm/evaluation/analysis.md)
 
 ## Future Improvement
 - Reduce news summarization and news research latency by improving llm call and function call parallelism
-- Further tune summarization prompt to generate more abstract summary
 - Use docker and k8s at the very beginning of the project for large scale deployment.

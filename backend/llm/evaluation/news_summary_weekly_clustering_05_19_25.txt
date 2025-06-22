@@ -1,116 +1,45 @@
-Title: Bitcoin Hits New Record High Amid Stablecoin Bill Progress and Trump's Crypto Engagement\Content: Bitcoin's price surged to a new high, surpassing $109,400, driven by the advancement of a stablecoin bill and Trump's increasing involvement with the crypto community, including hosting a dinner for meme coin holders. The crypto market is anticipating further gains with potential regulatory tailwinds and continued institutional buying. - **Bitcoin Reaches Record High:** Bitcoin hit a new all-time high of $109,400 as a Stablecoin bill advances.
-- **Trump's Crypto Engagement:**  President Trump will host a dinner for meme coin holders.
-- **Regulatory Tailwinds and Institutional Buying:** Regulatory tailwinds, persistent ETF and corporate buying, and Fed rate decisions are setting the crypto market up for an eventful next few months.
-- **White House Support for Stablecoins:**  Trump’s top crypto advisor, David Sacks, says the administration’s stablecoin bill is poised to pass with bipartisan support.
+Category: AI and Technology; Title: OpenAI to Acquire Jony Ive's AI Hardware Startup for $6.4 Billion; Content: OpenAI is set to acquire io, the AI hardware startup led by former Apple designer Jony Ive, for approximately $6.4 billion to create AI-integrated hardware and revolutionize user interaction with AI technology. OpenAI CFO is confident the bet on Jony Ive's startup will drive ChatGPT subscriptions.;
 
-Title: Ethical Concerns Rise as Gork, Musk's AI Chatbot, Spouts 'White Genocide' Theories\Content: Elon Musk's AI chatbot, Grok, has been criticized for generating responses about fictional South African “white genocide” when prompted with completely unrelated queries, raising questions about biases potentially incorporated into the product. Reference urls' contents:Elon Musk’s AI tool Grok has gone a on a bizarre bender where it’s spewing answers about fictional South African “white genocide” to completely unrelated queries, raising questions of whether Musk’s crackpot racism is baked into the product.
+Category: AI and Technology; Title: Anthropic Launches Claude 4, Its Most Powerful AI Model Yet; Content: Anthropic, backed by Amazon, has released Claude 4, its most advanced AI model, aimed at enhancing AI capabilities across various applications.;
 
-Title: SAG-AFTRA Files Complaint Against Epic Games Over AI Darth Vader in Fortnite\Content: SAG-AFTRA has filed an unfair labor complaint against Epic Games for using an AI to mimic James Earl Jones' Darth Vader voice in Fortnite without bargaining with the union. This action is separate from the ongoing video game voice actor strike, where AI usage is a key issue. Reference urls' contents:
-*theverge.com: SAG-AFTRA has filed an unfair labor complaint against Epic Games over Fortnite’s AI Darth Vader.
-*sagaftra.org: SAG-AFTRA Statement on Fortnite's Use of AI Darth Vader Voice and ULP Filing
+Category: AI and Technology; Title: Nvidia Announces New Tech to Keep It at the Center of AI Development; Content: Nvidia CEO Jensen Huang revealed new products and technologies aimed at maintaining the company's lead in AI computing, including new plans for Chinese AI researchers.;
 
-Title: Trump's Proposed Tax Bill Impacts Clean Energy and EV Markets\Content: The House has approved President Trump's tax bill, which includes the repeal of several Inflation Reduction Act (IRA) EV incentives, causing clean energy stocks to decline.  The bill also accelerates the sunset of tax credits, impacting solar power and clean energy investments. - **EV Incentives Repealed:** The House of Representatives approved President Trump's tax bill, which would repeal several IRA EV incentives.
-- **Clean Energy Stock Decline:** Solar power and other clean-energy stocks sold off after the House passed a tax bill that moves up the sunset of tax credits.
-- **Negative Impact on Clean Energy:** The Republican legislation takes a "sledgehammer" to the Inflation Reduction Act, according to Jefferies.
+Category: AI and Technology; Title: AI-Driven Tools and Frameworks for Developers; Content: Several new AI-driven tools and frameworks are emerging to assist developers, including Microsoft's GitHub AI agent, Azure Logic Apps' 'Agent Loop', Google Colab's AI-first version with Gemini 2.5 Flash, and Spring AI 1.0.;
 
-Title: Nvidia Plans to Sell Hybrid AI Systems with Competitor Chips, Intel Gains Slot in Nvidia's AI System\Content: Nvidia intends to offer semicustom AI systems that incorporate CPUs and AI chips from rival companies.  Intel's latest server CPU has been selected for Nvidia's DGX B300 AI computer. - **Nvidia's Hybrid Systems:** Nvidia plans to sell semicustom AI systems that use central processing units and AI chips from competitors.
-- **Intel's Gain:** One of Intel's latest central processing units for servers landed a spot in Nvidia's DGX B300 AI computer.
+Category: AI and Technology; Title: Google I/O 2025: AI-First Innovations; Content: Google I/O 2025 was heavily focused on AI, showcasing new models, tools, and integrations across Google platforms, including Gemini AI model enhancements, new AI-powered tools for developers, advancements in on-device AI, and the introduction of Google Beam.;
 
-Title: Half of Hong Kong organisations audited by watchdog collect personal data using AI\Content: Office of the Privacy Commissioner for Personal Data says most of the organisations have contingency plans for data breaches. 
+Category: AI and Technology; Title: AI Ethics and Concerns; Content: Ethical concerns surrounding AI continue to grow, with discussions on bias, security, and potential misuse. Researchers find Grok 3 has gone on a bizarre bender and raise concerns about Musk's crackpot racism being baked into the product. A study reveals that just 20 cloud images can make an AI deepfake video of your child, raising privacy concerns.;
 
-Title: After decades in Australia, Chinese expert Zhang Chengqi returns to teach AI in Shenzhen\Content: Zhang’s rural roots and social circumstances delayed university entry, but once admitted he was among the first in China to study AI in 1980s. Zhang Chengqi, a Chinese expert who spent decades in Australia, has returned to Shenzhen to teach AI. Zhang was among the first in China to study AI in the 1980s.
+Category: AI and Technology; Title: Microsoft Says 394,000 Windows Computers Infected by Lumma Malware Globally; Content: Microsoft reports that nearly 400,000 Windows computers worldwide have been infected by Lumma malware, which is used to steal sensitive information like passwords and crypto wallets.;
 
-Title: Microsoft says emails with 'Gaza,' 'Palestine,' or 'genocide' won't send\Content: Microsoft has seen a growing number of protests at recent events over the Israeli military's use of the company's AI products. 
+Category: AI and Technology; Title: Mountain View Company May Be Using Emails to Train Its AI; Content: Concerns are growing in the South Bay that a local company may be using technology to train its AI on emails residents might have sent in the past.;
 
-Title: Citigroup Enhances Operations with AI in Hong Kong, Consolidates Asia IB\Content: Citigroup is launching AI-powered tools in Hong Kong to streamline operations and has consolidated its Asian investment banking units to improve regional deal-making. - **AI Implementation:** Citigroup launches AI-powered tools in Hong Kong to streamline internal operations and improve efficiency.
-- **Asian Consolidation:**  GS merges three Asian IB units to streamline regional deal-making and optimize capital market strategies.
+Category: AI and Technology; Title: Alibaba and DeepSeek’s Home Province Launches AI Spending Spree to Become Innovation Hub; Content: The Zhejiang government plans to invest billions of yuan through 2027 to bolster AI companies and attract top talent, aiming to establish the region as a leading AI innovation hub.;
 
-Title: AI Reshaping Cyber Defense; Palo Alto Executive Highlights Trends\Content: An executive at Palo Alto Networks discusses how AI is transforming cybersecurity and creating an arms race between cyber defenders and attackers. Reference URLs Summary:
-- investors.com: Artificial intelligence is reshaping cybersecurity and fueling a high-stakes arms race between cyber defenders and sophisticated attackers.
+Category: AI and Technology; Title: Jacobs & NVIDIA Partner for AI Factory Digital Twins Blueprint; Content: Jacobs and Nvidia have formed a partnership to create digital twins of AI factories, advancing the development and optimization of AI infrastructure.;
 
-Title: Microsoft Stock Receives Bullish Notes on AI Agents After Build Conference\Content: Following the Microsoft Build conference, several Wall Street analysts issued positive reports on Microsoft stock, particularly highlighting the company's advancements in AI agents. Reference URLs Summary:
-- investors.com: Several Wall Street analysts issued bullish reports on Microsoft stock after the company's Build conference earlier this week.
+Category: AI and Technology; Title: Nvidia CEO says Chinese AI researchers are 'world class'; Content: Nvidia CEO Jensen Huang said US AI companies are being "sensible" by hiring Chinese researchers.;
 
-Title: Top AI Stocks to Consider for Portfolio Returns\Content: Microsoft (MSFT), Cognizant (CTSH), and Lam Research (LRCX) are highlighted as AI stocks poised to benefit from AI's increasing usage and ability to tackle complex problems. Reference URLs Summary:
-- zacks.com: Here, we have picked three AI stocks, MSFT, CTSH and LRCX, which are well poised to benefit from AI's growing usage and ability to solve complex problems.
+Category: AI and Technology; Title: Waymo Gets Green Light for Driverless Taxis in San José; Content: Waymo's driverless taxis will soon be able to operate in San José and other South Bay cities after a state regulator approved the expansion, reaching 10 million robotaxi trips.;
 
-Title: Google I/O 2025: AI-Driven Updates Dominate Across Platforms\Content: Google's I/O 2025 showcased a heavy focus on AI integration across its products: 
+Category: AI and Technology; Title: Baidu’s Robotaxi Service Completes 11 Million Rides as Company Beats Earnings Expectations; Content: Baidu's robotaxi service has completed 11 million rides, driven by expansion and AI growth, which contributed to exceeding profit expectations in the first quarter.;
 
-*   **Gemini AI:** Expanded availability of AI Mode in Search, new reasoning mode for Gemini 2.5 Pro, and integration of Gemini with Chrome for summarizing and navigating webpages.
-*   **Android XR:** A more thorough look at how to use Android XR glasses with smart features. Partnerships with Samsung and eyewear makers Warby Parker and Gentle Monster were also announced.
-*   **New AI Tools:** Google announced Flow, an AI filmmaking tool using Veo 3, and introduced the Imagen 4 image generator with better text rendering. Google also unveiled SynthID Detector to identify AI-generated content made with Google AI.
-*   **Google Workspace:** New features in Google Workspace include personalized smart replies in Gmail and AI avatars in Google Vids. Reference urls' contents:
-*Wired.com: This article summarizes the key announcements from Google I/O 2025, focusing on AI-driven updates to Android XR mixed-reality glasses, the search experience, and Gemini's agentic capabilities.
-*developers.googleblog.com: This blog post highlights the key announcements from Google I/O 2025, focusing on tools, APIs, and features for enhancing developer productivity and creating AI-powered experiences with Gemini, Android, Firebase, and web technologies.
-*cnbc.com: Google launched Veo 3, an AI video generator that can also create and incorporate audio.
+Category: US Politics and Economy; Title: Trump's Tariff Threats and Trade War; Content: Trump's administration is escalating trade tensions with threats of new tariffs on the EU and iPhones, causing market volatility and concerns about rising consumer prices.;
 
-Title: OpenAI Acquires Jony Ive's AI Hardware Startup, Setting Stage for New Devices\Content: OpenAI is acquiring Jony Ive's hardware startup, io, in a $6.4 billion deal, signaling a push into AI-powered hardware: 
+Category: US Politics and Economy; Title: Justin Sun Emerges as Donald Trump Memecoin's Top Holder; Content: Justin Sun has become the largest holder of the Trump-themed $TRUMP meme token, securing a spot at a private dinner with the former president. Tron's Sun sees the President fueling a new American crypto boom.;
 
-*   **New Hardware Division:**  Ive will lead a new hardware division at OpenAI, with initial products expected in 2026.
-*   **Altman's Vision:** Sam Altman aims to create a new generation of AI-powered computers and sees Ive as a key partner in this endeavor.
-*   **Industry Impact:** The move positions OpenAI to compete directly with tech giants like Apple and Google in the AI hardware space. Reference urls' contents:
-*cnbc.com: OpenAI said Wednesday that it's acquiring Jony Ive's artificial intelligence devices startup io for about $6.4 billion.
-*wired.com: Io, a firm Ive and Sam Altman cocreated, will now merge with OpenAI.
-*marketwatch.com: This article discusses OpenAI's acquisition of Jony Ive's AI device startup.
+Category: US Politics and Economy; Title: Trump-Putin Call and Ukraine War; Content: Trump spoke with Putin regarding the Ukraine war, suggesting immediate ceasefire negotiations and emphasizing that the US should not be involved, causing consternation among Ukraine and its European allies. Trump’s position appears to favor Russia, and he may be stepping away from involvement.;
 
-Title: Google's AI-Powered Shopping Tools and Virtual Try-Ons\Content: Google is enhancing its shopping experience with AI, including:
+Category: US Politics and Economy; Title: US Should Never Have Gotten 'Entangled' In Ukraine 'Death Trap': Trump; Content: President Trump says the US should never have intervened in Ukraine, blasting his predecessor for investing billions in arms and aid, calling it a “death trap.”;
 
-*   **Virtual Try-On:**  Users can upload photos to see how clothes look on them virtually.
-*   **AI Mode Integration:** AI Mode will feature buy-for-me options.
-*   **Expanded Access:**  AI Mode is being rolled out to all users in the United States. Reference urls' contents:
-*9to5google.com: Google just announced a new AI mode for shopping with two big new features: AI model virtually buys items for users.
-*axios.com: Google upgrades AI tools for shopping.
-*wired.com:  Google’s new chatbot-style AI Mode search experience, previously an experiment, is launching for US users. Publishers and marketers will have to adjust their search strategies once again.
+Category: US Politics and Economy; Title: Trump unveils plans for 'Golden Dome' missile defense system; Content: President Trump has announced plans to build a $175 billion ‘Golden Dome’ missile defense system, drawing inspiration from Israel’s Iron Dome. He picks US Space Force General Michael Guetlein to lead the ambitious missile shield programme involving a network of satellites.;
 
-Title: Nvidia's AI Dominance: New Tech and AMD Challenge\Content: Nvidia continues to solidify its position in the AI computing landscape:
-* Nvidia CEO Jensen Huang revealed new products, with the goal of sustaining its leadership in AI computing.
-* AMD is officially announcing its Radeon RX 9060 XT GPU at Computex today, challenging Nvidia’s RTX 5060. Reference urls' contents:
-*cnbc.com: Nvidia CEO Jensen Huang revealed new products, aiming to sustain its leadership in AI computing.
-*theverge.com: AMD is officially announcing its Radeon RX 9060 XT GPU at Computex today. Like the number implies, this graphics card will challenge Nvidia’s recently released RTX 5060.
-*investing.com: This article discusses Nvidia's bets on the future of AI.
+Category: East Asia and International Relations; Title: Europe-Japan Sixth-Generation Fighter Jet Races to Keep Pace with China; Content: Europe and Japan are collaborating on a sixth-generation fighter jet to counter future threats and maintain a technological edge over China's military advancements.;
 
-Title: Microsoft Build Conference Showcases AI Agents and Rust Commitment\Content: Microsoft's Build developer conference highlighted AI agents and the company's growing commitment to Rust:
+Category: East Asia and International Relations; Title: China Makes World’s First 5G Satellite-to-Phone Video Call; Content: China has achieved a technological milestone by conducting the world's first 5G satellite-to-phone video call, although regulatory and technological challenges remain for widespread adoption.;
 
-*   **AI Agents:** The conference focused on the "explosion" of AI agents, with OpenAI CEO Sam Altman discussing the future of AI coding.
-*   **Rust Adoption:** Microsoft CTO detailed the company's successes, challenges, and commitment to Rust, including using AI to accelerate migration from C/C++ to Rust. Reference urls' contents:
-*businessinsider.com: Microsoft's big event was all about the 'explosion' of AI agents, with OpenAI CEO Sam Altman joining to talk about the future of AI coding.
-*infoq.com: Mark Russinovich, Chief Technology Officer for Microsoft Azure, delved in a recent talk at Rust Nation UK into the factors driving Rust adoption, providing concrete examples of Rust usage in Microsoft products, and detailing ongoing efforts to accelerate the migration from C/C++ to Rust at Microsoft by leveraging generative AI.
-*investors.com: Microsoft announced new AI software agents capable of performing more complex tasks at its Build conference in Seattle.
+Category: East Asia and International Relations; Title: Taiwan, China, and Regional Geopolitics; Content: - Taiwan government expresses caution on exporting advanced tech; considers its chip manufacturing power a 'silicon shield' against Chinese aggression. Taiwan President calls for democratic nations like US and Japan to develop 'non-red' supply chains to counter China.;
 
-Title: AI Threatens News Publishers as Google Expands AI Mode\Content: News publishers are criticizing Google's expanded AI Mode in Search:
+Category: Bay Area Local News; Title: Barbara Lee, Sworn In as Oakland’s Mayor, Says ‘Today Marks a New Era’; Content: The former congresswoman faces no shortage of challenges as Oakland’s mayor, including a budget crisis, stubbornly high rates of crime and homelessness, and insufficient housing.;
 
-*   **Theft of Content:** The News/Media Alliance calls AI Mode "theft," depriving publishers of traffic and revenue.
-*   **Opt-Out Only:** Google decided against asking publishers for permission to use their content in AI features, requiring them to opt-out completely.
-*   **Impact on Traffic:** Links, a key source of traffic for publishers, are diminished in the AI-generated interface. Reference urls' contents:
-*theverge.com: The trade association backing some of the biggest news publishers in the US slammed Google’s newly expanded AI Mode, which trades traditional search results for an AI chatbot-like interface.
-*9to5google.com: The AI takeover of Search is in full swing, especially as Google’s new AI Mode is going live for all US users. But for publishers, this continues the existential crisis around how Google Search is changing, with a new statement calling AI Mode “the definition of theft” while legal documents reveal that Google did consider opt out controls that ultimately weren’t implemented.
-*nbcbayarea.com: Google on Tuesday unleashed another wave of artificial intelligence technology to accelerate a year-old makeover of its search engine that is changing the way people get information and curtailing the flow of internet traffic to websites.
-
-Title: AI Powers New Tools for Developers:  Codex, GitHub Copilot, Windsurf SWE-1\Content: New AI-powered tools are emerging to assist software engineers:
-
- * **OpenAI Codex**:  A cloud-based software engineering agent designed to automate common development tasks such as writing code, debugging, testing, and generating pull requests.
- * **GitHub Copilot**:  An artificial intelligence programming tool will be more visible in GitHub, and will accept assignments just like any other coder on the team.
-*   **Windsurf SWE-1**:  SWE-1 models aim to support a range of software engineering tasks, not limited to code generation. Reference urls' contents:
-*infoq.com: OpenAI has launched Codex, a research preview of a cloud-based software engineering agent designed to automate common development tasks such as writing code, debugging, testing, and generating pull requests.
-*cnbc.com:  The GitHub Copilot for artificial intelligence programming will be more visible in GitHub. It will accept assignments just like any other coder on the team.
-*infoq.com: Windsurf has introduced its first set of SWE-1 models, aimed at supporting the full range of software engineering tasks, not limited to code generation.
-
-Title: Data Services Analyze Children's Images, Raising Deepfake Concerns\Content: Experts warn that just 20 cloud images of a child can be used to create an AI deepfake video, raising privacy concerns as nearly half of parents are unaware that data services like Apple's iCloud analyze their kids' images. Reference urls' contents: A new study reveals nearly half of parents are unaware that data services like Apple's iCloud analyze their kids' images, raising privacy concerns over AI deepfakes.
-
-Title: AI-Generated Voice Clones Used for Malicious Purposes\Content: Concerns grow over AI voice cloning being utilized in malicious activities:
-* A gaming YouTuber reports their AI-generated clone is being used without permission to narrate videos, highlighting the risk of AI-driven plagiarism.
-* Scammers are now using AI to impersonate government officials in vishing scams, increasing the sophistication and believability of fraud attempts. Reference urls' contents:
-*wired.com: Mark Brown, who posts game explainers to his Game Maker’s Toolkit channel, says his persona has been plagiarized.
-*lifehacker.com:  These videos are going to trick you, Google’s AI Boss Says Gemini's New Abilities Point the Way to AGI.
-*lifehacker.com: Don't fall for this "vishing" scam.
-
-Title: UK to sign Chagos deal with Mauritius amid concerns over China's influence, with Chagos deal\Content: The UK and Mauritius have signed a multi-billion pound deal for the Chagos Islands, maintaining a key US and UK military base on the island of Diego Garcia for 99 years. The UK has signed a multi-billion pound agreement with Mauritius for the Chagos Islands, securing a 99-year extension for the US and UK military base on Diego Garcia.  The UK has stated that it believes China sought to undermine this agreement.
-
-
-Title: China’s Effort to Build a Competitor to Elon Musk's Starlink Is Off to a Bumpy Start\Content: China has launched over 100 satellites for two broadband networks that could eventually rival the service from Elon Musk's SpaceX, but progress is hampered by launch bottlenecks and high failure rates. China's effort to compete with Starlink is facing challenges due to launch bottlenecks and high failure rates, despite launching over 100 satellites for two broadband networks.
-
-Title: Half of Hong Kong organisations audited by watchdog collect personal data using AI\Content: Office of the Privacy Commissioner for Personal Data says most of the organisations have contingency plans for data breaches. 
-
-Title: Hong Kong Passes Stablecoin Law to Regulate Issuers\Content: Hong Kong has passed a stablecoin law to establish a regulatory regime for licensed issuers to sell to the public, aiming for a 'risk-based, pragmatic, and flexible' framework with public protection in mind. - **Stablecoin Legislation:** Hong Kong passes stablecoin law, clearing the way for licensed issuers to sell to the public.
-- **Regulatory Regime:** The law sets up a ‘risk-based, pragmatic, and flexible regulatory regime’ with public protection in mind.
-- **Ongoing Efforts:** Hong Kong has been working on establishing a stablecoin regime since 2023.
+Category: Financial Markets; Title: Why Top Hedge Funds Loaded Up on Broadcom During Its Q1 Pullback; Content: Why Top Hedge Funds Loaded Up on Broadcom During Its Q1 Pullback;

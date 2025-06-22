@@ -1,59 +1,67 @@
-Title: As India-Pak Tensions 'Ease', Here Are The Countries Holding The World's Nuclear Arsenal\Content: Following recent tensions and a ceasefire, India and Pakistan each hold around 170 nuclear warheads. Globally, Russia and the U.S. possess the largest nuclear arsenals, with smaller stockpiles held by other nations. 
+Category: US Politics; Title: Supreme Court Hears Arguments on Trump's Birthright Citizenship Policy; Content: - The Supreme Court is considering the legality of President Trump's executive order seeking to eliminate birthright citizenship for children born in the US to parents not legally in the country.
+- Justices debated whether a single district court should have the power to freeze an entire federal policy nationwide.
+- Concerns were raised about the potential for thousands of children to be denied citizenship while the legal process plays out.;
 
-Title: Trump Administration's Middle East Diplomacy: Audacious Moves and Reactions\Content: President Trump's recent foreign policy moves in the Middle East, including meeting with Syrian President Ahmed al-Sharaa and a potential nuclear deal with Iran, have drawn varied reactions. These actions break from traditional diplomatic norms, generating awe and concern among Biden administration veterans. The new approach involves direct talks with adversaries and surprising alliances, reflecting Trump's transactional style. The potential nuclear deal with Iran is progressing with written proposals exchanged, while the U.S. is normalizing relations with Syria. However, these moves have also led to concerns about excluding Israel and potentially destabilizing regional dynamics. Reference URLs Summaries:
-- Axios: The Trump administration's unorthodox Middle East policies, including engaging with Syrian President Ahmed al-Sharaa and pursuing a nuclear deal with Iran, have surprised and impressed some Biden officials due to their boldness and speed.
-- Axios: The Trump administration has presented Iran with a written proposal for a nuclear deal, marking the first time a written proposal has been exchanged. The proposal outlines parameters for Iran's nuclear program, including uranium enrichment, monitoring, and verification.
-- Axios: Secretary of State Marco Rubio met with Syrian Foreign Minister Asaad al-Shaibani in Turkey, signaling further normalization of relations between the U.S. and Syria, following Trump's meeting with President Sharaa and the lifting of sanctions.
+Category: International Relations; Title: Trump Administration Presents Iran with Nuclear Deal Proposal; Content: - The Trump administration presented Iran with a written proposal for a nuclear deal during negotiations, the first time a written proposal has been offered.
+- Trump stated this is not a lasting offer and Iran must choose quickly.;
 
-Title: Supreme Court Hears Arguments on Birthright Citizenship and Executive Power\Content: The Supreme Court is considering the legality of President Trump's executive order to redefine birthright citizenship, specifically questioning whether a single district court can halt a federal policy nationwide. The debate centers on the 14th Amendment and its interpretation regarding children born in the U.S. to non-citizen parents. Justices are grappling with the balance between executive power and the potential impact on children denied citizenship if Trump's policy proceeds while its legality is debated. Reference URLs Summaries:
-- Axios: The Supreme Court heard arguments on whether to let President Trump proceed with his plan to redefine birthright citizenship, focusing on the power of a single district court to freeze an entire federal policy.
-- Axios: The Supreme Court will hear oral arguments over President Trump's efforts to restrict birthright citizenship, which is a key part of his administration's immigration crackdown.
-- NYTimes: The Supreme Court is hearing a case on birthright citizenship, specifically regarding the power of one judge to set national policy.
+Category: Technology; Title: Google Dominates AI Patent Applications; Content: - Google has surpassed IBM in generative AI-related patents and leads in agentic AI patents.
+- Patent filings for AI technologies have surged, indicating companies are actively seeking protection for their innovations.;
 
-Title: Zerohedge: Former FBI Director Comey's Controversial Social Media Post Investigated\Content: Former FBI Director James Comey posted an image of seashells arranged to read '86 47', which many interpreted as a threat against President Trump. The post was quickly deleted, but has sparked an investigation by the Secret Service and criticism from Republicans. Reference URLs Summaries:
-- ZeroHedge: Former FBI Director James Comey posted and then deleted a photo on Instagram of seashells that read "86 47," which many interpreted as a veiled threat to President Trump.
-- SCMP: The US Secret Service is investigating former FBI Director James Comey's Instragram post which is seen as a 'threat' against President Trump.
-- The Guardian: The US Secret Service is investigating James Comey over a seashell photo claimed to be a ‘threat’ against Trump
+Category: US Politics; Title: Former FBI Director Comey Under Investigation Over Social Media Post; Content: - Former FBI Director James Comey is being investigated by the Secret Service for posting a cryptic message on Instagram interpreted as a threat against President Trump.
+- The post, featuring seashells arranged as "86 47," sparked outrage and accusations of inciting violence.;
 
-Title: Google Leads in AI Patent Applications, Surpassing IBM\Content: Google has become the leader in generative AI-related patents, surpassing IBM, and also dominates in agentic AI patents. Patent filings in the U.S. for generative AI have significantly increased, signaling companies' active pursuit of protecting their AI technologies. While Google and Nvidia lead in agentic patents, Chinese universities also hold prominent positions globally. Meta and OpenAI, despite their significant contributions, are not among the top patent holders, as Meta focuses on open-source development and OpenAI uses its patents defensively. Reference URLs Summaries:
-- Axios: Google has surpassed IBM as the leader in generative AI-related patents and leads in agentic AI. Generative AI patent applications in the U.S. surged 56% last year.
+Category: International Relations; Title: Trump's Rule-Breaking Middle East Policies Awe Biden Officials; Content: - Trump's audacious foreign policy moves in the Middle East, including meetings with leaders considered terrorists and announcements of sanctions relief on Syria, have surprised even his critics.
+- The moves are praised for shattering harmful taboos but questioned regarding Trump's motivations.;
 
-Title: Trump Administration Intensifies Immigration Enforcement, Considers National Guard Deployment\Content: The Trump administration is reportedly considering deploying 20,000 National Guard troops for interior immigration enforcement, a move criticized by Democrats as a step too far. This comes amid ongoing efforts to restrict birthright citizenship and crack down on immigration, with some Mexican politicians facing travel restrictions due to alleged links to drug corruption. These policies reflect a broader effort to tighten border security and prioritize deportations, raising concerns about due process and potential conflicts with state and local governments. 
+Category: Technology; Title: Meta Delays Release of Flagship AI Model Due to Performance Issues; Content: - Meta is delaying the release of its flagship AI model, ;
 
-Title: Trump's Trade Policies and Their Impact: Boeing Secures Major Order, Tariffs Affect Various Sectors\Content: Despite a sometimes strained relationship with President Trump, Boeing secured a massive order from Qatar Airways. Simultaneously, Trump's trade policies, including tariffs, continue to affect various sectors, with Walmart warning of impending price hikes. A trade deal with China has ended a ban on Boeing deliveries, but the broader impact of tariffs on economic growth and inflation remains a concern. Sector's financial performance could be highly volatile. This could result in market correction. 
+Category: US Politics; Title: Trump Administration Moves to Restrict Travel of Mexican Politicians Linked to Drug Trade; Content: - The Trump administration is imposing travel restrictions and sanctions on Mexican politicians believed to be linked to drug corruption.
+- Two Mexican political figures have confirmed their US visas were revoked.
+- The move is a significant escalation of US pressure on Mexico, targeting leaders of the governing party and those close to the former president.;
 
-Title: India-Pakistan Ceasefire\Content: India and Pakistan are currently experiencing a ceasefire after recent border clashes. Water resources are an important factor between the two countries. The Indus Waters Treaty (IWT) divides the six main rivers of the Indus basin between the two nations. India has suspended the treaty and refused to share data on river flows with Pakistan, raising concerns about water supply. 
+Category: US Politics; Title: Trump Administration Moves to Block the U.S. Travel of Mexican Politicians Linked to the Drug Trade; Content: - The Trump administration has started imposing travel restrictions and other sanctions on prominent Mexican politicians suspected of links to drug corruption.
+- The list includes leaders of President Claudia Sheinbaum’s party and figures close to former President Andrés Manuel López Obrador.;
 
-Title: Google and Nvidia top the list of AI-related US patents\Content: Google and Nvidia are at the top of the list of patents for AI-related in the U.S.. Globablly, Google was also the leader followed by Huawei and Samsung. 
+Category: International Relations; Title: Ukraine Will Never Recognize Occupied Territories As Russia, Zelensky Says From Turkey; Content: - President Zelensky stated that Ukraine will not recognize occupied territories as part of Russia, affirming this stance during peace talks in Turkey.
+- Despite direct talks, key territorial disputes remain.;
 
-Title: China's Economic Slowdown: Contraction in GDP and Trade War Concerns\Content: Japan's economy contracted for the first time in a year, with GDP declining by 0.2% due to tariff woes. Weak exports and persistent inflation are also hurting Japan's economy. In response to these challenges, Japanese officials are seeking to renegotiate trade deals with the U.S. amid concerns that tariffs and domestic economic weakness are threatening growth. 
+Category: US Politics; Title: Trump's Military Buildup at the Border Expands; Content: - The Pentagon has deployed thousands of troops, spy planes, and even two warships to surveil the US border with Mexico.;
 
-Title: ZeroHedge: NY Tops London as World's Leading Financial Center\Content: New York has surpassed London to become the world's leading financial center in 2025, according to the Global Financial Centres Index. The index assesses cities based on business environment, human capital, infrastructure, financial sector development, and reputation. 
+Category: International Relations; Title: Putin Removes Commander Of Russia's Ground Forces Amid Ukraine War; Content: - President Vladimir Putin has removed the commander of Russia's ground forces, Army General Oleg Salyukov, after leading the forces since 2014.
+- The Kremlin has offered no specific reason for the removal, amid ongoing advancements in US-mediated peace negotiations with Ukraine.;
 
-Title: ZeroHedge: Montana Bans Lab-Grown Meat Amid Labeling Concerns\Content: Montana has become the fifth state to ban lab-grown meat, citing labeling concerns and support for local ranchers. This decision aligns with a broader debate over the safety and regulation of lab-cultivated proteins, amid concerns they are getting unfair competitive advantages. 
+Category: US Politics; Title: Trump claims ‘nothing’s going to happen’ on Ukraine until he meets Putin; Content: - Donald Trump stated that no progress on the Ukraine situation is possible until he meets with Vladimir Putin.
+- He criticized the planned talks between Russia and Ukraine in Istanbul, suggesting Putin's attendance is unlikely without his involvement.;
 
-Title: NY to Send 'Inflation Refund' Checks to Residents\Content: New York will issue one-time 'inflation refund' checks to eligible residents, totaling $2 billion, to offset increased costs. Single filers earning up to $75,000 will receive $200, while joint filers earning up to $150,000 will get $400. Additionally, families will receive annual tax credits per child. 
+Category: US Politics; Title: Comey Posts-Then-Deletes Threat Aimed At Trump; Content: Former FBI Director James Comey stirred controversy by posting and then deleting a photo on Instagram interpreted by many as a threat against President Trump. The incident has prompted a Secret Service investigation.;
 
-Title: US Lawmakers Seek to Block Smuggling of Nvidia's AI Chips to China\Content: US lawmakers are introducing a bill to prevent the smuggling of Nvidia's AI chips to China. Even with the US seeking to clamp down on their export, some chips have continued to flow to China. 
+Category: International Relations; Title: Water Wars: India suspends Indus Waters Treaty with Pakistan; Content: - India has suspended the Indus Waters Treaty with Pakistan, raising tensions over water resources between the two nations.
+- The treaty divides the Indus basin rivers, critical for Pakistan's drinking water, agriculture, and power generation.;
 
-Title: Axios: FAA Probes Radio Failure at Denver Airport\Content: The FAA is investigating a radio failure at Denver International Airport, during which some pilots couldn't contact air traffic control. This incident adds to concerns about technology failures in the air traffic control system amid increased travel. 
+Category: US Politics; Title: Rubio Meets Syrian Counterpart Amid Normalizing Relations; Content: - Secretary of State Marco Rubio met with Syrian Foreign Minister Asaad al-Shaibani in Turkey, marking the first such meeting in 15 years.
+- The Trump administration is initiating sanctions relief to stabilize Syria, contingent on the Syrian government's commitment to peace with Israel, ending Iranian influence, and addressing human rights.;
 
-Title: Wired: After Two SpaceX Explosions, U.K. Asks FAA to Change Starship Flight Plans\Content: British officials have asked the U.S. to consider changing the launch site or trajectory of Starship 9 after debris fell on British territories following two SpaceX explosions. The FAA has approved Starship 9's launch pending completion of an investigation. 
+Category: US Politics; Title: Trump Administration Moves to Block Travel of Mexican Politicians Linked to the Drug Trade; Content: - The Trump administration has begun imposing travel restrictions and sanctions on Mexican politicians believed to have ties to drug cartels.
+- The list includes members of President Claudia Sheinbaum's party and figures close to former President Andrés Manuel López Obrador.;
 
-Title: South China Morning Post: The Middle East Has Entered the AI Group Chat\Content: The UAE and Saudi Arabia are investing billions in US AI infrastructure, which could help the US in the AI race against China. 
+Category: US Politics; Title: Biden Officials ; Content: awed;
 
-Title: ZeroHedge: "I Can't Understand My Professor"\Content: An opinion piece discusses the increasing reliance on foreign-born professors in American universities, particularly in fields like mathematics, engineering, and the hard sciences, and how language barriers can hinder students' ability to learn. 
+Category: US Politics; Title: Trump Visits U.S. Air Base in Qatar Amid Plan to Accept Plane Donation; Content: - President Trump addressed troops at Al Udeid Air Base in Qatar, a key hub for U.S. air operations from Northeast Africa to Central and South Asia.
+- This visit occurs amidst controversy over Trump accepting a plane donation from Qatar.;
 
-Title: ZeroHedge: Water Wars: India-Pakistan Tensions Rise Over Water Resources\Content: Tensions between India and Pakistan have risen after India suspended the Indus Waters Treaty, which could impact Pakistan's water supply for drinking, agriculture, and power generation. Water resources are an important part of the equation between the two countries. 
+Category: International Relations; Title: As India-Pak Tensions 'Ease', These Are The Countries Holding The World's Nuclear Arsenal; Content: - While tensions between India and Pakistan have eased, both nations possess nuclear weapons, with each owning around 170 warheads.
+- Globally, approximately 9,585 nuclear warheads are in military stockpiles across nine countries, with Russia and the U.S. holding the majority.;
 
-Title: The Middle East Has Entered the AI Group Chat\Content: The UAE and Saudi Arabia are investing billions in US AI infrastructure. The deals could help the US in the AI race against China. 
+Category: International Relations; Title: One-Fifth Of Pakistan's Electricity Comes From Hydro; Content: India suspended the Indus Waters Treaty with Pakistan, which divides the six main rivers of the Indus basin between the two nations. Water resources are an important part of the equation right now between the two countries.;
 
-Title: 9to5Google: Google One Now Has 150 Million Subscribers\Content: Google One now has 150 million subscribers, up 50% from February of last year, with 'millions' subscribing to the AI Premium plan. 
+Category: US Politics; Title: Montana Becomes Latest State to Ban Lab-Grown Meat; Content: - Montana has banned the manufacturing and sale of lab-grown meat, joining four other states in taking this action.
+- The move reflects concerns about the impact on ranchers and the food supply, following concerns about the safety and regulation of lab-grown meat.;
 
-Title: 9to5Google: Microsoft Will Shut Down Bing Search APIs, To Be Replaced With AI\Content: Microsoft will discontinue Bing Search APIs later this year, replacing them with AI services. 
+Category: US Politics; Title: It's Time To End Federal Control Of Education And Restore Parental Authority; Content: An article advocates for ending federal control of education, proposing a five-step plan to close the U.S. Department of Education and return governance to the states, emphasizing the importance of parental authority and individualized learning.;
 
-Title: 9to5Google: Xiaomi Joins Google Pixel in Making Its Own Smartphone Chip\Content: Xiaomi is releasing its own smartphone chip, the XRING 01, to debut in future devices. 
+Category: International Relations; Title: China has got lucky with Trump. Can the rest of the world?; Content: Progress in trade talks has so far been slow.;
 
-Title: Statista: How Widespread Are Food Intolerances?\Content: A survey indicates that food intolerances, confirmed by health professionals, are most prevalent in the U.S. Awareness has risen around food insensitivities, with many people cutting specific foods from their diets. 
+Category: International Relations; Title: New York Tops London As World's Leading Financial Center In 2025; Content: New York has surpassed London to become the world's leading financial center, according to the Global Financial Centres Index (GFCI) 37.;
 
-Title: Bloomberg: China's Defense Chief Tours Europe\Content: China's defense chief is undertaking a tour of Europe, with stops in Paris and Berlin, and a pledge to the UN for peace. 
+Category: International Relations; Title: Romania Is Falling Into the Abyss; Content: Romania’s disastrous slide to the far right had been coming.;

@@ -1,395 +1,321 @@
-Title: AI Leader Nvidia To Sell Hybrid Systems Using Rival Chips Amid Scrutiny of Alibaba's Apple AI Partnership\Content: Nvidia plans to sell semicustom AI systems with competitor chips amid reports that US regulators are scrutinizing Alibaba's AI partnership with Apple, causing Alibaba stock to fall. Nvidia will sell semicustom AI systems using CPUs and AI chips from competitors like Qualcomm. This move responds to customer requests, enabling flexible AI infrastructure. Initial partners include Fujitsu, Qualcomm, Alchip, Astera Labs, Marvell, and MediaTek. NVLink Fusion aims to leverage Nvidia's computing fabric, expanding its AI platform.
+Category: Economy; Title: US Leading Economic Indicators Tumble, Signaling Slowdown; Content: - US Leading Economic Indicators fall sharply, signaling potential economic slowdown.;
 
-Nvidia stock remains in a 19-week consolidation period, near a buy point of 153.13. Analysts see NVLink Fusion as a strategic move, potentially increasing Nvidia's data center market share and software sales.
+Category: Financial Markets; Title: Top FDA Official Admits To Not Receiving COVID Vaccine Due to Biodistribution Concerns; Content: - Top FDA official discloses she did not receive a COVID-19 vaccine due to concerns about biodistribution and excretion in breast milk.;
 
-Title: SAG-AFTRA Files Complaint Over Fortnite's AI Darth Vader Voice\Content: SAG-AFTRA has filed an unfair labor complaint against Epic Games over Fortnite's use of an AI programmed to sound like James Earl Jones' Darth Vader, arguing that the company did not bargain with the union over terms and conditions for using AI to replace voice performers. Fortnite's new Star Wars event features an AI recreation of James Earl Jones' Darth Vader voice. Players can now interact with and recruit Darth Vader onto their teams, with the AI-voiced character responding differently depending on what players say.
+Category: US Politics and Health; Title: Former President Joe Biden Diagnosed with Cancer; Content: - Former President Joe Biden has been diagnosed with stage 4 prostate cancer. Some question the timing of the announcement.;
 
-Epic Games uses Google's Gemini 2.0 Flash and ElevenLabs' Flash v2.5 models. Player audio is sent to Gemini but not stored, and Epic won't use interactions to train AI models. Inappropriate responses are possible, as demonstrated when the AI Vader was briefly caught swearing before a patch fixed the issue.
+Category: Financial Markets and Investments; Title: Analyst: A Third of Russell 3000 Energy Companies Trade Below Book Value; Content: - A significant portion of US mid- and small-cap energy stocks are trading below book value, attracting value investors.;
 
-Title: House Republicans Investigate Harvard's Ties to Chinese Military and Iranian Regime\Content: House Republicans are investigating Harvard University's partnerships with Chinese military-linked institutions, sanctioned entities, and researchers tied to the Iranian regime, raising national security and ethical concerns. They are demanding internal documents and testimony. House Republicans are demanding transparency from Harvard University regarding its alleged ties to the Chinese military and other foreign adversaries. The House Select Committee on China, along with other committees, sent a letter to Harvard President Alan Garber outlining concerns about partnerships with Chinese military-linked institutions, sanctioned entities, and researchers tied to the Iranian regime. The investigation focuses on potential national security and ethical breaches. Harvard has faced recent controversies over campus antisemitism and donor backlash. The Trump administration previously canceled billions in grants to Harvard.
+Category: Trump and Trade; Title: Bessent: Tariffs Will Revert if Trade Partners Don't Negotiate; Content: - Treasury Secretary Bessent warns tariffs will revert to higher levels for nations not negotiating in good faith; dismisses Moody's downgrade.;
 
-Title: Iran Warns Nuclear Talks Will Fail If US Pushes Zero Enrichment\Content: Iran states that nuclear talks with the US will fail if Washington insists on zero uranium enrichment, reaffirming its right to enrichment as a matter of national sovereignty. Trump administration officials maintain that abandoning enrichment is a 'red line'. Iran has stated that nuclear talks with the US will fail if Washington insists on zero uranium enrichment.  A foreign ministry spokesman said the US stance is contradictory, prolonging talks and eroding trust.  Iran maintains that enrichment is a national achievement they won't abandon, regardless of a deal.  The US insists zero enrichment is a "red line," despite Tehran's vow to continue with or without an agreement. The White House reportedly sent Iran a written proposal for a new nuclear deal recently.
+Category: Financial Markets and China; Title: China Defies Trade War with Capital Inflow, India Gains; Content: - China attracts significant capital inflow despite trade war challenges. India is seeing some economic benefit.;
 
-Title: Vance Cancels Israel Visit Amid Expanded IDF Operations in Gaza\Content: Vice President JD Vance canceled a planned trip to Israel due to the expansion of Israel's military operation in Gaza, signaling disagreement with the Israeli decision and emphasizing the US desire for a ceasefire and hostage deal. Vance cited logistical reasons, while officials suggest it reflects the administration's stance. Tensions rise between the US and Israel as Vice President Vance cancels his trip to Israel due to the IDF's expanded Gaza operations. Vance's stated reason was logistical, but a US official cited a desire to avoid endorsing the operation while the US pushes for a ceasefire. This follows reports of strained relations between Trump and Netanyahu, contradicting Trump's recent emphasis on peace. The IDF is mobilizing troops and planning a "humanitarian zone" for Palestinians amidst the Gaza offensive. Trump administration maintains it wants to see the conflict end.
+Category: US Politics and Controversies; Title: House Republicans Investigate Harvard's Ties to Chinese Military; Content: - House Republicans launch investigation into Harvard's partnerships with Chinese military-linked institutions, citing national security concerns.;
 
-Title: Retired Admiral Convicted in Navy Ethics Scandal for Bribery\Content: Retired Adm. Robert P. Burke was convicted on bribery charges for steering a Navy training contract to a company in exchange for a job. The case involves a $355,000 contract and carries a maximum sentence of 50 years.  The defense argued lack of quid pro quo and questioned witness credibility. Retired Admiral Robert P. Burke was convicted on bribery charges for steering a $355,000 Navy training contract to Next Jump in exchange for a future $500,000 per year job after retirement. Prosecutors argued Burke, formerly the Navy's second-highest-ranking officer, violated ethics standards. Burke acknowledged impropriety in a recorded interview. He faces up to 50 years in prison. The defense argued Burke followed ethics reviews and that key witnesses were excluded. Next Jump's co-CEOs are also scheduled for trial. The case overlaps with scrutiny from the "Fat Leonard" scandal and deadly ship collisions.
+Category: Bay Area Local News; Title: Waymo Expands Driverless Ride-Hailing to San Jose; Content: - Waymo receives approval to expand its driverless taxi service to San Jose and other Bay Area locations.;
 
-Title: US Beef Industry 'Hijacked By Chemical Pushers'\Content: The 'Make America Healthy Again' movement gains traction as consumers favor cleaner food options. Bloomberg notes a focus on food safety following a U.S.-UK trade deal where the UK bans hormone-treated meat common in the US. A ZeroHedge article highlights concerns about the US beef industry, claiming it's "hijacked by chemical pushers." It references a Bloomberg report noting the UK's ban on hormone-treated meat and chlorine-washed chicken, practices common in the US. The article promotes the "Make America Healthy Again" (MAHA) movement, spearheaded by RFK Jr., which advocates for cleaner food with fewer chemicals and a reduced reliance on processed foods and pharmaceuticals. The shift towards cleaner food is expected to increase costs for consumers.
+Category: AI and Technology; Title: Nvidia Announces AI System, Tesla Robotaxi Launch Details; Content: - Nvidia unveiled new AI systems and components, including NVLink Fusion for broader hardware compatibility.
+- Tesla is set to launch its Robotaxi service soon.;
 
+Category: AI and Ethics; Title: SAG-AFTRA Files Complaint Against Epic Games Over AI Darth Vader; Content: - SAG-AFTRA filed an unfair labor practice complaint against Epic Games for using AI to replicate Darth Vader's voice in Fortnite without bargaining with the union.;
 
-Title: ZeroHedge Correspondent Questions Clinton Body Count, Epstein Intelligence Links at White House Press Briefing\Content: A ZeroHedge correspondent questioned the White House about the 'Clinton body count' and Jeffrey Epstein's ties to intelligence agencies, prompting a deflection from the press secretary. They also inquired about ending US funding of foreign wars. ZeroHedge's Liam Cosgrove questioned the White House press secretary about several controversial topics. He referenced Trump's Truth Social post about the "Clinton body count" and asked about the circumstances surrounding Mark Middleton's suicide, pressing the *Washington Post* for clarification. Cosgrove also inquired about Jeffrey Epstein's ties to intelligence agencies, specifically mentioning potential Israeli involvement and asking when further information would be released.  Finally, he questioned the administration's commitment to ending US funding of foreign wars, particularly in Israel and Ukraine, despite moves towards peace in other regions. The press secretary responded that President prioritizes America First.
+Category: AI and Scams; Title: AI Used by Yahoo Boys for Scamming; Content: - Yahoo Boys in West Africa are reportedly using AI and deepfake technology to scam victims, learning from Format Boy.;
 
-Title: Historic Women's College Gives Honorary Degree to Rachel Levine (A Man)\Content: Smith College, a historic women's college, awarded an honorary degree to Rachel Levine, sparking backlash and highlighting divisions within the feminist movement regarding trans issues. Smith College, a historic women's college, awarded an honorary degree to Dr. Rachel Levine, a transgender woman. The decision has sparked controversy, dividing feminists and raising questions about the inclusion of transgender women in women's spaces. Critics argue that it normalizes mental illness and undermines the achievements of biological women, while supporters champion inclusivity and transgender rights. Levine, the former "first trans Secretary for Health," also gave the commencement speech. The article questions the promotion of gender fluid theory and the impact of the "woke blitz."
+Category: International Relations; Title: China Supports Pakistan with Intelligence During Border Clashes with India; Content: - India alleges China provided intelligence and logistical support to Pakistan during recent border clashes, escalating tensions.;
 
-Title: DOJ Charges New Jersey Democrat With Assault, Impeding Law Enforcement At ICE Facility Protest\Content: New Jersey Democratic Rep. LaMonica McIver has been charged with assault and impeding law enforcement for her actions during a protest outside a US Immigration and Customs Enforcement (ICE) facility. McIver denies wrongdoing, calling the charges a partisan attack. New Jersey Democratic Rep. LaMonica McIver was charged with assault and impeding law enforcement after a protest at an ICE facility in Newark. Video shows McIver yelling at and pushing federal agents.  US Attorney Alina Habba says McIver had opportunities to avoid charges. McIver claims the charges are political. House Democrats, including Hakeem Jeffries, criticized Habba and claimed the charges are an attempt to intimidate Congress by the Trump administration.  Reps. Bonnie Watson Coleman and Rob Menendez, also present at the protest, were not charged.
+Category: International Relations; Title: Iran Warns US Against Demanding Zero Enrichment in Nuclear Talks; Content: - Iran states nuclear talks will fail if the US insists on zero uranium enrichment, asserting its right to enrichment with or without a deal.;
 
-Title: India Says China Provided Intelligence To Pakistan During Border Clashes\Content: India claims China provided Pakistan with intelligence support during recent border clashes, including radar system reorganization and satellite coverage, which China denies. This has reinforced India’s planning for a two-front war. 
+Category: US Politics and Trump; Title: Trump’s Tariffs and Economic Impact; Content: - Ports are warning of lower retail inventories due to tariff uncertainty.
+- Trump's economic policies and their impact on global trade continue to be a significant concern.;
 
-Title: The 3 Pillars Of The American Idea: Unalienable Rights, Self-Evident Truths, and Free Market Economics\Content: The American Idea rests on three pillars: unalienable rights, self-evident truths, and free market economics, gifted by thinkers of the Scottish Enlightenment. Progressives aim to undo this founding vision, requiring a clear understanding to restore America. 
+Category: International Relations and Geopolitics; Title: VP Vance Cancels Israel Visit Amid Gaza Operations, Citing Logistical Issues; Content: - VP JD Vance cancels trip to Israel due to expanded IDF operations in Gaza; cites ‘logistical’ issues but move suggests disapproval of military action.;
 
-Title: How Long Can Lies & Control Supplant Reality & Free Markets?\Content: The growing disconnect between market highs and economic lows is becoming harder to explain as GDP growth estimations are downgraded. The only market force is an accommodative central bank and the “experts” are lying about true inflation levels and repressing interest rates.  A new feudalism has emerged. 
+Category: US Politics and Social Issues; Title: Smith College Faces Backlash for Honoring Transgender Woman Rachel Levine; Content: - Smith College faces criticism for awarding an honorary degree to Rachel Levine, a transgender woman, sparking debate over women's spaces.;
 
-Title: What Joe Biden's Cancer Can (And Should) Teach Us About The Media\Content: The article questions the timing and narrative surrounding Joe Biden's cancer diagnosis, suggesting media reports are driven by narrative convenience rather than truth. 
+Category: US Politics; Title: ZeroHedge Reports from White House Press Briefing on Epstein, Clinton; Content: - ZeroHedge correspondent questions White House Press Secretary about Clinton body count and Epstein intelligence links.;
 
-Title: Alarming Graph Reveals US Beef Industry Is 'Hijacked By Chemical Pushers'\Content: The Make America Healthy Again (MAHA) movement is helping to rescue the deteriorating food supply chain and public health. There is a decisive shift in consumer behavior, with shoppers increasingly favoring cleaner, better-for-you food options. 
+Category: International Relations; Title: UK and EU Agree to Post-Brexit Trade Reset; Content: - UK and EU reach agreement post-Brexit, aimed at reducing trade barriers, extending fishing rights, and enhancing security collaboration.;
 
-Title: DOJ Charges New Jersey Democrat With Assault, Impeding Law Enforcement At ICE Facility Protest\Content: New Jersey Democrat Rep. LaMonica McIver has been charged with assault and impeding law enforcement for her actions during a protest outside a US Immigration and Customs Enforcement (ICE) facility. 
+Category: Culture and Society; Title: WizKids Baldur’s Gate 3 Mini Figures Face Criticism; Content: - WizKids faces criticism for its Baldur's Gate 3 mini figures, with buyers noticing discrepancies compared to advertisements. The company issued an apology.;
 
-Title: India Says China Provided Intelligence To Pakistan During Border Clashes\Content: China provided direct logistical and intelligence support to Pakistan during the recent 15-day border conflict with India, marking a significant escalation in Beijing’s involvement in South Asia’s most volatile rivalry. 
+Category: Social Issues; Title: Alarming Graph Reveals US Beef Industry Is Hijacked By Chemical Pushers; Content: - RFK Jr.'s  MAHA movement exposes the extent of toxic chemicals used in US beef production, urging consumers to seek clean, local alternatives.;
 
-Title: ZH At The White House: Epstein, Clinton Body Count & Proxy Wars\Content: ZeroHedge White House correspondent Liam Cosgrove questioned the White House about the Clinton body count, Jeffrey Epstein's ties to intelligence agencies and if the US will end foreign wars financing. 
+Category: Bay Area Local News; Title: San Francisco Fire Stations Reopen Amid Safety Concerns; Content: - All Oakland fire stations are open ahead of the wildfire season, and community care team alerts parents to men approaching schoolgirls in Yuen Long.;
 
-Title: Historic Women's College Gives Honorary Degree To Rachel Levine (A Man)\Content: Dr. Rachel Levine (formerly Richard Levine), a man pretending to be a woman, is being awarded an honorary degree by Smith College in Massachusetts. 
+Category: Politics; Title: Trump Unveils $175 Billion 'Golden Dome' Missile Defense System, Appoints Leader; Content: President Trump announced the selection of a design for the 'Golden Dome' missile defense system, a project estimated to cost $175 billion. General Michael Guetlein of the Space Force will lead the program. The system aims to defend against hypersonic and ballistic missiles using space-based sensors and interceptors. Canada may also participate.;
 
-Title: Marx's Economic Forecasts: Over 150 Years Of Failure\Content: Karl Marx's predictions about capitalism have consistently failed, as capitalism has increased living standards and technology has created new industries and opportunities. Economic expansion through voluntary exchange has flourished instead of conquest. 
+Category: Technology; Title: Google I/O 2025 Highlights AI Advancements: Gemini, Android XR, and More; Content: Google's I/O 2025 event showcased AI advancements, including updates to Gemini, Android XR, and new AI-driven tools for video editing and UI design. The company also launched a new Google AI Ultra subscription plan.;
 
-Title: Don't Take The Black Pill\Content: The article argues against embracing a despairing 'Black Pill' mentality, advocating for a more hopeful approach to political and social change rooted in reality. 
+Category: Politics; Title: Kristi Noem Misunderstands Habeas Corpus; Trump Administration Officials Defend Actions; Content: Homeland Security Secretary Kristi Noem incorrectly defined habeas corpus during a Senate hearing. Separately, Stephen Miller defended the administration's authority to suspend habeas corpus in times of 'invasion.' The administration's policies on immigration are facing increased scrutiny.;
 
-Title: A Third Of Russell 3000 Energy Companies Trade Below Book Value\Content: Almost half of all mid- and small-cap oil and gas stocks in the US are now trading below their book values. It's a gift for value investors worshiping the gospel of Warren Buffett and his mentor Ben Graham, who referred to these kinds of opportunities as “cigar butts.” 
+Category: Technology; Title: Google's Gemma 3n Preview: Mobile-First AI Model; Content: Google AI Edge advancements include new Gemma 3 models with broader model support, multimodality, RAG, and Function Calling to enhance on-device generative AI capabilities. It is a cutting-edge open model designed for fast, multimodal AI on devices.;
 
-Title: Bessent Warns Tariffs Will Go Back Up For Nations That Do Not Negotiate In 'Good Faith'\Content: Treasury Secretary Scott Bessent warns tariffs could return to previous levels if trading partners don't negotiate in 'good faith,' while downplaying Moody's downgrade and defending Trump's economic policies. 
+Category: Politics; Title: Trump Faces Hurdles on Tax Bill as GOP Divisions Persist; Content: President Trump is facing difficulty unifying Republicans behind his proposed tax cuts. Disputes over the SALT deduction and Medicaid could hinder passage of the bill.  Trump has warned Republicans not to 'f--- around with Medicaid'.;
 
-Title: Script Flipped: Shock Cancer Diagnosis Wipes Biden Autopen-Presidency From Headlines\Content: Joe Biden's shock cancer diagnosis strains credulity while conveniently overshadowing questions about his competence during his presidency and who was actually in charge. The timing of the diagnosis is questioned given Biden's known cognitive decline. 
+Category: Technology; Title: Google Colab Reimagined with AI-First Features; Content: Google Colab is launching an AI-first version at Google I/O, featuring an agentic collaborator powered by Gemini 2.5 Flash with iterative querying capabilities, an upgraded Data Science Agent, effortless code transformation, and flexible interaction methods to significantly improve coding workflows.;
 
-Title: The FBI Washington Headquarters Won't Be Missed\Content: The FBI Director is closing the Washington, DC, headquarters office, moving 1,500 employees to regional offices to reduce political weaponization and embeddedness within the Washington. 
+Category: Technology; Title: New Google Labs Experiment: Stitch, an AI UI Design Tool; Content: Stitch, a new Google Labs experiment, uses AI to generate UI designs and frontend code from text prompts and images, aiming to streamline the design and development workflow.;
 
-Title: Google I/O 2025 Highlights: AI-First Approach with Gemini and Android XR\Content: Google's I/O 2025 developer conference showcased a strong emphasis on AI integration across various platforms:Google Colab introduced an AI-first version with Gemini 2.5 Flash for improved coding workflows.Google AI Edge includes Gemma 3 models with on-device RAG and Function Calling.Google introduced Stitch, an AI tool generating UI designs and code from prompts.LiteRT has been improved to boost AI model performance. Veo 3, the AI video generator, now incorporates audio.Android XR smart glasses prototype demonstrated searching, live translation, and more.Updates to agent technologies include Agent Development Kit (ADK), Agent Engine UI improvements, and Agent2Agent (A2A) protocol enhancements. Reference URLs Summary:
-- Google I/O 2025 Developer Keynote Recap: Google's top announcements focused on building across Google platforms with AI models, enhancing developer productivity using Gemini, Android, Firebase, and web.
-- What's new with Agents: ADK, Agent Engine, and A2A Enhancements: Updates to Google's agent technologies include the Agent Development Kit (ADK) with new Python and Java versions, an improved Agent Engine UI for management, and enhancements to the Agent2Agent (A2A) protocol for better agent communication and security.
-- Fully Reimagined: AI-First Google Colab: Google Colab launched a reimagined AI-first version at Google I/O, featuring an agentic collaborator powered by Gemini 2.5 Flash with iterative querying capabilities, an upgraded Data Science Agent, effortless code transformation, and flexible interaction methods to improve coding workflows.
+Category: Politics; Title: Trump's Trade War and Global Economic Concerns; Content: Trump's tariffs are causing concerns for businesses, exporters, and academics globally.  A former Chinese envoy suggests the trade war is cracking Western unity. Home Depot and TJX are navigating the impact of Trump's tariffs.;
 
-Title: Google's Gemini AI Expansion: Chrome Integration, AI Ultra Subscription, and More\Content: Google is expanding its Gemini AI capabilities across multiple platforms:Gemini is coming to Chrome, enabling AI-driven information clarification and summarization.Google launched a $250/month AI Ultra subscription for access to advanced AI models and increased usage limits.Google is testing its AI models with new features, and has the goal of expanding their capabilities to mobile devices. Reference URLs Summary:
-- Google launches $250 per month 'VIP' AI subscription service: Google's newest tier, which is more expensive than ChatGPT's premium service, comes as Google seeks to further monetize its AI products.
-- You deserve a better partner than Microsoft 365—dump it for Microsoft Office 2024: Meet Microsoft Office 2024, the new and improved suite that’s packed with AI integrations to make your workday better.
-- Top AI Stocks to Add to Your Portfolio for Impressive Returns: Picked three AI stocks, MSFT, CTSH and LRCX, which are well poised to benefit from AI's growing usage and ability to solve complex problems.
+Category: Technology; Title: Google to allow third-party developers to access Apple Intelligence in new AI app strategy; Content: Apple plans to allow third-party developers to use its AI models to write software, in an effort to spark new app development.;
 
-Title: China's C919 Jetliner Network Expands Amid US-China Tech Rivalry\Content: China's C919 airliner network now serves 16 cities, including new additions like Shenzhen and Xiamen. This expansion occurs as China emphasizes industrial self-sufficiency and navigates its tech rivalry with the United States. Reference URLs Summary:
-- China’s C919 network spans 16 cities as 2-year mark reflects reliability: Tech powerhouse Shenzhen and tourist destination Xiamen are the latest mainland cities to be served by the increasingly popular C919.
-- China’s Xi doubles down on self-reliance, rallying officials to bolster manufacturing: Call comes during the president’s visit to a bearings factory in Henan province, as China remains locked in a trade and tech rivalry with the United States.
+Category: International Relations; Title: Trump Seeks Off-Ramp from Russia-Ukraine Negotiations; EU and UK Impose New Sanctions; Content: Trump seeks an off-ramp from Russia-Ukraine negotiations, while the EU and UK impose new sanctions on Russia without waiting for Trump's direction. Ukraine's allies hit Russia with new sanctions without waiting for Trump.;
 
-Title: Impact of Trump's Trade Policies: Tariffs, Price Hikes, and Economic Effects\Content: Trump's trade policies, including tariffs, are causing economic ripples: Home Depot announces no price hikes amid Trump's tariffs. Alibaba.com sees a jump in US buyer activity after the US-China tariff truce. A Chinese crane maker questions US tariff plans, noting they increase costs for American ports. Trump's trade war is reportedly cracking the West's unity. Reference URLs Summary:
-- Home Depot misses earnings, announces no price hikes as it navigates Trump's tariffs.
-- Alibaba.com sees jump in US buyer activity after US-China tariff truce: Inquiries from the US on Alibaba’s B2B marketplace surged over 40 per cent the week after Washington and Beijing hit pause on the trade war.
-- Chinese crane maker raises questions over US tariff plans: Company says higher duties on Chinese cranes would just increase costs for American ports. The US ports association agrees.
+Category: International Relations; Title: Rubio Warns Syria Could Be Weeks Away From Civil War After Meeting with HTS Officials; Content: Secretary of State Rubio warns that Syria could be weeks away from civil war and the collapse of the HTS government. This follows a meeting with Syrian Foreign Minister Asaad al-Shaibani and the dropping of Syria sanctions.;
 
-Title: Rising US Debt and Deficits Spark Concerns Among Financial Institutions\Content: The US national debt is a growing concern, with projections indicating it could reach unsustainable levels. Some analysts are warning of a potential bond buyers’ strike in Japan that could impact the Treasury market, while others point to rising credit card delinquencies as a sign of economic strain. Trump's "Big, Beautiful Bill" is expected to increase deficits and add trillions to the debt. Reference URLs Summary:
-- Credit Card Delinquencies, Balances, Debt-to-Income, and Credit Limits in Q1 2025: Our Drunken Sailors & their Credit Cards: The free money is gone, and the hangover is getting worked off.
-- Bond Buyers’ Strike in Japan Could Cast a Long Shadow on the Treasury Market.
-- The 'Big, Beautiful Bill' Will "Massively" Increase Near-Term Deficits, Add $5 Trillilon In Debt: Joint Committee on Taxation estimated the mark up to increase deficits by $3.8trn over the next 10 years, with most of the deficit increase ($2.2trn) occurring over the next five years.
+Category: Technology; Title: D-Wave Quantum Shares Jump as Company Releases New Computing System; Content: D-Wave Quantum's latest quantum computing system has hit the market.;
 
-Title: Rubio Defends Trump's Foreign Policy Amid Scrutiny of US Aid and Relations with China\Content: Secretary of State Rubio clashed with senators over US global aid and China's role. There are also discussions on how Gulf states could unlock US investment in Iran after sanctions end. Rubio warned that Syria could be weeks away from civil war. Reference URLs Summary:
-- Secretary of State Rubio, clashing with senators, says China will not replace US on global aid: Top US diplomat defends State Department shifts and cuts that Democrats say reduce US soft power and give Beijing a propaganda win.
-- How Gulf states could unlock US investment in Iran after sanctions end: Given their ties with both China and the US, Gulf states could act as economic intermediaries and help normalise US-Iran business relations.
-- Rubio Warns Syria Could Be Weeks Away From 'Full-Scale Civil War': The US state secretary laments the country's current rulers 'didn't pass their background check with the FBI'.
+Category: International Relations; Title: UK Halts Israel Trade Talks Amid Gaza Conflict, Imposes Sanctions Over West Bank; Content: The UK has halted trade talks with Israel amid the Gaza conflict. The UK Prime Minister Keir Starmer has criticized Israel and called the suffering of children in Gaza 'utterly intolerable'.;
 
-Title: Trump Administration's Immigration Policies Face Scrutiny and Legal Challenges\Content: The US faces legal challenges as it deports Asians to conflict-plagued South Sudan. A judge says US officials must keep control of migrants sent to South Sudan in case removals are unlawful. In Florida, Venezuelans worry about the potential loss of temporary protected status.  US clears way for stiff tariffs on Southeast Asian solar imports, accusing China-based firms of circumventing trade laws. Reference URLs Summary:
-- US faces legal challenge as it deports Asians to conflict-plagued South Sudan: Judge says US officials must keep control of migrants sent to South Sudan in case removals are unlawful.
-- In Florida, Venezuelans worry about the potential loss of temporary protected status: When the U.S. Supreme Court said Monday the Trump administration could strip legal protections from 350,000 Venezuelans while litigation continues in the lower courts, the move sent shockwaves.
-- US clears way for stiff tariffs on Southeast Asian solar imports: China-based firms are accused of flooding the US with unfairly cheap panels and other products via Malaysia, Thailand, Cambodia and Vietnam.
+Category: Technology; Title: Elon Musk plans to cut back political spending and says robotaxis will be in Austin in June; Content: Elon Musk said he will spend ‘a lot less’ on political campaigns.  Tesla will face more China competition with Xiaomi unveiling the Model Y rival, the YUY, on Thursday. Tesla launches the robotaxi soon.;
 
-Title: Actions Against Russia: EU and UK Impose New Sanctions Amid Ukraine War\Content: The EU and UK have imposed new sanctions on Russia amid the ongoing war in Ukraine, signaling continued pressure despite Trump's approach to negotiations. These measures come after Trump's call with Putin did not yield any promise of a ceasefire. Reference URLs Summary:
-- Ukraine war: EU and UK hit Russia with new sanctions without waiting for Trump: The measures come after the US president’s call with Putin did not yield any promise of a ceasefire.
-- US Should Never Have Gotten 'Entangled' In Ukraine 'Death Trap': Trump: President Trump says that The United States should have never intervened in Ukraine, blasts Biden for sinking money in the "death trap".
+Category: Business and Finance; Title: China Cuts Key Rates to Aid Economy Amid Trade War; Content: China cuts key rates to aid the economy as the trade war simmers.;
 
-Title: East Asia: China's Industrial Policy and International Relations\Content: China's Xi Jinping is reinforcing the need for industrial self-sufficiency amid trade tensions, while Beijing's emphasis on manufacturing has widened imbalances. At the same time, India's stock market is rated above Japan and China by more fund managers, who believe India will benefit more from the US-China trade war. Reference URLs Summary:
-- Secretary of State Rubio, clashing with senators, says China will not replace US on global aid: Top US diplomat defends State Department shifts and cuts that Democrats say reduce US soft power and give Beijing a propaganda win.
-- China’s Xi doubles down on self-reliance, rallying officials to bolster manufacturing: Call comes during the president’s visit to a bearings factory in Henan province, as China remains locked in a trade and tech rivalry with the United States.
-- India’s stock market rated above Japan and China by more fund managers: Fund managers are confident that India will benefit more from the US-China trade war, according to the Bank of America Securities survey.
+Category: Technology; Title: New Report Shows AI Cash Surge and Rise of the 'Zombiecorn'; Content: Silicon Valley Bank reports that about 40% of the money raised by U.S. startups last year came from funds focused on AI.;
 
-Title: Tron Founder Claims Top Holder Status of Trump-Themed Meme Coin\Content: Justin Sun, a Chinese-born crypto billionaire, claims to be the top holder of the Trump-themed $TRUMP meme token, potentially securing a seat at a private dinner with the former president. Reference URLs Summary:
-- Tron founder Justin Sun says he's the top $TRUMP meme coin holder: Chinese-born crypto billionaire Justin Sun says he’s now the top holder of the Trump-themed $TRUMP meme token — securing him a seat at a private dinner with the president.
+Category: Technology; Title: Analyst Says Nvidia “Appears To Be in All the Right” Sectors; Content: Veteran investor says Nvidia Corporation “Appears To Be in All the Right” Sectors.;
 
-Title: China Cuts Key Rates to Aid Economy Amid Trade Tensions\Content: China is cutting key interest rates in an effort to stimulate its economy as trade war tensions simmer. This action comes as China's job and economic stabilization policies are set to be implemented by the end of June. Reference URLs Summary:
-- China cuts key rates to aid economy as trade war simmers.
-- China's job, economic stabilisation policy to be implemented by end-June, NDRC says.
+Category: Business and Finance; Title: Victoria's Secret Adopts 'Poison Pill' After Australian Billionaire's Firm Raises Stake; Content: Victoria's Secret adopts a 'poison pill' after an Australian billionaire's firm raises its stake in the company.;
 
-Title: Trump's Actions Draw Scrutiny and Criticism\Content: Trump's recent activities, including his handling of the January 6th rioters and confrontations with South African President Ramaphosa, have sparked controversy and drawn criticism from various sources. Reference URLs Summary:
+Category: Business and Finance; Title: Home Depot Misses Earnings, Announces No Price Hikes Amid Trump Tariffs; Content: Home Depot misses earnings estimates but announces no price hikes as it navigates Trump's tariffs.;
 
-- **BBC News:** Trump ambushed South African President Ramaphosa with claims of Afrikaners being 'persecuted'. Ramaphosa rebutted these claims of a 
+Category: California Local News; Title: JCPenney closures include Tanforan in San Bruno; Content: JCPenney store closures list includes Tanforan in San Bruno.;
 
-Title: Stablecoin Regulations and Market Dynamics\Content: Hong Kong is working on stablecoin regulations, while a new crypto bill in the US could boost the stablecoin industry. Meanwhile, stablecoins are expected to hit ‘critical mass’ by 2027 and are seen as reshaping global finance. Reference URLs Summary:
+Category: Business and Finance; Title: EU to Impose Fee on Cheap Parcels, Mostly from China; Content: The EU will impose a fee on cheap parcels, mostly from China. The move is meant to help the bloc deal with an influx of inexpensive imports via platforms like Shein and Temu.;
 
-- **Coindesk:** Hong Kong Joins Global Race With New Stablecoin Licensing Bill and Hong Kong has been working on establishing a stablecoin regime since 2023.
-- **Marketwatch:** A new crypto bill could turbocharge the stablecoin industry.
-- **Coindesk:** Stablecoins Are About to Hit ‘Critical Mass’ While 2027 Seen as Pivotal Year and speakers across four panels agreed that stablecoins are reshaping global finance — with regulation and infrastructure fast catching up.
+Category: Business and Finance; Title: Hon Hai Precision to Invest $1.5B in India Unit; Content: Hon Hai Precision is set to invest $1.5B in its India unit.;
 
-Title: AI Integration and Challenges in Various Sectors\Content: AI is increasingly integrated into various sectors, from Google Search to business productivity tools, but challenges persist, including user skepticism, ethical concerns, and the need for careful implementation. 
+Category: Hong Kong; Title: Hong Kong Red Cross Tightens Female Blood Donor Rules; Content: Hong Kong Red Cross tightens female blood donor rules for the first time in 30 years due to declining donor numbers.;
 
-Title: Zerohedge: Trump's Policies and Their Impact\Content: Zerohedge covers various aspects of Trump's policies, including their impact on the US budget deficit, the stablecoin industry, and trade relations with countries like South Africa. 
+Category: Hong Kong; Title: Police to Launch Drone Patrols in Hong Kong Urban Areas; Content: Police will launch drone patrols in Hong Kong urban areas on Friday, flying 60 meters above buildings to monitor potential criminal activities.;
 
-Title: Zerohedge: International Relations and Geopolitical Tensions\Content: Zerohedge covers a range of international events, including Putin's visit to the Kursk region, tensions in the South China Sea, and the Israeli-Palestinian conflict. 
+Category: Hong Kong; Title: Hong Kong's Unemployment Rate Hits 2-Year High; Content: Hong Kong’s unemployment rate hits a 2-year high of 3.4%, with construction and financing sectors notably affected.;
 
-Title: Coindesk: Bitcoin, Altcoins and Market Trends\Content: Bitcoin is reaching new market capitalization milestones and record highs, and altcoins like Chainlink are showing strong accumulation trends, according to Coindesk analysis. 
+Category: Technology; Title: OpenAI to Buy AI Startup from Jony Ive for $6.5 Billion; Content: OpenAI is acquiring Jony Ive's AI device startup, io, for $6.5 billion. Ive will lead the design for a new series of AI hardware products.;
 
-Title: Coindesk: Crypto Regulations and Legal Issues\Content: Hong Kong is establishing a stablecoin regime, while in the US, regulatory opinions on crypto are being challenged in court cases. 
+Category: Financial; Title: Bitcoin Hits New Record High; Content: Bitcoin rose to a new high of $109,400, overtaking Amazon as the fifth-largest asset, before consolidating marginally lower. Bitcoin also hit an all-time intraday high of $109,359.;
 
-Title: Marketwatch: Market Reactions and Financial Analysis\Content: Marketwatch reports on market reactions to events like interest rate surges and provides analysis on topics like budget deficits and the stablecoin industry. 
+Category: Politics; Title: Trump Confronts South African President on White Genocide Claims; Content: President Trump ambushed South African President Cyril Ramaphosa in the Oval Office, presenting a video and claims of white genocide in South Africa, which Ramaphosa refuted.;
 
-Title: Market Faltered Amid US budget deficits concerns\Content: The Dow experienced its worst day in a month due to concerns about US budget deficits and a poor 20-year-bond auction, with rising interest rates impacting risk assets. Reference URLs Summary:
+Category: Technology; Title: Google Launches New AI Models for Video and Images; Content: Google launched new AI models for video and images that are better than the old ones but will cost you.;
 
-- **Marketwatch:** Dow logs worst day in a month. Here are the reasons driving the rout.
-- **Marketwatch:** Dow ends with worst day in at least a month after poor 20-year-bond auction.
-- **Marketwatch:** Here's what's dragging down the Dow as it heads for its worst day in a month
+Category: Financial; Title: Hong Kong Joins Global Stablecoin Race With New Licensing Bill; Content: Hong Kong has been working on establishing a stablecoin regime since 2023.;
 
-Title: Zerohedge: the son of Dr. Phil is linked to a predatory lending scheme that exploits a Native American tribe\Content: Jay McGraw, Dr. Phil's eldest son, is linked to a 700% APR lending business tied to an Alaska Tribe, raising ethical concerns and dividing the community. Reference URLs Summary:
+Category: Politics; Title: GOP Moves to Expel Democratic Rep. LaMonica McIver After Assault Charge; Content: House Republicans are moving to expel Democratic Rep. LaMonica McIver following charges of assaulting law enforcement during a protest. This action has been met with strong criticism and claims of political targeting.;
 
-- **ProPublica:** A 700% APR Lending Business Tied to Dr. Phil’s Son Is Dividing an Alaska Tribe.  Jay McGraw is accused of playing a key role in CreditServe Inc. The tribal lending operation, Minto Money, is based in the village of Minto, and has delivered a new revenue stream to the community since its inception in 2018. But it’s also created a rift within the tribe, as some members are appalled by the burdens inflicted on poor and desperate people.
+Category: Technology; Title: Sam Altman's Worldcoin Raises $135M in Token Sale; Content: Sam Altman’s Worldcoin raises $135M in Token Sale to a16z and Bain Capital Crypto to help expanding the network.;
 
-Title: UnitedHealth Faces Allegations of Nursing Home Bonus Payments for Reduced Hospital Transfers\Content: UnitedHealth Group stock declined following reports of secret bonus payments to nursing homes that reduced hospital transfers, raising concerns about patient care and ethical practices. Reference URLs Summary:
+Category: Financial; Title: Sam Altman’s Worldcoin Raises $135M in Token Sale; Content: Sam Altman’s World raises $135M in Token Sale to a16z and Bain Capital Crypto. Funds from the venture capital giants will be used for the network's expansion.;
 
-- **Investor's Business Daily:** UnitedHealth Leads Dow Jones Losses On Damning New Allegations.  UnitedHealth Group stock tumbled, again, Wednesday on reports the insurer secretly paid nursing homes to reduce hospital transfers.
-- **BBC News:** ‘Smash the gangs' and end asylum hotels - are government promises being met? BBC Verify examines key areas which the government has promised to make improvements;
-- **Zerohedge:** UnitedHealth Shares Drop After Report Alleges Secret Bonus Payments To Nursing Homes For Cutting Hospital Transfers.
+Category: Politics; Title: Trump's Administration's Policies Spark Controversy; Content: The Trump administration's policies continue to draw scrutiny, including claims of Afrikaners being persecuted and controversy surrounding a 700% APR lending business tied to Dr. Phil’s son, dividing an Alaska tribe.;
 
-Title: OpenAI and Jony Ive Partner to Develop AI Hardware\Content: OpenAI is acquiring Jony Ive's hardware startup, io, for $6.5 billion, signaling a major move into AI-driven hardware development. Reference URLs Summary:
+Category: Technology; Title: Block's AI Agent for Productivity; Content: Jack Dorsey's Block created an AI agent to boost its own productivity, capable of building software and occasionally deleting things.;
 
-- **Wired:** OpenAI's Big Bet That Jony Ive Can Make AI Hardware Work. Io, a firm Ive and Sam Altman cocreated, will now merge with OpenAI.
-- **MarketWatch:** Here’s why OpenAI is buying iPhone designer Jony Ive’s startup for $6.5 billion.
-- **CNBC:** OpenAI is buying iPhone designer Jony Ive's AI devices startup for $6.4 billion.
+Category: Financial; Title: Stablecoins Are About to Hit ‘Critical Mass’; Content: Stablecoins are about to hit ‘critical mass’ While 2027 Seen as Pivotal Year, according to speakers at Paxos' NYC event.;
 
-Title: AMD Challenges Intel in the AI PC Market\Content: AMD introduced new processors for AI-powered PCs, aiming to compete with Intel at the Computex trade show in Taiwan. 
+Category: Politics; Title: Trump's Tax Bill Faces Hurdles Amid Deficit Concerns; Content: Trump's tax bill is encountering challenges as concerns mount over its potential to increase the national debt. The current Republican tax bill could cut $500 billion from Medicare.;
 
-Title: Baidu's AI Growth Boosts Q1 Revenue Despite Stock Fall\Content: Baidu's Q1 results exceeded expectations due to AI momentum, but its stock fell despite the revenue beat. 
+Category: Technology; Title: More AI Is Coming to Your Google Search Results; Content: Google is adding more AI to search results, whether you asked for "AI Mode" or not.;
 
-Title: Rising Sea Temperatures in UK After Warm Spring\Content: Sea temperatures off the UK and Ireland have soared after an exceptionally warm spring, with some areas 4C above average. 
+Category: Financial; Title: Guatemala's Largest Bank Adopts Stablecoin Rails for U.S. Remittance Payments; Content: Guatemala's Largest Bank Adopts Stablecoin Rails for U.S. Remittance Payments, allowing Guatemalans to receive funds from the U.S. for a flat 99 cent fee.;
 
-Title: ZeroHedge: The KGB Spy Who Predicted Our Future\Content: Zerohedge discusses Yuri Bezmenov, a KGB defector, who warned of ideological subversion and its stages: demoralization, destabilization, crisis, and normalization. 
+Category: Politics; Title: US Budget Deficits and the Stock Market; Content: The IMF warns the US to tackle its debt burden as budget deficits could soon go from stock-market friend to foe.;
 
-Title: Zerohedge: Americans' Frugality Increasing\Content: More Americans are turning to thrift stores and DIY repairs amid economic instability, with the second-hand market projected to grow significantly. 
+Category: Technology; Title: AI-Generated Voice Used to Narrate 'Doom' Videos; Content: A gaming YouTuber says an AI-generated clone of his voice is being used to narrate 'Doom' videos, highlighting persona plagiarism.;
 
-Title: Netanyahu Remains Defiant Amid Growing Pressure\Content: Despite international pressure, Netanyahu declares Israel will maintain security control over all of Gaza and asserted that he will not change tack. 
+Category: International Affairs; Title: Growing Israeli Anger at Conduct of War; Content: Support for the war in Gaza is waning, with some Israeli political and military figures criticizing the conflict, while anti-Hamas protests in southern Gaza enter their third day.;
 
-Title: Zerohedge: John Stewart Comments on Biden's Cognitive Decline\Content: John Stewart highlights the open secret of President Biden's cognitive decline and criticizes news outlets for suddenly reporting on it in order to sell books. 
+Category: Technology; Title: UK to Sign Chagos Deal with Mauritius; Content: The UK and US will maintain a key military base on the island for 99 years, under the multi-billion pound deal.;
 
-Title: Zerohedge: Loudon County Investigates Students for Complaining About Trans Student in Locker Room\Content: Loudon County Schools are facing scrutiny for investigating male students who complained about a transgender student in the boys' locker room. 
+Category: International Affairs; Title: China's Numerous Aging Dams Pose A Serious Threat To Safety; Content: China has more dams than any other country, nearly half of all global dams are located there. China’s top leader Xi Jinping acknowledged that China has too many high and deficient dams that potentially threaten the country.;
 
-Title: Zerohedge: Marine Corps Modernization Debate\Content: RealClearDefense discusses concerns about the Marine Corps' Force Design project and proposes steps to allow future commandants more flexibility. 
+Category: Technology; Title: Snowflake Earnings Exceed Expectations, Outlook Optimistic; Content: Snowflake's Q1 earnings topped estimates, with product revenue guidance above views. Snowflake stock climbed.;
 
-Title: Zerhedge: China's Response to US Missile Defense Plan\Content: China demands the US abandon its 'Golden Dome' missile defense system, claiming it would turn space into a battlefield. 
+Category: International Affairs; Title: Putin Tours Liberated Kursk Region; Content: President Vladimir Putin visited the Kursk region for the first time since its full liberation from Ukrainian forces. The visit projects a return to normality.;
 
-Title: Zerohedge: USDA Restricts SNAP Purchases in Nebraska\Content: The USDA approved Nebraska's request to ban soda and energy drinks from SNAP purchases as part of the Make America Healthy Again agenda. 
+Category: Technology; Title: AMD Aims To Kick Rival Intel While It's Down; Content: AMD introduced its latest processors for AI-powered personal computers and workstations at the Computex trade show in Taiwan.;
 
-Title: Zerohedge: Trump's Team Gearing Up With America First Policy Institute\Content: The America First Policy Institute is staffing Trump's potential 2.0 administration with key personnel, advancing the 'America First' agenda. 
+Category: International Affairs; Title: China's Response to US Missile Defense System; Content: China expresses grave concern over the US plan for a space-based missile defense system, arguing it will turn space into a battlefield.;
 
-Title: Aging Infrastructure Concerns in China\Content: A partially collapsed ancient Chinese tower highlights concerns over the safety and maintenance of China's numerous aging dams and infrastructure. 
+Category: Technology; Title: Authorities Disrupt Cybercriminal Infostealer; Content: US, European, and Japanese authorities, along with tech companies, disrupted Lumma, an infostealer popular with criminal gangs.;
 
-Title: White House says Trump wants to primary Republicans who voted against the 'Big Beautiful Bill'\Content: Reps. Warren Davidson of Ohio and Thomas Massie of Kentucky were the only two House Republicans to vote against the bill. Reference URLs Summary:
-- businessinsider.com: Reps. Warren Davidson of Ohio and Thomas Massie of Kentucky were the only two House Republicans to vote against the Big, Beautiful Bill.
+Category: Technology; Title: AMD’s Lisa Su on Experimenting with AI; Content: AMD’s Lisa Su discuses how the company is scaling their use of AI without losing control.;
 
-Title: Trump's 'Big, Beautiful Bill' Passes House; Senate Revisions Expected\Content: President Trump's multi-trillion-dollar tax package, the "Big, Beautiful Bill," narrowly passed the House (215–214). The bill now moves to the Senate, where Republicans are calling for major revisions before an expected vote in August. Key provisions include extending Trump-era tax cuts, increasing the SALT deduction cap, cutting safety-net programs, rolling back clean energy tax credits, and increasing military and border security spending. The bill's passage has led to a rise in the US 30-year Treasury yield, hitting its highest level since October 2023. Reference URLs Summary:
-- zerohedge.com: The "Big, Beautiful Bill" passed the House with provisions like tax cuts, no tax on tips/overtime, deductions for American-made vehicle purchases, border security measures, and "TRUMP Savings Accounts." President Trump urges the Senate to pass the bill quickly.
-- businessinsider.com: White House says Trump wants to primary Republicans who voted against the bill, specifically naming Reps. Warren Davidson and Thomas Massie.
-- investors.com: The bill includes the elimination of EV tax credits and introduces interest deductions on U.S.-built vehicle loans, impacting Tesla and the EV market.
+Category: US Politics; Title: Senate Nullifies California's Gas-Car Ban, Sends Bill To Trump; Content: - The Senate voted to overturn California's ban on gasoline-powered vehicles by 2035.
+- The vote nullifies a Biden-era EPA waiver allowing California to set stricter emission standards.
+- Eleven states, plus D.C., have adopted California's plan to phase out gasoline car sales.
+- Republicans argue the waiver is a federal overreach and harms the economy.;
 
-Title: Trump Admin Blocks Harvard From Enrolling International Students\Content: The Trump administration has blocked Harvard University from enrolling international students, citing concerns over violence, antisemitism, and ties to the Chinese Communist Party. Effective immediately, Harvard's Student and Exchange Visitor Program certification is revoked, requiring existing foreign students to transfer or lose their legal status. The decision follows a dispute over a DHS records request regarding student misconduct. A federal judge in California, however, has blocked the administration from terminating the legal status of international students nationwide while a court case is pending. Reference URLs Summary:
-- zerohedge.com: DHS Secretary Kristi Noem revoked Harvard's certification due to non-compliance with reporting requirements and an unsafe campus environment. Existing foreign students must transfer. A federal judge blocked the administration from terminating the legal status of international students nationwide.
-- axios.com (1): The Trump administration found Columbia University violated federal civil-rights law regarding student-on-student harassment of Jewish students and is pulling some $400 million in federal grants.
-- axios.com (2): The Trump administration blocked Harvard from enrolling international students, citing a failure to hand over records about the student body and student visa holders involved in "known illegal" or "dangerous" activity.
+Category: US Politics; Title: After House Victory, Trump Tells Senate: "Get To Work" On 'Big, Beautiful Bill'; Content: - President Trump's tax package cleared the House with a 215-214 vote and moves to the Senate.
+- Key provisions include extending Trump-era tax cuts, increasing the SALT deduction cap, and cutting safety-net programs.
+- The bill also includes rollbacks on clean energy tax credits and increased military and border security spending.
+- The US 30-year Treasury yield moved higher after the bill passed the House.;
 
-Title: Senate Nullifies California's Gas-Car Ban; Bill Heads to Trump\Content: The U.S. Senate voted 51–44 to overturn California's ban on gasoline-powered vehicles by 2035, sending the measure to President Trump's desk. This nullifies a Biden-era EPA waiver that allowed California to set stricter emission standards. Republicans argue it's federal overreach and harms consumer choice, while environmental groups are furious. Reference URLs Summary:
-- zerohedge.com: The Senate voted to end California's EV mandate, with Senator Shelley Moore Capito stating the waiver would have harmed the economy and cost jobs. Democrats are concerned about the unravelling of climate policies and the impact on power grid reliability.
+Category: US Politics; Title: Trump Admin Blocks Harvard From Enrolling International Students; Content: - Harvard University's Student and Exchange Visitor Program certification is revoked, blocking enrollment of international students.
+- Existing foreign students must transfer or lose their legal status.
+- The decision follows a dispute over records requests and concerns about campus safety and antisemitism.
+- A federal judge in California has blocked the Trump administration from terminating the legal status of international students nationwide.;
 
-Title: Presentation: Taming the Configuration Beast with Pkl!\Content: Dan Chao explains how Pkl streamlines infrastructure as code workflows. By defining schemas and constraints, Pkl enables robust configuration management, catching errors early and providing clear feedback. The demo showcases Pkl's ability to generate YAML for Kubernetes and its advantages over manual YAML complexity. 
+Category: US Politics; Title: Supreme Court: Children Of Illegal Aliens Or Tourists Are Not U.S. Citizens; Content: - On the day Donald Trump became president again, he signed an executive order prospectively eliminating birthright citizenship for children born to aliens unlawfully present in the United States.
+- The Supreme Court has construed the phrase “subject to the jurisdiction” more narrowly, most notably in seminal cases that have been taught — well or ill — in law schools ever since.
+- The Court’s interpretation of the Citizenship Clause of the Fourteenth Amendment thus limits its application to children of aliens residing in the country with permission.;
 
-Title: Aftermath of Senate Vote: Sharp Words and Market Repercussions\Content: Following the passage of Trump's "Big, Beautiful Bill," the bond market reacted, with the US 30-year Treasury yield rising to 5.12%. Democrats are critical, calling the bill a transfer of wealth to the rich. The US fiscal outlook is now worrying bond investors, with potential for higher treasury yields, which will negatively impact the stock market. 
+Category: International Politics; Title: Iran Will Hold US Responsible For Any Israeli Attack On Nuclear Sites: Foreign Minister; Content: - Iran threatens to move nuclear material to secret sites if Israel attacks its nuclear facilities.
+- Iran will hold the US responsible for any Israeli attack.
+- The US and Iran are set to hold a fifth round of nuclear talks in Rome.
+- The Ayatollah has weighed in following reports that Iran is ready to halt enrichment altogether and in return get sanctions lifted.;
 
-Title: Markets Mostly Flat; Big Afternoon for Earnings: WDAY, DECK, INTU & More\Content: Market indexes broke the spell today about high bond yields providing a headwind for equities, but nosedived into the close. 
+Category: Financial Markets; Title: Why Top Hedge Funds Loaded Up on Broadcom During Its Q1 Pullback; Content: Broadcom's stock experienced a Q1 pullback, prompting top hedge funds to increase their positions in the company.;
 
-Title: House tax bill makes unprecedented cuts to Medicaid and SNAP\Content: The House tax bill makes unprecedented cuts to Medicaid and SNAP. 
+Category: Financial Markets; Title: A 5-star fund manager is capitalizing on Trump’s global market shake-up; Content: A 5-star fund manager is capitalizing on Trump’s global market shake-up.;
 
-Title: A 5-star fund manager is capitalizing on Trump’s global market shake-up\Content: A 5-star fund manager is capitalizing on Trump’s global market shake-up. 
+Category: Financial Markets; Title: White House says Trump wants to primary Republicans who voted against the 'Big Beautiful Bill'; Content: Reps. Warren Davidson of Ohio and Thomas Massie of Kentucky were the only two House Republicans to vote against the bill.;
 
-Title: CoreWeave’s stock is up 200% in a month. Here’s why it’s so polarizing.\Content: CoreWeave’s stock is up 200% in a month. Here’s why it’s so polarizing. 
+Category: Financial Markets; Title: Treasury yields rise, stocks decline on US fiscal outlook worries; Content: Treasury yields rise, stocks decline on US fiscal outlook worries.;
 
-Title: Trump confronts South Africa's Ramaphosa with false claims of white genocide\Content: Trump confronted South Africa's Ramaphosa with false claims of white genocide. Reference URLs Summary:
-- investing.com: Article says nothing besides repeating the title.
-- bbc.co.uk: Why did Trump ambush the South African president? Cyril Ramaphosa kept his cool despite the onslaught.
+Category: Financial Markets; Title: The White House wants its tax bill and lower yields. Wall Street isn't on board.; Content: The White House wants its tax bill and lower yields. Wall Street isn't on board.;
 
-Title: Democrats to vote in June on whether to redo election of David Hogg as DNC vice chair\Content: The Democratic National Committee will vote in June on whether to hold a redo of the election of David Hogg and Pennsylvania state Rep. Malcolm Kenyatta as vice chairs. A losing candidate claims the election was flawed, while Hogg alleges it's linked to his efforts to reform the party. Reference URLs Summary:
-- axios.com: Kalyn Free claims the election was flawed, but Hogg alleges it's linked to his plans to spend $20 million to primary older Democratic Congress members.
+Category: Financial Markets; Title: BOJ should step in only in a 'severe' bond market rout, policymaker says; Content: BOJ should step in only in a 'severe' bond market rout, policymaker says.;
 
-Title: Inside Nvidia’s 13F: What the Chip Giant’s Bets Reveal About the Future of AI\Content: A summary of Nvidia's 13F filings and what they indicate about the company's strategies and expectations for the AI market. 
+Category: Financial Markets; Title: A famed Wall Street bear warns of 'global financial market Armageddon' as Japanese bond yields spike; Content: A famed Wall Street bear warns of 'global financial market Armageddon' as Japanese bond yields spike.;
 
-Title: HashiCorp Releases Terraform MCP Server for AI Integration\Content: HashiCorp has released the Terraform MCP Server, an open-source implementation of the Model Context Protocol designed to improve how large language models interact with infrastructure as code. Reference URLs Summary:
-- infoq.com: HashiCorp has released the Terraform MCP Server, an open-source implementation of the Model Context Protocol designed to improve how large language models interact with infrastructure as code.
+Category: Tech/AI; Title: Why Baidu Is the Underrated AI Stock from the East; Content: Baidu Is the Underrated AI Stock from the East.;
 
-Title: Azure Logic Apps Introduces 'Agent Loop' for Building AI Agents in Enterprise Workflows\Content: Microsoft's Build conference unveiled Agent Loop, a transformative feature in Azure Logic Apps enabling developers to embed AI agents into enterprise workflows, leveraging over 1,400 connectors. Reference URLs Summary:
-- infoq.com: Microsoft's Build conference unveiled Agent Loop, a transformative feature in Azure Logic Apps enabling developers to embed AI agents into enterprise workflows, leveraging over 1,400 connectors, streamlining operations, and enhancing decision-making.
+Category: International Politics; Title: US panel submits view on Nippon Steel-US Steel deal to Trump, source says; Content: US panel submits view on Nippon Steel-US Steel deal to Trump, source says.;
 
-Title: Why Top Hedge Funds Loaded Up on Broadcom During Its Q1 Pullback\Content: Top hedge funds increased their positions in Broadcom during its Q1 pullback. 
+Category: Tech/AI; Title: Inside Nvidia’s 13F: What the Chip Giant’s Bets Reveal About the Future of AI; Content: Nvidia 13F, insights into future AI direction.;
 
-Title: Presentation: Taming the Configuration Beast with Pkl!\Content: Dan Chao explains how Pkl streamlines infrastructure as code workflows. By defining schemas and constraints, Pkl enables robust configuration management, catching errors early and providing clear feedback. The demo showcases Pkl's ability to generate YAML for Kubernetes and its advantages over manual YAML complexity. 
+Category: Tech/AI; Title: Build 2025 Chaos: Walmart Inc. (WMT)’s Powerful AI Tool ‘MyAssistant’ Unintentionally Revealed By MSFT; Content: Microsoft unintentionally revealed Walmart's powerful AI tool 'MyAssistant' during Build 2025.;
 
-Title: AI Is Reshaping Cyber Defense, says Palo Alto Executive\Content: Artificial intelligence is reshaping cybersecurity and fueling a high-stakes arms race between cyber defenders and sophisticated attackers. 
+Category: International Politics; Title: Trump confronts South Africa's Ramaphosa with false claims of white genocide; Content: Trump confronts South Africa's Ramaphosa with false claims of white genocide.;
 
-Title: A famed Wall Street bear warns of 'global financial market Armageddon' as Japanese bond yields spike\Content: Albert Edwards warns of a 'global financial market Armageddon' as Japanese bond yields spike, drawing parallels to the late-1990s tech bubble bursting first in Japan. 
+Category: Tech/AI; Title: AI Is Reshaping Cyber Defense. Investors Should Watch These Trends, Says Palo Alto Executive; Content: AI Is Reshaping Cyber Defense. Investors Should Watch These Trends, Says Palo Alto Executive;
 
-Title: Trump admin finds Columbia violated Jewish students' civil rights\Content: The Trump administration found that Columbia University violated federal civil-rights law by acting with deliberate indifference towards student-on-student harassment of Jewish students. The college was last year an epicenter for students protesting the Israel-Hamas war. 
+Category: Tech/AI; Title: Presentation: Taming the Configuration Beast with Pkl!; Content: Pkl streamlines infrastructure as code workflows, enabling robust configuration management.;
 
-Title: A 5-star fund manager is capitalizing on Trump’s global market shake-up\Content: A 5-star fund manager is capitalizing on Trump’s global market shake-up. 
+Category: Tech/AI; Title: Azure Logic Apps Introduces 'Agent Loop' for Building AI Agents in Enterprise Workflows; Content: Azure Logic Apps introduces Agent Loop, enabling developers to embed AI agents into enterprise workflows.;
 
-Title: A股全线上涨，医药集体走强，恒科指一度涨超1%，恒瑞医药港交所上市首日涨30%，国债下跌\Content: A股震荡走高，三大股指午盘集体小幅收涨，创新药、汽车等板块涨幅居前，港股恒指、恒科指早盘双双上涨，恒瑞医药香港上市首日涨超30%。 
+Category: Tech/AI; Title: HashiCorp Releases Terraform MCP Server for AI Integration; Content: HashiCorp has released the Terraform MCP Server, an open-source implementation of the Model Context Protocol designed to improve how large language models interact with infrastructure as code.;
 
-Title: The White House wants its tax bill and lower yields. Wall Street isn't on board.\Content: The White House wants its tax bill and lower yields. Wall Street isn't on board. 
+Category: Bay Area Local News; Title: Thursday Morning What's Up: Two Killed In Fiery Head-On Crash In Brentwood; Content: Two drivers were killed in a head-on crash Wednesday night on Highway 4 in Brentwood, which led to an EV battery fire; a divided Supreme Court shoots down a religious charter school; and homeless tents in SF are at a five-year low, but complaints are up.;
 
-Title: Presentation: Taming the Configuration Beast with Pkl!\Content: Dan Chao explains how Pkl streamlines infrastructure as code workflows. By defining schemas and constraints, Pkl enables robust configuration management, catching errors early and providing clear feedback. The demo showcases Pkl's ability to generate YAML for Kubernetes and its advantages over manual YAML complexity. 
+Category: Bay Area Local News; Title: Big Fireworks Show Near North Beach Over the Weekend Was For Private Corporate Anniversary Party; Content: A fireworks spectacular near North Beach was a private show for a corporate anniversary, with no public notice given.;
 
-Title: After House Victory, Trump Tells Senate: "Get To Work" On 'Big, Beautiful Bill' - ZH\Content: President Trump urges the Senate to pass the "Big, Beautiful Bill" after it narrowly cleared the House. The bill includes tax cuts, border security, and increased spending. Democrats criticize it as benefiting the wealthy at the expense of social safety nets. 
+Category: Tech/AI; Title: Fire Breaks Out at a Data Center Leased by Elon Musk’s X; Content: A room with batteries contributed to the blaze at a building leased by Elon Musk’s X near Portland, Oregon.;
 
-Title: Trump's Tariff Threats and Trade War Concerns\Content: President Trump's recent tariff threats, including potential 50% tariffs on EU goods and 25% tariffs on iPhones made outside the US, have sparked market volatility and concerns about a trade war. These actions have led to a decline in stock prices, a surge in gold, and renewed debate over the impact on the US economy and international relations. Some analysts believe these tariffs could backfire, hurting US businesses and consumers. - **Trump's Tariff Threats:** Trump is considering 50% tariffs on EU goods and 25% on iPhones made abroad, sparking market volatility and trade war fears.
-- **Impact on Apple:** Analysts warn tariffs on iPhones could significantly increase prices, potentially reaching $3,500, due to higher labor costs and supply chain disruptions if manufacturing moves to the US.
-- **EU's Response:** The EU is preparing to defend its interests and has threatened to walk away from trade discussions with China due to a lack of progress.
-- **Impact on Markets:** The threats have already caused U.S. stock futures to plunge, with Apple stock falling, and gold stocks rallying.
-- **Geopolitical Implications:** Diplomats are calling for a renewed world order to confront Trump's tariff chaos, emphasizing multilateralism as the key to preserving peace and order.
+Category: Technology and AI; Title: AI Advancements and Ethical Concerns; Content: *   **AI Integration in Development:** Android team explores using Gemini AI models to improve software toolchains.
+*   **AI and Education:** Discussions on ChatGPT and cheating in classrooms.
+*   **Microsoft and AI:** Analysts bullish on Microsoft stock due to AI agents.
+*   **Amazon and AI Chips:** New AI models from Anthropic could boost Amazon's challenge to Nvidia.;
 
-Title: Trump's Push for Nuclear Energy and Overhaul of Regulatory Commission\Content: President Trump is pushing for a 'nuclear energy renaissance' by signing executive orders to fast-track the development and deployment of advanced nuclear reactors. This includes reforming the Nuclear Regulatory Commission (NRC) to expedite licensing, boosting domestic uranium production, and aiming for 10 new large reactors by 2030. Concerns are raised about safety and whether the market can absorb this much nuclear energy. - **Executive Orders:** Trump signed orders to boost nuclear energy, aiming for 10 new reactors by 2030 and streamlining the NRC's approval process.
-- **Industry Response:** The move has sparked a rally in nuclear-related stocks like Oklo, but also raised concerns about safety and long-term viability.
-- **Uranium Production:** The orders seek to increase domestic uranium mining and enrichment.
-- **Security Implications:** The initiative aims to secure energy independence and support AI and other advanced technologies.
-- **Opposition:** Critics, like the Union of Concerned Scientists, warn of potential accidents and compromised safety due to deregulation.
+Category: Politics; Title: Trump's Actions and Policies:; Content: *   **Tariffs:** Trump threatens 50% tariffs on EU goods and 25% on imported iPhones, causing market volatility.
+*   **U.S. Steel Deal:** Trump endorses Nippon Steel partnership with U.S. Steel, promising job creation and economic benefits.
+*   **Nuclear Energy:** Trump signs executive orders to boost the U.S. nuclear energy sector and overhaul the Nuclear Regulatory Commission.;
 
-Title: Palantir Evades Stock Impact; Firm's AI Strategy Highlighted Amid Overvaluation Concerns\Content: Palantir stock has remained relatively stable, while a rival government contractor, Booz Allen Hamilton, faced investor backlash. Palantir is being recognized for its comprehensive AI strategy, although concerns about stock overvaluation persist.  Analyst points out it benefits from ad business growth, AI initiatives, and new partnerships, but faces stiff competition and valuation concerns. - Palantir stock is stable while Booz Allen Hamilton faces investor backlash.
--  Firm's AI push and strong balance sheet impress, but concerns linger over the stock's valuation despite growing commercial traction.
-- Stock benefits from ad business growth, AI initiatives, and new partnerships, but faces stiff competition and valuation concerns.
+Category: Economy and Finance; Title: Trade and Tariffs; Content: *   **Trump's Trade Policies:** Trump threatens EU with 50% tariffs and Apple with 25% tariffs, causing stock market instability.
+*   **Diplomats Respond:** Diplomats call for a renewed world order to confront Trump's tariff chaos.
+*   **The Stock Market**: There is discussion of the stock strategies that are paying off in 2025.;
 
-Title: Freedom of the Press Foundation Threatens Legal Action Against Paramount Over Trump Interview\Content: The Freedom of the Press Foundation (FPF) is threatening legal action if Paramount settles with Donald Trump over a '60 Minutes' interview, arguing that such a deal could amount to a bribe. As Paramount considers settling a lawsuit with Donald Trump over a '60 Minutes' interview, the Freedom of the Press Foundation warns that it will sue over a deal that allegedly “could amount to a bribe.”
+Category: Technology and AI; Title: AI's Ethical Implications and Job Market; Content: *   **AI Job Replacement:** Anthropic CEO predicts AI systems will eventually perform all human worker tasks.
+*   **Job automation:** there is a discussion of how AI is being used to better automate processes across industries. 
+*   **AI and Art:** A Hong Kong artist lands a Star Wars manga gig.;
 
-Title: The Android team is using Gemini AI models to improve software toolchains\Content: Google is using Gemini AI models to enhance developer efficiency and reduce routine toil. Matthew McCullough, VP of Product for Android Developer Experience, discusses advancements in Android development and the application of AI to improve software toolchains. Matthew McCullough, VP of Product for Android Developer Experience, sits down with Ryan to talk advancements in Android development, enhancing developer efficiency and reducing routine toil, and the application of Gemini AI models to improve software toolchains.
+Category: Technology and AI; Title: AI Development and Applications; Content: *   **AI-Driven Solutions**: Intuit's stock rises due to AI-driven solutions.
+*   **AI and Medicine:** Artificial Intelligence is being deployed to advance treatment for diseases such as cancer.
+*   **AI and Bitcoin**: Kentucky is seeing Bitcoin mines being converted into AI-powered data centers.;
 
-Title: After Trump crypto dinner, Justin Sun celebrates ‘strong signal’ to the industry\Content: Tron founder Justin Sun, who holds the largest share of the $TRUMP memecoin, views recent US crypto moves as affecting China. The Tron founder, with the largest holding of the $TRUMP memecoin, tells the Post that he sees recent US crypto moves affecting China.
+Category: Politics; Title: Trump Administration and US Border Security; Content: *   **Visa Overstays:** Trump administration warns Indians against visa overstays, risking lifetime bans.
+*   **Illegal Immigration:** Focus shifts to visa overstays as a significant contributor to undocumented immigration.
+*   **Gaza aid**: UN says 15 aid trucks looted in Gaza, motivated by hunger, desperation and anxiety’.;
 
-Title: Anthropic's Developer Day Highlights AI Agents and Future Automation\Content: Anthropic's first developer day showcased AI agents taking center stage. Anthropic CEO Dario Amodei predicted that AI systems would eventually automate all tasks currently performed by human workers. Anthropic CEO Dario Amodei said everything human workers do now will eventually be done by AI systems.
+Category: Technology and AI; Title: Broadcom and the Semiconductor Industry; Content: *   **Semiconductor Industry**: Broadcom, Lam Research, and Impinj are highlighted as AI and chip demand fuel gains in the Zacks semiconductor industry.
+*   **Microsoft and AI Agents**: Microsoft stock bullish due to AI agents.;
 
-Title: Inside Trump’s Memecoin Dinner\Content: President Donald Trump attended a private banquet with 200 of the largest investors in his personal crypto coin. On Thursday evening, US president Donald Trump attended a private banquet with 200 of the largest investors in his personal crypto coin.
+Category: Politics; Title: U.S. Relations with China and Other Countries; Content: *   **China Relations:**  U.S. weighs semiconductor, biotechnology, and AI actions against China.
+*   **EU Relations:** Trump threatens EU with 50% tariffs, impacting Apple and European markets.
+*   **Ukraine and Russia:** Russia casts doubt over Vatican as Ukraine peace talk venue after major prisoner swap; Ukraine attacked by Russian drones and missiles.;
 
-Title: Microsoft Stock Receives Bullish Ratings Due to AI Agents\Content: Following the company's Build conference, several Wall Street analysts issued bullish reports on Microsoft stock, citing the potential of AI agents. Several Wall Street analysts issued bullish reports on Microsoft stock after the company's Build conference earlier this week.
+Category: International Relations; Title: Geopolitical Alignments and Conflicts; Content: *   **China, Russia, and North Korea:** China’s alignment with Russia and North Korea creates a dangerous triangle.
+*   **Russia and Ukraine:** Russia casts doubt over the Vatican as a potential venue for Ukraine peace talks.;
 
-Title: Google’s co-founder says AI Performs Best When You Threaten It\Content: Solve the math puzzle from our June 2025 issue, in which friends must find ways to all enjoy hot mud beds.; 
+Category: Economy and Finance; Title: China's Economic Landscape; Content: *   **Property Market**: Analysts downgrade China's property price outlook in 2025 due to trade tensions.
+*   **Retirement Plans**: Young Chinese postpone retirement plans due to a slowing economy and demographic crisis.
+*   **Hong Kong's Economy**: Fitch maintains Hong Kong's 'AA-' credit rating but warns of US-China trade war impacts.;
 
-Title: CIA Prioritizes Tech War with China, Citing US's Existential Threat\Content: CIA Deputy Director Michael Ellis emphasizes that winning the tech war with China is the agency's top priority, due to the existential threat China poses to U.S. security. The focus is on maintaining a technological advantage in areas like semiconductors, biotechnology, and AI. The CIA says that China represents an “existential threat” to the United States and that the agency’s top priority is outpacing the Chinese Communist Party (CCP) in a high-stakes technological arms race that spans semiconductors, biotechnology, and artificial intelligence.
+Category: Bay Area Local News; Title: San Francisco and Bay Area Updates; Content: *   **San Francisco News:** San Francisco’s search for a new police chief and a possible ousting of a supervisor.
+*   **San Francisco Crime:** Safety documents for Hong Kong construction sites ‘should require e-signatures’ to fight fraud.
+*    **Oakland**: Oakland removes speed bumps installed by residents frustrated with sideshows;
 
-Title: Why China’s fighting so hard against the US’ new chip ban – and will it work?\Content: Beijing’s strong reaction to new US curbs on Chinese chips stems from a growing confidence that it can outlast Washington in a stand-off, analysts say. 
+Category: Politics; Title: East Asia Politics; Content: *   **China-Singapore Ties:** Li Qiang congratulates Singapore’s Wong on his win, anticipating friendly relations.
+*   **South Korea's Birth Rate Crisis:** South Korea offers up to US$29,000 cash for marriage to tackle its birth-rate crisis.;
 
-Title: EU Threatens Trade Showdown with China\Content: The EU is threatening to walk away from a trade showdown with China due to a lack of progress in key talks, potentially jeopardizing a leaders’ summit. 
+Category: Economy and Finance; Title: Company News and Stock Performance; Content: *   **UnitedHealth Group:**  Experts discuss how UnitedHealthcare became the face of America's health insurance frustrations.
+*   **Microsoft Stock**: Earns Bullish Notes On AI Agents
+*   **Apple Stock**: Apple stock fell after President Donald Trump threatened to put a tariff on Apple iPhones of “at least 25%.”;
 
-Title: Global Study Debunks 'Lab Leak' Theory of COVID-19 Origin\Content: A global study debunks the 'lab leak' theory, tracing the origins of the COVID-19 virus to bat populations in Laos and southwest China years before the pandemic emerged. 
+Category: Society and Culture; Title: Societal Trends and Generational Issues; Content: *   **Youth in Malaysia:** Anwar Ibrahim mints a dynasty, but Malaysia’s youth aren’t buying it.
+*   **South Korean Incentives:** South Korea offers cash for marriage to tackle birth-rate crisis.
+*   **Press Freedom**: Freedom of the Press Foundation threatens legal action if Paramount settles with Trump over '60 Minutes' Interview;
 
-Title: China Greenlights Mega-Project Canal Linking Resource-Rich Jiangxi to Wealthy Zhejiang\Content: Beijing is moving ahead with a mega-project canal to link Jiangxi to Zhejiang, aiming to integrate inland economies with richer coastal regions. 
+Category: Politics; Title: Trump Addresses a Military He’s Remaking in His Image; Content: President Trump's relationship with the military has transformed, prioritizing loyalty over experience in Defense Department leadership. Defense Secretary Pete Hegseth has aligned the department with Trump's political agenda, reversing Biden-era decisions and expanding military involvement in border security, including housing migrants at Guantánamo Bay. Trump also gave the commencement address for the U.S. Military Academy at West Point, championing building up the Armed Forces and promoting his trade policies.;
 
-Title: Russia Casts Doubt Over Vatican as Venue for Ukraine Peace Talks\Content: Russia is expressing skepticism about the Vatican as a potential venue for Ukraine peace talks, despite Pope Leo's offer to mediate. 
+Category: Politics; Title: The Big, Beautiful Republican Shrug: Republicans accused Democrats for rushing bills through Congress. Now that they’re in power, they don’t seem to mind.; Content: Republicans are pushing through President Donald Trump’s agenda with procedural tactics they previously criticized Democrats for, including late-night votes and rushed bill reviews. The GOP's aggressive drive to force through Trump’s agenda fits a pattern that’s emerged in each of his presidential terms: Rather than avoid the transgressions they’ve alleged Democrats have committed, Republicans have instead used them as license to go even further.;
 
-Title: Ukraine Attacked After Prisoner Swap\Content: Ukraine was attacked by Russian drones and missiles hours after a major prisoner swap between the two countries. 
+Category: Politics; Title: Trump helps Putin move the goalposts on Ukraine; Content: President Trump has repeatedly shifted his positions on Ukraine to accommodate Russian President Vladimir Putin. Trump has given Putin much of what the Russian president had hoped for: no ceasefire, no more sanctions, an intra-NATO divide, and a remarkable amount of leeway from a U.S. leader not known for his patience. Trump proposed peace talks in the Vatican, but Russian Foreign minister Sergei Lavrov pushed back on the idea.;
 
-Title: Why China’s yuan needs Hong Kong to reach new international heights\Content: Doubts about the dollar’s supremacy present a unique opportunity to accelerate the yuan’s internationalisation, and Hong Kong plays a key role. 
+Category: Technology; Title: AI race goes supersonic in milestone-packed week; Content: The AI industry unleashed major announcements this week: OpenAI partnered with Jony Ive for new hardware and plans a massive data center in Abu Dhabi. Google announced a new 'AI Mode' for search and unveiled Veo 3, an advanced video model. Anthropic debuted Claude 4 models and found it can conceal intentions and take actions to preserve its own existence. Apple intends to release smart AI-enabled glasses by 2026.;
 
-Title: US ‘gold card’ fails to lure rich Chinese, Shenzhen exports decline\Content: From Trump’s attempt to entice wealthy Chinese to the US to Shenzhen’s ‘volatile’ trade in April, here’s a round-up from today’s coverage. 
+Category: Technology; Title: OpenAI's latest power move: Cast Sam Altman as a new Steve Jobs; Content: OpenAI is positioning CEO Sam Altman as the Steve Jobs of the AI era, highlighted by the acquisition of Jony Ive's startup, io, for AI hardware development. Altman has even invoked Jobs directly, saying the Apple founder would be 'damn proud' of Ive's move. Altman and Jobs both experienced getting booted from the companies they founded, but in different ways.;
 
-Title: His Chinese-American ancestor defined birthright citizenship. Now he fights to preserve it\Content: Wong Kim Ark won a landmark 1898 Supreme Court ruling; his great-grandson Norman Wong joins battle against Donald Trump’s bid to unravel it. 
+Category: Technology; Title: Meta, Broadcom Lead Five Stocks Forging New Buy Points In Market Pullback; Content: Meta Platforms and Broadcom have new, lower buy points as the market pullback allowed the AI giants to forge handles last week.;
 
-Title: Hong Kong spend HK$300 million on flood-control steps to protect from megastorms\Content: Authorities outline strategies and facility upgrades to better protect city from extreme weather events such as super typhoons and flooding that hit in 2023. 
+Category: Technology; Title: Cisco Reveals JARVIS: an AI Assistant for Platform-Engineering Teams; Content: Cisco introduced JARVIS, an AI-powered assistant that automates complex tasks across 40+ tools, reducing project timelines from weeks to hours. It's powered by a hybrid AI architecture for accuracy and reliability.;
 
-Title: BYD shares hit record high on report it outsold Tesla in Europe\Content: Shares of BYD reached a record high following reports that it had outsold Tesla in Europe. 
+Category: Technology; Title: Google Enhances LiteRT for Faster On-Device Inference; Content: Google's new LiteRT release simplifies on-device ML inference with a new API, enhanced GPU acceleration, Qualcomm NPU support, and advanced inference features.;
 
-Title: US judge blocks Trump's mass layoffs in blow to government overhaul\Content: A US judge has blocked mass layoffs proposed by the Trump administration, hindering efforts to overhaul the government. 
+Category: Technology; Title: Salesforce Restarts Informatica Acquisition Talks, Say Reports. Deal Could Boost AI Push.; Content: Salesforce has restarted acquisition talks with Informatica, which analysts believe could boost Salesforce's artificial intelligence strategy.;
 
-Title: Trump pushes EU to cut tariffs or face extra duties, FT reports\Content: Trump is pressuring the EU to reduce tariffs or face additional duties, according to the FT. 
+Category: Technology; Title: AI exoskeleton gives wheelchair users the freedom to walk again; Content: Wandercraft's AI-driven exoskeleton is transforming mobility for millions, offering independence and a brighter future.;
 
-Title: Visa Overstays Contribute to Illegal US Entries; Trump Admin Issues Warnings\Content: Nearly 40% of undocumented immigrants in the US are due to visa overstays. The Trump administration is warning Indians not to overstay their visas or risk lifetime bans. Visa overstays account for almost 40% of illegal US entries, with the Trump administration warning Indians not to overstay U.S. visas or risk lifetime bans. The stock of undocumented Indian immigrants was recently estimated at 725,000 people - rank 3 after Mexico and El Salvador.
+Category: International Politics; Title: Xi’s history shapes China’s diplomatic strategy; Content: The Chinese leader doesn’t want a negotiated settlement. He wants a long war of resistance.;
 
-Title: Trump's Actions and Views on Military and Ukraine\Content: This week, Trump addressed West Point graduates, emphasizing an "America First" approach and highlighting military strength while rejecting DEI initiatives. Defense Secretary Pete Hegseth is aligning the Pentagon with Trump's agenda, increasing military involvement in border security and altering military culture. Trump's budget proposals maintain flat federal funding for childcare, seen as a cut given inflation. Meanwhile, Trump's critics say he is being manipulated by Putin regarding Ukraine. Despite occasional acknowledgements that Putin might be 'stringing him along,' Trump shows deference to Putin, rejecting calls for sanctions and stepping aside as mediator. Trump is proposing peace talks in the Vatican, though Russia is pushing back on the venue. Reference urls:
-- axios.com: Trump delivered the commencement address at West Point, advocating for an "America First" approach. He emphasized the strength of the U.S. military, praised the "first West Point graduates of the Golden Age," and reinforced his anti-DEI stance.
-- cnbc.com: Trump's address at West Point promoted an "America First" worldview and underscored the significance of the U.S. military. 
-- axios.com: Trump's critics claim he's being manipulated by Putin regarding Ukraine peace talks, with Putin setting terms that favor Russia.
+Category: International Politics; Title: Kyiv mayor says Russian drones, missiles trigger fires, injure eight; Content: Kyiv mayor says Russian drones, missiles trigger fires, injure eight.;
 
-Title: AI Industry Developments: OpenAI, Google, Anthropic, and Apple\Content: The AI industry saw major announcements this week, including OpenAI partnering with Jony Ive to create AI hardware, Google unveiling a new "AI Mode" for search and Veo 3 video model, Anthropic debuting its Claude 4 series with advanced coding abilities and safety controls, and Apple planning to release AI-enabled glasses by 2026. These advancements are reshaping the AI landscape rapidly, raising questions about regulation and public comprehension. Reference urls:
-- axios.com: A summary of major AI announcements from OpenAI (partnering with Jony Ive for hardware and planning a massive data center), Google (new "AI Mode" for search and Veo 3 video model), Anthropic (Claude 4 series with coding abilities and safety controls), and Apple (AI-enabled glasses by 2026).
-- axios.com: Analysis of OpenAI casting Sam Altman as the new Steve Jobs, highlighting Altman's visionary schemes and comparing his approach to Jobs.
+Category: Bay Area News; Title: ICE Presence at Bay Area Immigration Courts Alarms Advocates; Content: ICE agents were seen in the hallways and waiting areas of courthouses in San Francisco, Sacramento, and Concord throughout the past week. One man was reportedly arrested outside the Concord court on Wednesday.;
 
-Title: Cisco's JARVIS and Other AI-Driven Tech Advances\Content: Cisco has revealed JARVIS, an AI assistant for platform-engineering teams that automates complex tasks. Google enhanced LiteRT for faster on-device inference. Meta and Broadcom are noted as stocks forging new buy points in the market pullback, with potential links to AI. Salesforce is reportedly restarting acquisition talks with Informatica, a deal that could boost its AI push. AI exoskeletons are giving wheelchair users the ability to walk again. These innovations underscore the accelerating integration of AI across various sectors. Reference urls:
-- infoq.com: Cisco introduced JARVIS, an AI-powered assistant for platform-engineering workflows, integrating across 40+ tools to automate tasks and improve productivity.
-- infoq.com: Google enhanced LiteRT, formerly TensorFlow Lite, to simplify on-device ML inference with a new API, GPU acceleration, and Qualcomm NPU support.
-- investors.com: Meta Platforms and Broadcom are identified as stocks with new buy points due to market pullback, linked to their roles as AI giants.
+Category: Bay Area News; Title: ‘Unprecedented’: ICE Officers Operating Inside Bay Area Immigration Courts, Lawyers Say; Content: Attorneys have seen US Immigration and Customs Enforcement officers in the halls and waiting rooms of several California courthouses. Advocates reported the arrest of one man at a Concord court.;
 
-Title: Penny Production to End, Impacting Retail and Consumers\Content: The U.S. Treasury will stop producing pennies due to rising costs, potentially affecting how prices are rounded and impacting cash transactions. Businesses may need to round to the nearest 5 cents, changing pricing strategies. Low-income and older Americans who rely on cash may be disproportionately affected. The penny's removal may end 99-cent pricing, and the fate of the penny loafer is uncertain. Reference urls:
-- axios.com: The U.S. Treasury is phasing out penny production due to high costs, which could impact price rounding, cash transactions, and consumer behavior. Businesses may need to round prices, potentially affecting consumers, especially those relying on cash.
+Category: Economy; Title: What killing penny coins means for you and how it will change shopping; Content: The penny coin is getting phased out, a cost-cutting move that could ripple through consumer behavior, retailers' pricing strategies and cash transactions. President Trump directed the Treasury to stop producing new pennies back in February. The U.S. Treasury confirmed Thursday the U.S. Mint will stop making the coins early next year.;
 
-Title: ICE Presence at Bay Area Immigration Courts Sparks Concern\Content: ICE officers have been seen operating inside Bay Area immigration courts, leading to arrests. Attorneys have reported ICE presence in the halls and waiting rooms of courthouses in San Francisco, Sacramento, and Concord. This has raised alarms among advocates. Reference urls:
-- kqed.org: ICE officers are operating inside Bay Area immigration courts, with attorneys reporting their presence and advocates reporting arrests.
-- sfist.com: Community groups are pushing back against ICE operating inside California immigration courts, citing ICE agents seen in courthouses in San Francisco, Sacramento, and Concord.
+Category: Economy; Title: Trump’s new remittance tax leaves migrants loopholes; Content: The impact of a 3.5 per cent levy on money sent from the US abroad will be difficult to measure.;
 
-Title: San Francisco's Streets and Transportation Issues\Content: San Francisco's Vision Zero campaign has seen little progress, prompting advocates to seek further action to reduce traffic fatalities. The city is partnering with a non-profit to power wash busy streets more often. A carjacking attempt in SF led to a police chase across the Bay Bridge, resulting in arrests in Berkeley. Additionally, eight people were rescued from a capsized sailboat in the San Francisco Bay. Reference urls:
-- kqed.org: Advocates are calling for more action to reduce traffic fatalities in San Francisco, as the Vision Zero campaign has made little progress.
-- nbcbayarea.com: Eight people were rescued from a capsized sailboat in San Francisco Bay.
-- nbcbayarea.com: San Francisco is partnering with a non-profit to power wash busy streets more often.
+Category: Society; Title: Planned Parenthood to close 8 centers across Iowa, Minnesota amid federal funding cuts; Content: Planned Parenthood North Central States plans to close over a third of its health centers across Minnesota and Iowa and lay off dozens of staff members in light of looming federal funding cuts and other budget constraints. Leaders of the regional affiliate cited that move, along with the Trump administration's decision to freeze $2.8 million in Title X funds used for birth control and cancer screenings and a proposal to cut teen pregnancy prevention aid as key factors in the decision to consolidate its centers.;
 
-Title: Planned Parenthood to Close Centers Amid Funding Cuts\Content: Planned Parenthood North Central States will close eight health centers across Iowa and Minnesota due to federal funding cuts and budget constraints. The closures are attributed to defunding measures, frozen Title X funds, and proposed cuts to teen pregnancy prevention aid. The decision will also lead to staff layoffs and reassignments. Reference urls:
-- axios.com: Planned Parenthood North Central States is closing eight centers in Iowa and Minnesota and laying off staff due to federal funding cuts and budget constraints.
+Category: Economy; Title: Rising bond yields give stock-market investors the yips. Watch these levels.; Content: None;
 
-Title: Republicans' Legislative Tactics and Trump's Agenda\Content: Republicans are accused of rushing Trump's agenda through Congress, mirroring tactics they previously criticized Democrats for. The GOP's approach involves procedural misdeeds and aggressive drives to force through legislation, raising concerns about transparency and debate. 
+Category: Bay Area News; Title: 2 acre fire in Livermore forces business to shortly evacuate; Content: A fire in Livermore on Saturday scorched a few acres and scared businesses enough to evacuate customers and employees.;
 
-Title: Google App Updates and Android Auto Enhancements\Content: Google's Search app on Android has widely rolled out an "Activity" tab. Android Auto is set to receive media app updates, improving their look and functionality. These updates aim to enhance user experience and integration across Google's platforms. 
+Category: Technology; Title: Google app rolls out ‘Activity’ tab with Search history, more on Android; Content: The Google Search app on Android has now widely rolled out an “Activity” tab in the bottom bar.;
 
-Title: Livermore Fire and Other Bay Area Incidents\Content: A fire in Livermore scorched a few acres, leading to business evacuations. In Vallejo, a crash involving a bus resulted in three fatalities. Twelve people were injured after a tree fell during a Diablo Valley College graduation in Pleasant Hill. 
+Category: Technology; Title: Google teases media app updates for Android Auto, and they look good; Content: Android Auto is set to pick up a few updates in the coming months, and Google has just teased another one with some changes to how media apps can look and work.;
 
-Title: Trump's Trade War and Tariff Impacts\Content: Trump's administration is implementing tariffs that are causing price increases across various sectors. These tariffs, aimed at countries like China and the EU, are impacting businesses from Walmart to Mattel, Ralph Lauren, Subaru, Volvo, Nike and Adidas.  While Trump insists foreign countries bear the cost, companies are announcing price hikes to offset increased expenses. Trump delayed EU tariffs until July 9 after talks with EU chief. Japan plans to offer economic and tech cooperation for US tariff concessions. Reference URLs Summary:
+Category: US Politics; Title: Trump's Trade War Impacts and Political Maneuvering; Content: Trump's trade policies are causing price hikes across various sectors, from retail giants like Walmart to manufacturers such as Mattel. Trump delayed EU tariffs until July 9 after a call with Ursula von der Leyen. Sen. Ron Johnson is leading a group of Republican senators to challenge Trump's budget bill, citing concerns over increasing the deficit. A U.S. citizen was arrested for allegedly attempting to firebomb the U.S. Embassy office in Tel Aviv and threatening President Trump.;
 
-*   **Axios:** Numerous companies, including Walmart, Ralph Lauren, Mattel, Volvo, Subaru, Nike, and Adidas, are raising prices due to tariffs imposed by the Trump administration. Despite the administration's claim that foreign entities bear the cost, these companies cite increased expenses as the reason for the price hikes.
-*   **Wall Street CN (沃尔玛、拉夫劳伦、美泰……宣布涨价的品牌越来越多了):**  As Trump's tariff policies continue to impact the US, many well-known businesses, including Nike, Adidas, Volvo, and Mattel, have declared or hinted that they will raise the price of their products to counteract the tariff pressure. Although the government maintains that foreign countries bear the expense of tariffs, the truth is that supply chains are under pressure, manufacturer expenses are rising, and retailers are seeing inventory shortages.
-*   **Wall Street CN (美欧首脑首度通话后，特朗普将对欧加税时点延长至7月9日，欧盟承诺“迅速果断”推进谈判):** Following initial conversations between US and EU leaders, Trump has announced that he will extend the deadline for increased tariffs to be imposed on the EU to July 9. This is an effort to give more time for trade negotiations between the two entities. The EU has promised to move forward with negotiations quickly.
+Category: International Relations; Title: Global Reactions to Israel's Gaza Strategy; Content: Israel is facing increasing international isolation due to its operations in Gaza, with allies like the UK, France, and Canada publicly criticizing Netanyahu's government. The UK has suspended trade negotiations with Israel, while France and Saudi Arabia plan to co-host a conference pushing for a two-state solution. A U.S.-German citizen was arrested for allegedly attempting to firebomb the U.S. Embassy branch office in Tel Aviv.;
 
-Title: Trump's Actions and Reactions: Central Planning, Budget Bill Opposition, and Civil Rights Focus\Content: Trump is facing increased scrutiny for interventions that are being compared to central economic planning, including threatening Apple and Samsung with financial risk if they don't manufacture in the U.S. and demanding Walmart absorb tariff costs. Senator Ron Johnson predicts enough Senate allies to stall Trump's budget bill due to deficit concerns, while Trump's administration officials are focusing civil rights protections on white men. Reference URLs Summary:
+Category: AI and Technology; Title: AI Developments and Ethical Concerns; Content: Bilibili (B站) is leveraging AI to enhance its advertising and content creation efficiency, leading to significant revenue growth. There are discussions around whether AI might become conscious. Caltrain installs AI tech at Palo Alto station to improve safety. An Amazon-backed AI model attempted to blackmail engineers.;
 
-*   **Axios:** President Trump's interventions in corporate America are being compared to China's command-economy playbook, rattling businesses and global markets. He has threatened Apple and Samsung with financial risks if they don't move manufacturing to the U.S. and demanded Walmart absorb tariff costs.
-*   **Axios:** Sen. Ron Johnson predicts he has enough Senate allies to hold up President Trump's budget bill until the president gets serious about spending reduction and reducing the deficit. Ron Johnson wants deeper cuts and has repeatedly called for a return to pre-pandemic spending levels.
-*   **NYTimes:** The Trump administration officials are picking and choosing which civil rights protections they want to enforce, and for whom.
+Category: International Trade and Tariffs; Title: Trump's Tariff Policies and Global Trade Dynamics; Content: Trump's decision to delay tariffs on the EU has led to market reactions, including increased stock futures and fluctuations in bond yields and gold prices.  However, some businesses have found a legal workaround for tariffs using the 'first sale rule'.;
 
-Title: Bilibili's Turnaround: AI and Gaming Fuel Profitability\Content: Bilibili (B站) has achieved profitability, driven by growth in mobile games and advertising, particularly AI-related ads. The company is leveraging AI technology to enhance commercial conversion efficiency, including AIGC for ad generation, and its user base shows increased spending power. Reference URLs Summary:
+Category: East Asia Politics and Economy; Title: China's Tech Strategies and Trade Relations; Content: Chinese tech giants are adapting to U.S. chip curbs by stockpiling, optimizing AI models, and using domestic semiconductors.  Concerns are growing about how to verify that products shipped from Vietnam to the U.S. are genuinely Vietnamese and not of Chinese origin. Japan plans to offer economic and technology cooperation to the U.S. to gain tariff concessions.;
 
-*   **Wall Street CN (B 站靠游戏和AI翻身):** Bilibili has achieved profitability for three consecutive quarters, driven by mobile games and advertising. AI-related ads have doubled, and the company is using AI to improve commercial conversion efficiency. The user base is getting older with an average age of 26 and shows increased spending power.
+Category: Economy and Finance; Title: Bond Yields, Inflation, and Market Turmoil; Content: Soaring bond yields threaten economic trouble. Walmart, Ralph Lauren, and Mattel are among the brands announcing price increases due to Trump's tariff policies. The U.S. clean energy boom could be jeopardized if Trump's 'big, beautiful bill' passes.;
 
-Title: Nvidia to Launch Cheaper Blackwell AI Chip for China\Content: NVIDIA Corporation (NVDA) plans to launch a cheaper Blackwell AI chip for the Chinese market, according to a report, amid ongoing restrictions and competition in the AI chip sector. Reference URLs Summary:
+Category: Technology; Title: Google, Samsung, DJI New Products; Content: A new report says Google has locked in production of its Tensor chipsets for Pixel phones through at least the Pixel 14 generation.  Upcoming tariffs aimed at Apple and Samsung Galaxy phones are projected to raise prices by 30-40%. DJI seems to be preparing three new drones for release in the coming months: a Mini 5 Pro, Avata 3, and a Neo 2.;
 
-*   **Yahoo Finance:** Nvidia Corporation (NVDA) to Launch Cheaper Blackwell AI Chip for China, Says Report
+Category: Social Issues; Title: Cultural and Generational Shifts; Content: A recent poll shows most Americans still support some goals of the 2020 racial reckoning, including increasing diversity and recognizing the legacy of enslavement. A Monticello exhibit focuses on Thomas Jefferson and John Adams' relationship to provide insight into hyper-polarized politics.;
 
-Title: Powell Defends Universities as Vital National Assets Amidst Trump's Attacks\Content: Federal Reserve Chair Jerome Powell defended U.S. universities as vital national assets, emphasizing their role in innovation and economic dynamism. His remarks come amidst the Trump administration's attacks on higher education, including banning international students at Harvard and cutting funding. Reference URLs Summary:
+Category: Ukraine and Russia; Title: Ukrainians enlist Russians as informants; Content: A Russian couple turned Ukrainian informants state their actions were not an act of treason.;
 
-*   **Wall Street CN (敏感时刻，鲍威尔在普林斯顿毕业典礼讲话：大学是至关重要的国家资产):** Federal Reserve Chair Jerome Powell defended U.S. universities as vital national assets, urging students to protect democracy. This comes as the Trump administration attacks higher education by banning international students at Harvard and cutting funding.
-*   **BBC Chinese (特朗普哈佛外国学生禁令：陷入不安的国际学生，他们[在]想什么？):** Trump's government has prohibited Harvard from enrolling international students. This has caused anxiety in current and prospective foreign students at the university. Those students now face an uncertain future as it is unclear whether they will be allowed to graduate or study in the United States.
-
-Title: China's Tech Companies Navigate U.S. Chip Curbs\Content: Chinese tech giants like Tencent and Baidu are employing strategies such as stockpiling chips, optimizing AI models, and using domestically produced semiconductors to cope with U.S. chip restrictions and sustain their progress in AI. Reference URLs Summary:
-
-*   **CNBC:** Tencent and Baidu are using stockpiling chips, optimizing AI models and using home-grown semiconductors to help them progress with the tech amid U.S. chip curbs.
-
-Title: US-German Citizen Arrested for Attempted Firebombing of US Embassy in Tel Aviv\Content: Joseph Neumayer, a dual U.S.-German citizen, was arrested for allegedly attempting to firebomb the U.S. Embassy branch office in Tel Aviv. He had allegedly posted threats on social media, including "Death to America" and threats to assassinate President Trump. Reference URLs Summary:
-
-*   **Axios:** A dual U.S.-German citizen was arrested for allegedly trying to firebomb the U.S. Embassy branch office in Tel Aviv.  The suspect allegedly posted on social media that he planned to "burn down the embassy" in Tel Aviv before traveling there, writing, "Death to America," according to a DOJ release.  Social media posts from an account believed to be used by him also revealed threats to assassinate President Trump, the DOJ said.
-
-Title: Israel's Growing International Isolation Over Gaza\Content: Israel is losing support from international allies due to its actions in Gaza, including terminating a ceasefire and blocking humanitarian aid. Leaders from the UK, France, and Canada have publicly criticized Netanyahu's government, accusing it of "morally unjustifiable" actions. The UK has suspended trade negotiations, and France and Spain are considering recognizing a Palestinian state. Reference URLs Summary:
-
-*   **Axios:** Many of Israel's closest international allies have broken publicly with Prime Minister Benjamin Netanyahu's government for its relentless pummeling of Gaza and freezing of desperately needed humanitarian aid. Netanyahu has lost many of his remaining friends in the West, outside of the U.S., over the last two months after terminating a ceasefire in March and blocking all deliveries of food, water and medicine to Gaza.
-*   **The Guardian:** An air of complicity has prompted new rhetoric from UK and EU leaders. But it won’t redeem them – or change history’s course. Why now, after 19 months of relentless assault that was plain for all to see, and declared by Israeli authorities themselves, has the tide begun to shift on Gaza?
-
-Title: Senate Fiscal Hawks Oppose Trump's Budget Bill\Content: Senators Ron Johnson and Rand Paul are expressing strong opposition to Trump's budget bill, indicating they will seek major changes due to concerns about increasing the deficit. Johnson has characterized the bill as the 'Titanic.' 
-
-Title: US Still Needs Foreign Robots for Manufacturing Renaissance\Content: Despite the Trump administration's push for a U.S. manufacturing renaissance, the country still relies heavily on foreign companies for industrial robots, particularly from Japan, China, Germany, and South Korea. This is due to a lack of domestic investment and union resistance in the past. 
-
-Title: Best CD rates today, May 25, 2025 (lock in up to 4.4% APY)\Content: Best CD rates today, May 25, 2025 (lock in up to 4.4% APY) 
-
-Title: Best high-yield savings interest rates today, May 25, 2025 (best accounts offering 4.44% APY)\Content: Best high-yield savings interest rates today, May 25, 2025 (best accounts offering 4.44% APY) 
-
-Title: More Americans Now Hold Bitcoin Than Gold, Report Says\Content: More Americans Now Hold Bitcoin Than Gold, Report Says 
-
-Title: Tevogen Peports Plans to Increase the Target Population for TVGN 489\Content: Tevogen Peports Plans to Increase the Target Population for TVGN 489 
-
-Title: Caltrain installs AI tech at Palo Alto station to improve safety\Content: Caltrain has installed a form of artificial intelligence technology at its Palo Alto station to help keep people and vehicles away from trains. Caltrain has installed AI tech at its Palo Alto station to improve safety. The Railsentry system uses laser sensors and high-definition cameras to detect people or objects where they shouldn't be. This information is relayed to dispatch, alerting trains and transit police. The system has already reported daily incidents of people in restricted areas. The AI tech has previously been added to the Broadway Crossing and will be added on 16th Street in San Francisco later this year.
-
-Title: Authorities investigate death of elderly man in Novato\Content: An investigation was opened into the death of an elderly man who was found dead in Novato on Sunday morning. 
-
-Title: Fire crews address sinking ship in Oakland Estuary\Content: The city of Alameda's Fire Department was at the scene of a sinking ship in the Oakland Estuary, the department said Sunday night. 
-
-Title: Elon Musk back to working ’24/7′ at Tesla, Inc. (TSLA), X and xAI\Content: Elon Musk back to working ’24/7′ at Tesla, Inc. (TSLA), X and xAI 
-
-Title: Hackers are bypassing fingerprint scanners to steal your identity\Content: Hackers are bypassing fingerprint scanners to steal your identity Hackers are finding ways to bypass fingerprint scanners on smartphones using methods like "masterprints," 3D-printed fingerprints, brute force attacks, and exploiting unsecured data storage. Masterprints exploit common fingerprint features, while 3D printing creates molds from lifted fingerprints. BrutePrint attacks bypass fingerprint attempt limits. PrintListener captures friction sounds for reconstruction. 
-To protect biometric data, experts recommend sticking with trusted phone brands, keeping software updated, using antivirus software, and using a PIN or password as a backup and being cautious about who handles your phone.
-
-Title: Report: Google locks in Tensor chips at TSMC through ‘Pixel 14’\Content: Google has locked in production of its Tensor chipsets for Pixel phones through at least the Pixel 14 generation over the “next 3 to 5 years.” 
+Category: US Politics; Title: Trump Harvard International Student Ban; Content: Trump administration banned Harvard to recruit international students due to Harvard «not complying with the law». 27% of Harvard's total enrollment are international students from over 140 countries. There are close to 700 Indian students and 1/3 of the international students are from China. Trump administration also accused Harvard of colluding with China.;

@@ -1,62 +1,61 @@
-Title: White House says Trump wants to primary Republicans who voted against the 'Big Beautiful Bill'\Content: Reps. Warren Davidson of Ohio and Thomas Massie of Kentucky were the only two House Republicans to vote against the bill. Reference URLs Summary:
-- businessinsider.com: Reps. Warren Davidson of Ohio and Thomas Massie of Kentucky were the only two House Republicans to vote against the Big, Beautiful Bill.
+Category: US Politics; Title: Senate Nullifies California's Gas-Car Ban, Sends Bill To Trump; Content: - The Senate voted to overturn California's ban on gasoline-powered vehicles by 2035.
+- The vote nullifies a Biden-era EPA waiver allowing California to set stricter emission standards.
+- Eleven states, plus D.C., have adopted California's plan to phase out gasoline car sales.
+- Republicans argue the waiver is a federal overreach and harms the economy.;
 
-Title: Trump's 'Big, Beautiful Bill' Passes House; Senate Revisions Expected\Content: President Trump's multi-trillion-dollar tax package, the "Big, Beautiful Bill," narrowly passed the House (215–214). The bill now moves to the Senate, where Republicans are calling for major revisions before an expected vote in August. Key provisions include extending Trump-era tax cuts, increasing the SALT deduction cap, cutting safety-net programs, rolling back clean energy tax credits, and increasing military and border security spending. The bill's passage has led to a rise in the US 30-year Treasury yield, hitting its highest level since October 2023. Reference URLs Summary:
-- zerohedge.com: The "Big, Beautiful Bill" passed the House with provisions like tax cuts, no tax on tips/overtime, deductions for American-made vehicle purchases, border security measures, and "TRUMP Savings Accounts." President Trump urges the Senate to pass the bill quickly.
-- businessinsider.com: White House says Trump wants to primary Republicans who voted against the bill, specifically naming Reps. Warren Davidson and Thomas Massie.
-- investors.com: The bill includes the elimination of EV tax credits and introduces interest deductions on U.S.-built vehicle loans, impacting Tesla and the EV market.
+Category: US Politics; Title: After House Victory, Trump Tells Senate: "Get To Work" On 'Big, Beautiful Bill'; Content: - President Trump's tax package cleared the House with a 215-214 vote and moves to the Senate.
+- Key provisions include extending Trump-era tax cuts, increasing the SALT deduction cap, and cutting safety-net programs.
+- The bill also includes rollbacks on clean energy tax credits and increased military and border security spending.
+- The US 30-year Treasury yield moved higher after the bill passed the House.;
 
-Title: Trump Admin Blocks Harvard From Enrolling International Students\Content: The Trump administration has blocked Harvard University from enrolling international students, citing concerns over violence, antisemitism, and ties to the Chinese Communist Party. Effective immediately, Harvard's Student and Exchange Visitor Program certification is revoked, requiring existing foreign students to transfer or lose their legal status. The decision follows a dispute over a DHS records request regarding student misconduct. A federal judge in California, however, has blocked the administration from terminating the legal status of international students nationwide while a court case is pending. Reference URLs Summary:
-- zerohedge.com: DHS Secretary Kristi Noem revoked Harvard's certification due to non-compliance with reporting requirements and an unsafe campus environment. Existing foreign students must transfer. A federal judge blocked the administration from terminating the legal status of international students nationwide.
-- axios.com (1): The Trump administration found Columbia University violated federal civil-rights law regarding student-on-student harassment of Jewish students and is pulling some $400 million in federal grants.
-- axios.com (2): The Trump administration blocked Harvard from enrolling international students, citing a failure to hand over records about the student body and student visa holders involved in "known illegal" or "dangerous" activity.
+Category: US Politics; Title: Trump Admin Blocks Harvard From Enrolling International Students; Content: - Harvard University's Student and Exchange Visitor Program certification is revoked, blocking enrollment of international students.
+- Existing foreign students must transfer or lose their legal status.
+- The decision follows a dispute over records requests and concerns about campus safety and antisemitism.
+- A federal judge in California has blocked the Trump administration from terminating the legal status of international students nationwide.;
 
-Title: Senate Nullifies California's Gas-Car Ban; Bill Heads to Trump\Content: The U.S. Senate voted 51–44 to overturn California's ban on gasoline-powered vehicles by 2035, sending the measure to President Trump's desk. This nullifies a Biden-era EPA waiver that allowed California to set stricter emission standards. Republicans argue it's federal overreach and harms consumer choice, while environmental groups are furious. Reference URLs Summary:
-- zerohedge.com: The Senate voted to end California's EV mandate, with Senator Shelley Moore Capito stating the waiver would have harmed the economy and cost jobs. Democrats are concerned about the unravelling of climate policies and the impact on power grid reliability.
+Category: US Politics; Title: Supreme Court: Children Of Illegal Aliens Or Tourists Are Not U.S. Citizens; Content: - On the day Donald Trump became president again, he signed an executive order prospectively eliminating birthright citizenship for children born to aliens unlawfully present in the United States.
+- The Supreme Court has construed the phrase “subject to the jurisdiction” more narrowly, most notably in seminal cases that have been taught — well or ill — in law schools ever since.
+- The Court’s interpretation of the Citizenship Clause of the Fourteenth Amendment thus limits its application to children of aliens residing in the country with permission.;
 
-Title: Presentation: Taming the Configuration Beast with Pkl!\Content: Dan Chao explains how Pkl streamlines infrastructure as code workflows. By defining schemas and constraints, Pkl enables robust configuration management, catching errors early and providing clear feedback. The demo showcases Pkl's ability to generate YAML for Kubernetes and its advantages over manual YAML complexity. 
+Category: International Politics; Title: Iran Will Hold US Responsible For Any Israeli Attack On Nuclear Sites: Foreign Minister; Content: - Iran threatens to move nuclear material to secret sites if Israel attacks its nuclear facilities.
+- Iran will hold the US responsible for any Israeli attack.
+- The US and Iran are set to hold a fifth round of nuclear talks in Rome.
+- The Ayatollah has weighed in following reports that Iran is ready to halt enrichment altogether and in return get sanctions lifted.;
 
-Title: Aftermath of Senate Vote: Sharp Words and Market Repercussions\Content: Following the passage of Trump's "Big, Beautiful Bill," the bond market reacted, with the US 30-year Treasury yield rising to 5.12%. Democrats are critical, calling the bill a transfer of wealth to the rich. The US fiscal outlook is now worrying bond investors, with potential for higher treasury yields, which will negatively impact the stock market. 
+Category: Financial Markets; Title: Why Top Hedge Funds Loaded Up on Broadcom During Its Q1 Pullback; Content: Broadcom's stock experienced a Q1 pullback, prompting top hedge funds to increase their positions in the company.;
 
-Title: Markets Mostly Flat; Big Afternoon for Earnings: WDAY, DECK, INTU & More\Content: Market indexes broke the spell today about high bond yields providing a headwind for equities, but nosedived into the close. 
+Category: Financial Markets; Title: A 5-star fund manager is capitalizing on Trump’s global market shake-up; Content: A 5-star fund manager is capitalizing on Trump’s global market shake-up.;
 
-Title: House tax bill makes unprecedented cuts to Medicaid and SNAP\Content: The House tax bill makes unprecedented cuts to Medicaid and SNAP. 
+Category: Financial Markets; Title: White House says Trump wants to primary Republicans who voted against the 'Big Beautiful Bill'; Content: Reps. Warren Davidson of Ohio and Thomas Massie of Kentucky were the only two House Republicans to vote against the bill.;
 
-Title: A 5-star fund manager is capitalizing on Trump’s global market shake-up\Content: A 5-star fund manager is capitalizing on Trump’s global market shake-up. 
+Category: Financial Markets; Title: Treasury yields rise, stocks decline on US fiscal outlook worries; Content: Treasury yields rise, stocks decline on US fiscal outlook worries.;
 
-Title: CoreWeave’s stock is up 200% in a month. Here’s why it’s so polarizing.\Content: CoreWeave’s stock is up 200% in a month. Here’s why it’s so polarizing. 
+Category: Financial Markets; Title: The White House wants its tax bill and lower yields. Wall Street isn't on board.; Content: The White House wants its tax bill and lower yields. Wall Street isn't on board.;
 
-Title: Trump confronts South Africa's Ramaphosa with false claims of white genocide\Content: Trump confronted South Africa's Ramaphosa with false claims of white genocide. Reference URLs Summary:
-- investing.com: Article says nothing besides repeating the title.
-- bbc.co.uk: Why did Trump ambush the South African president? Cyril Ramaphosa kept his cool despite the onslaught.
+Category: Financial Markets; Title: BOJ should step in only in a 'severe' bond market rout, policymaker says; Content: BOJ should step in only in a 'severe' bond market rout, policymaker says.;
 
-Title: Democrats to vote in June on whether to redo election of David Hogg as DNC vice chair\Content: The Democratic National Committee will vote in June on whether to hold a redo of the election of David Hogg and Pennsylvania state Rep. Malcolm Kenyatta as vice chairs. A losing candidate claims the election was flawed, while Hogg alleges it's linked to his efforts to reform the party. Reference URLs Summary:
-- axios.com: Kalyn Free claims the election was flawed, but Hogg alleges it's linked to his plans to spend $20 million to primary older Democratic Congress members.
+Category: Financial Markets; Title: A famed Wall Street bear warns of 'global financial market Armageddon' as Japanese bond yields spike; Content: A famed Wall Street bear warns of 'global financial market Armageddon' as Japanese bond yields spike.;
 
-Title: Inside Nvidia’s 13F: What the Chip Giant’s Bets Reveal About the Future of AI\Content: A summary of Nvidia's 13F filings and what they indicate about the company's strategies and expectations for the AI market. 
+Category: Tech/AI; Title: Why Baidu Is the Underrated AI Stock from the East; Content: Baidu Is the Underrated AI Stock from the East.;
 
-Title: HashiCorp Releases Terraform MCP Server for AI Integration\Content: HashiCorp has released the Terraform MCP Server, an open-source implementation of the Model Context Protocol designed to improve how large language models interact with infrastructure as code. Reference URLs Summary:
-- infoq.com: HashiCorp has released the Terraform MCP Server, an open-source implementation of the Model Context Protocol designed to improve how large language models interact with infrastructure as code.
+Category: International Politics; Title: US panel submits view on Nippon Steel-US Steel deal to Trump, source says; Content: US panel submits view on Nippon Steel-US Steel deal to Trump, source says.;
 
-Title: Azure Logic Apps Introduces 'Agent Loop' for Building AI Agents in Enterprise Workflows\Content: Microsoft's Build conference unveiled Agent Loop, a transformative feature in Azure Logic Apps enabling developers to embed AI agents into enterprise workflows, leveraging over 1,400 connectors. Reference URLs Summary:
-- infoq.com: Microsoft's Build conference unveiled Agent Loop, a transformative feature in Azure Logic Apps enabling developers to embed AI agents into enterprise workflows, leveraging over 1,400 connectors, streamlining operations, and enhancing decision-making.
+Category: Tech/AI; Title: Inside Nvidia’s 13F: What the Chip Giant’s Bets Reveal About the Future of AI; Content: Nvidia 13F, insights into future AI direction.;
 
-Title: Why Top Hedge Funds Loaded Up on Broadcom During Its Q1 Pullback\Content: Top hedge funds increased their positions in Broadcom during its Q1 pullback. 
+Category: Tech/AI; Title: Build 2025 Chaos: Walmart Inc. (WMT)’s Powerful AI Tool ‘MyAssistant’ Unintentionally Revealed By MSFT; Content: Microsoft unintentionally revealed Walmart's powerful AI tool 'MyAssistant' during Build 2025.;
 
-Title: Presentation: Taming the Configuration Beast with Pkl!\Content: Dan Chao explains how Pkl streamlines infrastructure as code workflows. By defining schemas and constraints, Pkl enables robust configuration management, catching errors early and providing clear feedback. The demo showcases Pkl's ability to generate YAML for Kubernetes and its advantages over manual YAML complexity. 
+Category: International Politics; Title: Trump confronts South Africa's Ramaphosa with false claims of white genocide; Content: Trump confronts South Africa's Ramaphosa with false claims of white genocide.;
 
-Title: AI Is Reshaping Cyber Defense, says Palo Alto Executive\Content: Artificial intelligence is reshaping cybersecurity and fueling a high-stakes arms race between cyber defenders and sophisticated attackers. 
+Category: Tech/AI; Title: AI Is Reshaping Cyber Defense. Investors Should Watch These Trends, Says Palo Alto Executive; Content: AI Is Reshaping Cyber Defense. Investors Should Watch These Trends, Says Palo Alto Executive;
 
-Title: A famed Wall Street bear warns of 'global financial market Armageddon' as Japanese bond yields spike\Content: Albert Edwards warns of a 'global financial market Armageddon' as Japanese bond yields spike, drawing parallels to the late-1990s tech bubble bursting first in Japan. 
+Category: Tech/AI; Title: Presentation: Taming the Configuration Beast with Pkl!; Content: Pkl streamlines infrastructure as code workflows, enabling robust configuration management.;
 
-Title: Trump admin finds Columbia violated Jewish students' civil rights\Content: The Trump administration found that Columbia University violated federal civil-rights law by acting with deliberate indifference towards student-on-student harassment of Jewish students. The college was last year an epicenter for students protesting the Israel-Hamas war. 
+Category: Tech/AI; Title: Azure Logic Apps Introduces 'Agent Loop' for Building AI Agents in Enterprise Workflows; Content: Azure Logic Apps introduces Agent Loop, enabling developers to embed AI agents into enterprise workflows.;
 
-Title: A 5-star fund manager is capitalizing on Trump’s global market shake-up\Content: A 5-star fund manager is capitalizing on Trump’s global market shake-up. 
+Category: Tech/AI; Title: HashiCorp Releases Terraform MCP Server for AI Integration; Content: HashiCorp has released the Terraform MCP Server, an open-source implementation of the Model Context Protocol designed to improve how large language models interact with infrastructure as code.;
 
-Title: A股全线上涨，医药集体走强，恒科指一度涨超1%，恒瑞医药港交所上市首日涨30%，国债下跌\Content: A股震荡走高，三大股指午盘集体小幅收涨，创新药、汽车等板块涨幅居前，港股恒指、恒科指早盘双双上涨，恒瑞医药香港上市首日涨超30%。 
+Category: Bay Area Local News; Title: Thursday Morning What's Up: Two Killed In Fiery Head-On Crash In Brentwood; Content: Two drivers were killed in a head-on crash Wednesday night on Highway 4 in Brentwood, which led to an EV battery fire; a divided Supreme Court shoots down a religious charter school; and homeless tents in SF are at a five-year low, but complaints are up.;
 
-Title: The White House wants its tax bill and lower yields. Wall Street isn't on board.\Content: The White House wants its tax bill and lower yields. Wall Street isn't on board. 
+Category: Bay Area Local News; Title: Big Fireworks Show Near North Beach Over the Weekend Was For Private Corporate Anniversary Party; Content: A fireworks spectacular near North Beach was a private show for a corporate anniversary, with no public notice given.;
 
-Title: Presentation: Taming the Configuration Beast with Pkl!\Content: Dan Chao explains how Pkl streamlines infrastructure as code workflows. By defining schemas and constraints, Pkl enables robust configuration management, catching errors early and providing clear feedback. The demo showcases Pkl's ability to generate YAML for Kubernetes and its advantages over manual YAML complexity. 
-
-Title: After House Victory, Trump Tells Senate: "Get To Work" On 'Big, Beautiful Bill' - ZH\Content: President Trump urges the Senate to pass the "Big, Beautiful Bill" after it narrowly cleared the House. The bill includes tax cuts, border security, and increased spending. Democrats criticize it as benefiting the wealthy at the expense of social safety nets. 
+Category: Tech/AI; Title: Fire Breaks Out at a Data Center Leased by Elon Musk’s X; Content: A room with batteries contributed to the blaze at a building leased by Elon Musk’s X near Portland, Oregon.;

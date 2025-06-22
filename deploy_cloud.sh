@@ -1,4 +1,6 @@
-conda activate llmapps
+cd ~/llmapps
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/github
 git fetch origin
 git rebase origin/main
 npm install

@@ -38,11 +38,9 @@ We can see that the agent generates multiple questions and terms to query the ne
 
 
 # Manual Analysis
-My summarization agent does summarize news to some extent. Some summary entries are summary of multiple news entries. However many summary entries still seem too granular. Based on given user preference, my summarization agent does filter news based on user's preference. For example, the sample user prefers politics news with a strong interest in Trump. And the summary contains a lot of Trump related political summary entries comparing to the summary without user preference being applied.
+My summarization agent summarizes news into several categories and topics. It decides category and topic based on user preference. For example, the sample user prefers politics news with a strong interest in Trump. And the summary contains a lot of Trump related political summary entries comparing to the summary without user preference being applied.
 
-Therefore my news summarization agent does much better on user preference based news filtering rather than news summarization. However, news entries are hard to summarize while pertaining useful information in the summary given the diverse and granular nature of news entries. 
-
-Comparing the 2 aggregation algorithms' result, summary entries generated from daily summary are more consistent with user's primary preference while less diverse than summary entries generated from embedding clustering. In the above examples, summary generated from daily summary contains mainly political news while the other summary contains more IT news which is secondary user preference. 
+Comparing the 2 aggregation algorithms' result, summary entries generated from embedding clustering biases more towards majority category maybe due to some clusters have a lot of that category's news while daily aggregation approach's summary is more diverse
 
 
 # Future Consideration
@@ -52,5 +50,4 @@ There are 1k news entries every day. It is very hard to evaluate summarization q
 - Ablation study. Hide different news entries in a static news entry list and compare the generated summary. The goal is to test if LLM summary could cover all news entries even if the input news entry list is as large as the LLM's context window. (1 million tokens for Gemini model) 
 - Test summary of fewer new entries like 10-20. 
 
-In the future, the summarization prompt can also be tuned to increase abstraction level of news summary maybe by adding more guidance to the prompt. 
 

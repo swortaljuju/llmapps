@@ -21,6 +21,9 @@ from db.models import (
     NewsEntry,
 )
 from sqlalchemy import or_, and_
+from utils.logger import setup_logger
+
+setup_logger("llm_evaluation")
 
 
 def export_daily_entry():
@@ -83,7 +86,7 @@ async def summarize_news_and_export(
             summary_entry_list.extend(current_summary_entry_list)
     with open(f"{export_file_name}.txt", "w") as f:
         formatted_summary_entries = [
-            f"Title: {entry.title}\Content: {entry.content} {entry.expanded_content or ''}\n"
+            f"Category: {entry.category}; Title: {entry.title}; Content: {entry.content};\n"
             for entry in summary_entry_list
         ]
         f.write("\n".join(formatted_summary_entries))

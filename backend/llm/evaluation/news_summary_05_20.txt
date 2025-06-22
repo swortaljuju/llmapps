@@ -1,49 +1,49 @@
-Title: Google I/O 2025 Highlights: AI-First Approach with Gemini and Android XR\Content: Google's I/O 2025 developer conference showcased a strong emphasis on AI integration across various platforms:Google Colab introduced an AI-first version with Gemini 2.5 Flash for improved coding workflows.Google AI Edge includes Gemma 3 models with on-device RAG and Function Calling.Google introduced Stitch, an AI tool generating UI designs and code from prompts.LiteRT has been improved to boost AI model performance. Veo 3, the AI video generator, now incorporates audio.Android XR smart glasses prototype demonstrated searching, live translation, and more.Updates to agent technologies include Agent Development Kit (ADK), Agent Engine UI improvements, and Agent2Agent (A2A) protocol enhancements. Reference URLs Summary:
-- Google I/O 2025 Developer Keynote Recap: Google's top announcements focused on building across Google platforms with AI models, enhancing developer productivity using Gemini, Android, Firebase, and web.
-- What's new with Agents: ADK, Agent Engine, and A2A Enhancements: Updates to Google's agent technologies include the Agent Development Kit (ADK) with new Python and Java versions, an improved Agent Engine UI for management, and enhancements to the Agent2Agent (A2A) protocol for better agent communication and security.
-- Fully Reimagined: AI-First Google Colab: Google Colab launched a reimagined AI-first version at Google I/O, featuring an agentic collaborator powered by Gemini 2.5 Flash with iterative querying capabilities, an upgraded Data Science Agent, effortless code transformation, and flexible interaction methods to improve coding workflows.
+Category: Politics; Title: Trump Unveils $175 Billion 'Golden Dome' Missile Defense System, Appoints Leader; Content: President Trump announced the selection of a design for the 'Golden Dome' missile defense system, a project estimated to cost $175 billion. General Michael Guetlein of the Space Force will lead the program. The system aims to defend against hypersonic and ballistic missiles using space-based sensors and interceptors. Canada may also participate.;
 
-Title: Google's Gemini AI Expansion: Chrome Integration, AI Ultra Subscription, and More\Content: Google is expanding its Gemini AI capabilities across multiple platforms:Gemini is coming to Chrome, enabling AI-driven information clarification and summarization.Google launched a $250/month AI Ultra subscription for access to advanced AI models and increased usage limits.Google is testing its AI models with new features, and has the goal of expanding their capabilities to mobile devices. Reference URLs Summary:
-- Google launches $250 per month 'VIP' AI subscription service: Google's newest tier, which is more expensive than ChatGPT's premium service, comes as Google seeks to further monetize its AI products.
-- You deserve a better partner than Microsoft 365—dump it for Microsoft Office 2024: Meet Microsoft Office 2024, the new and improved suite that’s packed with AI integrations to make your workday better.
-- Top AI Stocks to Add to Your Portfolio for Impressive Returns: Picked three AI stocks, MSFT, CTSH and LRCX, which are well poised to benefit from AI's growing usage and ability to solve complex problems.
+Category: Technology; Title: Google I/O 2025 Highlights AI Advancements: Gemini, Android XR, and More; Content: Google's I/O 2025 event showcased AI advancements, including updates to Gemini, Android XR, and new AI-driven tools for video editing and UI design. The company also launched a new Google AI Ultra subscription plan.;
 
-Title: China's C919 Jetliner Network Expands Amid US-China Tech Rivalry\Content: China's C919 airliner network now serves 16 cities, including new additions like Shenzhen and Xiamen. This expansion occurs as China emphasizes industrial self-sufficiency and navigates its tech rivalry with the United States. Reference URLs Summary:
-- China’s C919 network spans 16 cities as 2-year mark reflects reliability: Tech powerhouse Shenzhen and tourist destination Xiamen are the latest mainland cities to be served by the increasingly popular C919.
-- China’s Xi doubles down on self-reliance, rallying officials to bolster manufacturing: Call comes during the president’s visit to a bearings factory in Henan province, as China remains locked in a trade and tech rivalry with the United States.
+Category: Politics; Title: Kristi Noem Misunderstands Habeas Corpus; Trump Administration Officials Defend Actions; Content: Homeland Security Secretary Kristi Noem incorrectly defined habeas corpus during a Senate hearing. Separately, Stephen Miller defended the administration's authority to suspend habeas corpus in times of 'invasion.' The administration's policies on immigration are facing increased scrutiny.;
 
-Title: Impact of Trump's Trade Policies: Tariffs, Price Hikes, and Economic Effects\Content: Trump's trade policies, including tariffs, are causing economic ripples: Home Depot announces no price hikes amid Trump's tariffs. Alibaba.com sees a jump in US buyer activity after the US-China tariff truce. A Chinese crane maker questions US tariff plans, noting they increase costs for American ports. Trump's trade war is reportedly cracking the West's unity. Reference URLs Summary:
-- Home Depot misses earnings, announces no price hikes as it navigates Trump's tariffs.
-- Alibaba.com sees jump in US buyer activity after US-China tariff truce: Inquiries from the US on Alibaba’s B2B marketplace surged over 40 per cent the week after Washington and Beijing hit pause on the trade war.
-- Chinese crane maker raises questions over US tariff plans: Company says higher duties on Chinese cranes would just increase costs for American ports. The US ports association agrees.
+Category: Technology; Title: Google's Gemma 3n Preview: Mobile-First AI Model; Content: Google AI Edge advancements include new Gemma 3 models with broader model support, multimodality, RAG, and Function Calling to enhance on-device generative AI capabilities. It is a cutting-edge open model designed for fast, multimodal AI on devices.;
 
-Title: Rising US Debt and Deficits Spark Concerns Among Financial Institutions\Content: The US national debt is a growing concern, with projections indicating it could reach unsustainable levels. Some analysts are warning of a potential bond buyers’ strike in Japan that could impact the Treasury market, while others point to rising credit card delinquencies as a sign of economic strain. Trump's "Big, Beautiful Bill" is expected to increase deficits and add trillions to the debt. Reference URLs Summary:
-- Credit Card Delinquencies, Balances, Debt-to-Income, and Credit Limits in Q1 2025: Our Drunken Sailors & their Credit Cards: The free money is gone, and the hangover is getting worked off.
-- Bond Buyers’ Strike in Japan Could Cast a Long Shadow on the Treasury Market.
-- The 'Big, Beautiful Bill' Will "Massively" Increase Near-Term Deficits, Add $5 Trillilon In Debt: Joint Committee on Taxation estimated the mark up to increase deficits by $3.8trn over the next 10 years, with most of the deficit increase ($2.2trn) occurring over the next five years.
+Category: Politics; Title: Trump Faces Hurdles on Tax Bill as GOP Divisions Persist; Content: President Trump is facing difficulty unifying Republicans behind his proposed tax cuts. Disputes over the SALT deduction and Medicaid could hinder passage of the bill.  Trump has warned Republicans not to 'f--- around with Medicaid'.;
 
-Title: Rubio Defends Trump's Foreign Policy Amid Scrutiny of US Aid and Relations with China\Content: Secretary of State Rubio clashed with senators over US global aid and China's role. There are also discussions on how Gulf states could unlock US investment in Iran after sanctions end. Rubio warned that Syria could be weeks away from civil war. Reference URLs Summary:
-- Secretary of State Rubio, clashing with senators, says China will not replace US on global aid: Top US diplomat defends State Department shifts and cuts that Democrats say reduce US soft power and give Beijing a propaganda win.
-- How Gulf states could unlock US investment in Iran after sanctions end: Given their ties with both China and the US, Gulf states could act as economic intermediaries and help normalise US-Iran business relations.
-- Rubio Warns Syria Could Be Weeks Away From 'Full-Scale Civil War': The US state secretary laments the country's current rulers 'didn't pass their background check with the FBI'.
+Category: Technology; Title: Google Colab Reimagined with AI-First Features; Content: Google Colab is launching an AI-first version at Google I/O, featuring an agentic collaborator powered by Gemini 2.5 Flash with iterative querying capabilities, an upgraded Data Science Agent, effortless code transformation, and flexible interaction methods to significantly improve coding workflows.;
 
-Title: Trump Administration's Immigration Policies Face Scrutiny and Legal Challenges\Content: The US faces legal challenges as it deports Asians to conflict-plagued South Sudan. A judge says US officials must keep control of migrants sent to South Sudan in case removals are unlawful. In Florida, Venezuelans worry about the potential loss of temporary protected status.  US clears way for stiff tariffs on Southeast Asian solar imports, accusing China-based firms of circumventing trade laws. Reference URLs Summary:
-- US faces legal challenge as it deports Asians to conflict-plagued South Sudan: Judge says US officials must keep control of migrants sent to South Sudan in case removals are unlawful.
-- In Florida, Venezuelans worry about the potential loss of temporary protected status: When the U.S. Supreme Court said Monday the Trump administration could strip legal protections from 350,000 Venezuelans while litigation continues in the lower courts, the move sent shockwaves.
-- US clears way for stiff tariffs on Southeast Asian solar imports: China-based firms are accused of flooding the US with unfairly cheap panels and other products via Malaysia, Thailand, Cambodia and Vietnam.
+Category: Technology; Title: New Google Labs Experiment: Stitch, an AI UI Design Tool; Content: Stitch, a new Google Labs experiment, uses AI to generate UI designs and frontend code from text prompts and images, aiming to streamline the design and development workflow.;
 
-Title: Actions Against Russia: EU and UK Impose New Sanctions Amid Ukraine War\Content: The EU and UK have imposed new sanctions on Russia amid the ongoing war in Ukraine, signaling continued pressure despite Trump's approach to negotiations. These measures come after Trump's call with Putin did not yield any promise of a ceasefire. Reference URLs Summary:
-- Ukraine war: EU and UK hit Russia with new sanctions without waiting for Trump: The measures come after the US president’s call with Putin did not yield any promise of a ceasefire.
-- US Should Never Have Gotten 'Entangled' In Ukraine 'Death Trap': Trump: President Trump says that The United States should have never intervened in Ukraine, blasts Biden for sinking money in the "death trap".
+Category: Politics; Title: Trump's Trade War and Global Economic Concerns; Content: Trump's tariffs are causing concerns for businesses, exporters, and academics globally.  A former Chinese envoy suggests the trade war is cracking Western unity. Home Depot and TJX are navigating the impact of Trump's tariffs.;
 
-Title: East Asia: China's Industrial Policy and International Relations\Content: China's Xi Jinping is reinforcing the need for industrial self-sufficiency amid trade tensions, while Beijing's emphasis on manufacturing has widened imbalances. At the same time, India's stock market is rated above Japan and China by more fund managers, who believe India will benefit more from the US-China trade war. Reference URLs Summary:
-- Secretary of State Rubio, clashing with senators, says China will not replace US on global aid: Top US diplomat defends State Department shifts and cuts that Democrats say reduce US soft power and give Beijing a propaganda win.
-- China’s Xi doubles down on self-reliance, rallying officials to bolster manufacturing: Call comes during the president’s visit to a bearings factory in Henan province, as China remains locked in a trade and tech rivalry with the United States.
-- India’s stock market rated above Japan and China by more fund managers: Fund managers are confident that India will benefit more from the US-China trade war, according to the Bank of America Securities survey.
+Category: Technology; Title: Google to allow third-party developers to access Apple Intelligence in new AI app strategy; Content: Apple plans to allow third-party developers to use its AI models to write software, in an effort to spark new app development.;
 
-Title: Tron Founder Claims Top Holder Status of Trump-Themed Meme Coin\Content: Justin Sun, a Chinese-born crypto billionaire, claims to be the top holder of the Trump-themed $TRUMP meme token, potentially securing a seat at a private dinner with the former president. Reference URLs Summary:
-- Tron founder Justin Sun says he's the top $TRUMP meme coin holder: Chinese-born crypto billionaire Justin Sun says he’s now the top holder of the Trump-themed $TRUMP meme token — securing him a seat at a private dinner with the president.
+Category: International Relations; Title: Trump Seeks Off-Ramp from Russia-Ukraine Negotiations; EU and UK Impose New Sanctions; Content: Trump seeks an off-ramp from Russia-Ukraine negotiations, while the EU and UK impose new sanctions on Russia without waiting for Trump's direction. Ukraine's allies hit Russia with new sanctions without waiting for Trump.;
 
-Title: China Cuts Key Rates to Aid Economy Amid Trade Tensions\Content: China is cutting key interest rates in an effort to stimulate its economy as trade war tensions simmer. This action comes as China's job and economic stabilization policies are set to be implemented by the end of June. Reference URLs Summary:
-- China cuts key rates to aid economy as trade war simmers.
-- China's job, economic stabilisation policy to be implemented by end-June, NDRC says.
+Category: International Relations; Title: Rubio Warns Syria Could Be Weeks Away From Civil War After Meeting with HTS Officials; Content: Secretary of State Rubio warns that Syria could be weeks away from civil war and the collapse of the HTS government. This follows a meeting with Syrian Foreign Minister Asaad al-Shaibani and the dropping of Syria sanctions.;
+
+Category: Technology; Title: D-Wave Quantum Shares Jump as Company Releases New Computing System; Content: D-Wave Quantum's latest quantum computing system has hit the market.;
+
+Category: International Relations; Title: UK Halts Israel Trade Talks Amid Gaza Conflict, Imposes Sanctions Over West Bank; Content: The UK has halted trade talks with Israel amid the Gaza conflict. The UK Prime Minister Keir Starmer has criticized Israel and called the suffering of children in Gaza 'utterly intolerable'.;
+
+Category: Technology; Title: Elon Musk plans to cut back political spending and says robotaxis will be in Austin in June; Content: Elon Musk said he will spend ‘a lot less’ on political campaigns.  Tesla will face more China competition with Xiaomi unveiling the Model Y rival, the YUY, on Thursday. Tesla launches the robotaxi soon.;
+
+Category: Business and Finance; Title: China Cuts Key Rates to Aid Economy Amid Trade War; Content: China cuts key rates to aid the economy as the trade war simmers.;
+
+Category: Technology; Title: New Report Shows AI Cash Surge and Rise of the 'Zombiecorn'; Content: Silicon Valley Bank reports that about 40% of the money raised by U.S. startups last year came from funds focused on AI.;
+
+Category: Technology; Title: Analyst Says Nvidia “Appears To Be in All the Right” Sectors; Content: Veteran investor says Nvidia Corporation “Appears To Be in All the Right” Sectors.;
+
+Category: Business and Finance; Title: Victoria's Secret Adopts 'Poison Pill' After Australian Billionaire's Firm Raises Stake; Content: Victoria's Secret adopts a 'poison pill' after an Australian billionaire's firm raises its stake in the company.;
+
+Category: Business and Finance; Title: Home Depot Misses Earnings, Announces No Price Hikes Amid Trump Tariffs; Content: Home Depot misses earnings estimates but announces no price hikes as it navigates Trump's tariffs.;
+
+Category: California Local News; Title: JCPenney closures include Tanforan in San Bruno; Content: JCPenney store closures list includes Tanforan in San Bruno.;
+
+Category: Business and Finance; Title: EU to Impose Fee on Cheap Parcels, Mostly from China; Content: The EU will impose a fee on cheap parcels, mostly from China. The move is meant to help the bloc deal with an influx of inexpensive imports via platforms like Shein and Temu.;
+
+Category: Business and Finance; Title: Hon Hai Precision to Invest $1.5B in India Unit; Content: Hon Hai Precision is set to invest $1.5B in its India unit.;
+
+Category: Hong Kong; Title: Hong Kong Red Cross Tightens Female Blood Donor Rules; Content: Hong Kong Red Cross tightens female blood donor rules for the first time in 30 years due to declining donor numbers.;
+
+Category: Hong Kong; Title: Police to Launch Drone Patrols in Hong Kong Urban Areas; Content: Police will launch drone patrols in Hong Kong urban areas on Friday, flying 60 meters above buildings to monitor potential criminal activities.;
+
+Category: Hong Kong; Title: Hong Kong's Unemployment Rate Hits 2-Year High; Content: Hong Kong’s unemployment rate hits a 2-year high of 3.4%, with construction and financing sectors notably affected.;
