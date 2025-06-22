@@ -37,7 +37,7 @@ SUMMARY_WITH_USER_PREFERENCE_AND_CHUNKED_DATA_PROMPT = """
     
     - Group the news into several categories and topics and then summarize. 
     - One category can have multiple topics.
-    - Don't create too granular topics, but also don't make them too broad.
+    - Don't create too granular topics.
     - Decide the category, topic and selection of news entries based on the user preferences.
     - Assess the importance of each news summary based on the user preferences.
     - Write the summary in accordance with the user preferences.
@@ -54,7 +54,7 @@ class NewsSummaryOutput(BaseModel):
     category: str = Field(
         description="""Required. Category of the news summary."""
     )
-    title: str = Field(description="""Title """)
+    topic: str = Field(description="""Topic of the news summary.""")
     content: str | None = Field(description="""Content""")
     reference_urls: list[str] = Field(
         description="""The summarized news entries' reference URLs. Only keep 3 most important URLs. """
@@ -324,7 +324,7 @@ async def __chunk_and_summarize_news_per_period(
             # Format entries for the LLM
             for entry in chunk_entries:
                 entry_data = {
-                    "title": entry.title,
+                    "topic": entry.title,
                     "content": entry.content or "",
                     "reference urls": entry.reference_urls,
                 }
@@ -470,7 +470,7 @@ async def __cluster_and_summarize_news(
                 # Convert summary_list objects to dictionaries
                 summaries_as_dicts = [
                     {
-                        "title": summary.title,
+                        "topic": summary.topic,
                         "content": summary.content or "",
                         "reference urls": summary.reference_urls,
                     }
@@ -592,7 +592,7 @@ async def __save_and_return_summary_entry(
                 news_chunking_experiment=news_chunking_experiment,
                 news_preference_application_experiment=news_preference_experiment,
                 category=summary.category,
-                title=summary.title,
+                title=summary.topic,
                 content=summary.content,
                 reference_urls=summary.reference_urls,
                 clicked=False,  # Default to False, can be updated later
