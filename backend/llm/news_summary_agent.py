@@ -27,6 +27,7 @@ from .agent_utils import crawl_and_summarize_url
 from utils.exceptions import UserErrorCode, ApiErrorType, ApiException
 
 MAX_NEWS_SUMMARY_EACH_TURN = 25
+MAX_TOPIC_NUMBER_PER_CATEGORY = 5
 
 ### Prompt templates for summarizing news entries
 SUMMARY_WITH_USER_PREFERENCE_AND_CHUNKED_DATA_PROMPT = """
@@ -451,7 +452,17 @@ async def __cluster_and_summarize_news(
                 summary_list = []
                 for summary_response in summary_task_responses:
                     if summary_response:
-                        summary_list.extend(summary_response)
+                        entry_count_per_category = {}
+                        for summary in summary_response:
+                            category = summary.category
+                            if not entry_count_per_category.get(category):
+                                entry_count_per_category[category] = 0
+                                
+                            entry_count_per_category[category] += 1
+                            if entry_count_per_category[category] > MAX_TOPIC_NUMBER_PER_CATEGORY:
+                                continue
+                            
+                            summary_list.append(summary)
         
                 logger.info(
                     f"Generated {len(summary_list)} summaries for {start_date}"
@@ -589,7 +600,6 @@ async def __save_and_return_summary_entry(
             )
             added_summaries.append(summary_entry)
             session.add(summary_entry)
-
         # Commit the transaction to save to database
         session.commit()
         return __get_existing_news_summary_entries(
