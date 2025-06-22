@@ -3,6 +3,7 @@ import { getBackendApiUrl } from "../common/utils"
 
 export interface NewsSummaryItem {
     id: number;
+    category: string;
     title: string;
     content: string;
     expanded_content?: string;

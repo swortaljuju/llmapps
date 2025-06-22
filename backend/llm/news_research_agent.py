@@ -139,7 +139,7 @@ async def __expand_news_url(
     llm_tracker: LlmTracker,
     url: str,
 ) -> str:
-    return await crawl_and_summarize_url(url=url, llm_tracker=llm_tracker)
+    return await crawl_and_summarize_url(url=[url], llm_tracker=llm_tracker)
 
 
 TEXT_SEARCH_RESPONSE_TEMPLATE = """

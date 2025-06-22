@@ -1,7 +1,7 @@
 from .client_proxy_factory import get_default_client_proxy
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
-from sqlalchemy import func, or_, and_
+from sqlalchemy import func, or_, and_, select
 from db.models import (
     NewsEntry,
     NewsPreferenceApplicationExperiment,
@@ -12,10 +12,8 @@ from db.models import (
     RssFeed,
 )
 from datetime import datetime, date, timedelta
-from utils.http import ua
 from utils.logger import logger
 from db.db import get_sql_db, SqlSessionLocal
-from sqlalchemy import select
 from utils.date_helper import (
     is_valid_period_start_date,
     determine_period_exclusive_end_date,
@@ -32,77 +30,48 @@ MAX_NEWS_SUMMARY_EACH_TURN = 25
 
 ### Prompt templates for summarizing news entries
 SUMMARY_WITH_USER_PREFERENCE_AND_CHUNKED_DATA_PROMPT = """
-    You are an AI assistant that summarizes and merges news entries into a list of summaries entries. 
-    You should summarize based on the following user preferences:
+    You are an AI assistant that summarizes news entries into a list of summary entries. 
     User preferences:
     {user_preferences}
     
-    You should also assess the importance of each news summary based on the user preferences and order from high importance to low importance.
-    Thirdly, you should write the summary in accordance with the user preferences.
-    If some news entries are similar, you should summarize and merge them into one news summary entry while keeping their reference urls.
-    Do NOT exceed 25 news summary entries in the output. Only keep the most important news summary entries.
-    
-    {expansion_instruction}
-    
+    - Group the news into several categories and topics and then summarize. 
+    - One category can have multiple topics.
+    - Don't create too granular topics, but also don't make them too broad.
+    - Decide the category, topic and selection of news entries based on the user preferences.
+    - Assess the importance of each news summary based on the user preferences.
+    - Write the summary in accordance with the user preferences.
+    - Do NOT exceed {max_entry} news summary entries in the output. Only keep the most important news summary entries.
+        
     News entries:
     {news_entries}
 """
 
-EXPANSION_INSTRUCTION = """
-    Among returned news summary entries, you should pick 10 most important and preferred news summary entries and summarize their reference urls. 
-"""
-
-# Aggregated summary
-class AggregatedSummaryOutput(BaseModel):
+class NewsSummaryOutput(BaseModel):
     """
-    Generated news summary entry. Each entry is a summary of multiple news entries.
+    Generated news summary entry. 
     """
-
-    title: str = Field(description="""Summarized from news entries' title. """)
-    content: str | None = Field(
-        description="""Summarized from news entries' content field. """
+    category: str = Field(
+        description="""Required. Category of the news summary."""
     )
-    expanded_content: str | None = Field(
-        description="""Summarized from news entries' expanded_content field. """
-    )
+    title: str = Field(description="""Title """)
+    content: str | None = Field(description="""Content""")
     reference_urls: list[str] = Field(
         description="""The summarized news entries' reference URLs. Only keep 3 most important URLs. """
     )
-
-class AggregatedSummaryListOutput(BaseModel):
-    """
-    A list of aggregated news summaries.
-    """
-
-    summaries: list[AggregatedSummaryOutput] = Field(
-        max_items=MAX_NEWS_SUMMARY_EACH_TURN,
-        description="""List of aggregated news summaries."""
-    )
-
-class NewsSummaryWithPreferenceAppliedOutput(BaseModel):
-    """
-    Generated news summary entry. Each entry is a summary of multiple news entries.
-    If required, summarize the reference urls into a paragraph less than 100 words and put the summary in the expanded_content field.
-    """
-
-    title: str = Field(description="""Summary of news entries' title. """)
-    content: str | None = Field(description="""Summary of news entries' contents.""")
-    reference_urls: list[str] = Field(
-        description="""The summarized news entries' reference URLs. Only keep 3 most important URLs. """
-    )
-    should_expand: bool = Field(
-        description="""True if the summary should be expanded based on user preference or its importance. """
-    )
-    expanded_content: str | None = Field(
-        description="""Optional. Summary of the reference urls' contents in accordance with the user preferences. None if failed to access the reference urls."""
+    importance_score: int = Field(
+        minimum=0,
+        maximum=100,
+        description="""Importance score of the news summary based on user preferences.
+        The score is between 0 and 100, where 100 is the most important. Each number should be distinct in the list.
+        """
     )
     
-class NewsSummaryWithPreferenceAppliedListOutput(BaseModel):
+class NewsSummaryListOutput(BaseModel):
     """
     A list of news summaries with user preferences applied.
     """
 
-    summaries: list[NewsSummaryWithPreferenceAppliedOutput] = Field(
+    summaries: list[NewsSummaryOutput] = Field(
         max_items=MAX_NEWS_SUMMARY_EACH_TURN,
         description="""List of news summaries with user preferences applied."""
     )
@@ -356,78 +325,30 @@ async def __chunk_and_summarize_news_per_period(
                 entry_data = {
                     "title": entry.title,
                     "content": entry.content or "",
-                    "expanded content": entry.expanded_content or "",
                     "reference urls": entry.reference_urls,
                 }
                 formatted_entries.append(entry_data)
 
         # Invoke LLM to generate summary
         try:
-            prompt = SUMMARY_WITH_USER_PREFERENCE_AND_CHUNKED_DATA_PROMPT.format_map(
-                {
-                    "user_preferences": news_preference or "No specific preferences",
-                    "news_entries": formatted_entries,
-                    "expansion_instruction": (
-                        EXPANSION_INSTRUCTION if for_base_period else ""
-                    ),
-                }
-            )
-            summary_result = (await get_default_client_proxy().generate_content_async(
-                    prompt=prompt,
-                    tracker=llm_tracker,
-                    output_object=(
-                        NewsSummaryWithPreferenceAppliedListOutput
-                        if for_base_period
-                        else AggregatedSummaryListOutput
-                    ),
-                    max_retry=5,
-                ))[0].structured_output
+            summary_result = await __generate_news_summary_from_chunked_data(
+                    formatted_entries=formatted_entries,
+                    news_preference=news_preference,
+                    llm_tracker=llm_tracker,
+                )
 
             # Process results and prepare for expansion if needed
-            if summary_result:
-                logger.info(
-                    f"Generated {len(summary_result.summaries)} summaries for {start_date}"
+            return await __save_and_return_summary_entry(
+                    summary_list=summary_result,
+                    user_id=user_id,
+                    start_date=start_date,
+                    end_date=end_date,
+                    target_period_type=target_period_type,
+                    subscribed_feed_id_list=subscribed_feed_id_list,
+                    news_preference_experiment=news_preference_experiment,
+                    news_chunking_experiment=news_chunking_experiment,
+                    session=session,
                 )
-                for summary in summary_result.summaries:
-                    logger.info(summary.model_dump_json(indent=2))
-                if for_base_period:
-                    # Expand summaries based on user preference and importance
-                    await __expand_news_if_necessary(summary_result.summaries, llm_tracker)
-                added_summaries = []
-                # Create NewsSummaryEntry objects and save to database
-                for order, summary in enumerate(summary_result.summaries):
-                    summary_entry = NewsSummaryEntry(
-                        user_id=user_id,
-                        start_date=start_date,
-                        period_type=target_period_type,
-                        news_chunking_experiment=news_chunking_experiment,
-                        news_preference_application_experiment=news_preference_experiment,
-                        title=summary.title,
-                        content=summary.content,
-                        expanded_content=summary.expanded_content,
-                        reference_urls=summary.reference_urls,
-                        clicked=False,  # Default to False, can be updated later
-                        display_order_within_period=order,
-                    )
-                    added_summaries.append(summary_entry)
-                    session.add(summary_entry)
-
-                # Commit the transaction to save to database
-                session.commit()
-                logger.info(f"Saved {len(summary_result.summaries)} summaries for {start_date}")
-                return __get_existing_news_summary_entries(
-                    session,
-                    user_id,
-                    start_date,
-                    end_date,
-                    target_period_type,
-                    subscribed_feed_id_list,
-                    news_preference_experiment,
-                    news_chunking_experiment,
-                    delete_if_outdated=False,
-                )
-            else:
-                return []
         except Exception as e:
             session.rollback()
             logger.error(f"Error summarizing news for {start_date}: {str(e)}")
@@ -540,61 +461,29 @@ async def __cluster_and_summarize_news(
                     {
                         "title": summary.title,
                         "content": summary.content or "",
-                        "expanded content": summary.expanded_content or "",
                         "reference urls": summary.reference_urls,
                     }
                     for summary in summary_list
                 ]
-                prompt = SUMMARY_WITH_USER_PREFERENCE_AND_CHUNKED_DATA_PROMPT.format_map(
-                        {
-                            "user_preferences": news_preference or "No specific preferences",
-                            "news_entries": summaries_as_dicts,
-                            "expansion_instruction": "",
-                        })
 
-                aggregated_summary = (await get_default_client_proxy().generate_content_async(
-                        prompt=prompt,
-                        tracker=llm_tracker,
-                        output_object=AggregatedSummaryListOutput,
-                        max_retry=5,
-                    ))[0].structured_output
+                aggregated_summary = await __generate_news_summary_from_chunked_data(
+                    formatted_entries=summaries_as_dicts,
+                    news_preference=news_preference,
+                    llm_tracker=llm_tracker,
+                )
 
                 # Process results and prepare for expansion if needed
-                if aggregated_summary.summaries:
-                    for summary in aggregated_summary.summaries:
-                        logger.info(summary.model_dump_json(indent=2))
-                    added_summaries = []
-                    # Create NewsSummaryEntry objects and save to database
-                    for order, summary in enumerate(aggregated_summary.summaries):
-                        summary_entry = NewsSummaryEntry(
-                            user_id=user_id,
-                            start_date=start_date,
-                            period_type=target_period_type,
-                            news_chunking_experiment=news_chunking_experiment,
-                            news_preference_application_experiment=news_preference_experiment,
-                            title=summary.title,
-                            content=summary.content,
-                            expanded_content=summary.expanded_content,
-                            reference_urls=summary.reference_urls,
-                            clicked=False,  # Default to False, can be updated later
-                            display_order_within_period=order,
-                        )
-                        added_summaries.append(summary_entry)
-                        session.add(summary_entry)
-
-                    # Commit the transaction to save to database
-                    session.commit()
-                    return __get_existing_news_summary_entries(
-                        session,
-                        user_id,
-                        start_date,
-                        end_date,
-                        target_period_type,
-                        subscribed_feed_id_list,
-                        news_preference_experiment,
-                        news_chunking_experiment,
-                        delete_if_outdated=False,
-                    )
+                return await __save_and_return_summary_entry(
+                    summary_list=aggregated_summary,
+                    user_id=user_id,
+                    start_date=start_date,
+                    end_date=end_date,
+                    target_period_type=target_period_type,
+                    subscribed_feed_id_list=subscribed_feed_id_list,
+                    news_preference_experiment=news_preference_experiment,
+                    news_chunking_experiment=news_chunking_experiment,
+                    session=session,
+                )
             except Exception as e:
                 session.rollback()
                 traceback.print_exc()
@@ -606,7 +495,7 @@ async def __summarize_single_cluster(
     entry_ids: list[int],
     news_preference: str | None,
     llm_tracker: LlmTracker,
-) -> list[NewsSummaryWithPreferenceAppliedOutput]:
+) -> list[NewsSummaryListOutput]:
     """
     Summarize a single cluster of news entries.
     """
@@ -623,70 +512,126 @@ async def __summarize_single_cluster(
             "reference url": entry.entry_url,
         }
         formatted_entries.append(entry_data)
-    # Invoke LLM to generate summary per cluster
+    return await __generate_news_summary_from_chunked_data(formatted_entries, news_preference, llm_tracker)
+
+async def __generate_news_summary_from_chunked_data(
+    formatted_entries: list[dict],
+    news_preference: str | None,
+    llm_tracker: LlmTracker,
+) -> list[NewsSummaryListOutput]:
+    if not formatted_entries:
+        logger.info("No news entries to summarize.")
+        return []
     prompt = SUMMARY_WITH_USER_PREFERENCE_AND_CHUNKED_DATA_PROMPT.format_map(
         {
             "user_preferences": news_preference or "No specific preferences",
             "news_entries": formatted_entries,
-            "expansion_instruction": EXPANSION_INSTRUCTION ,
+            "max_entry": MAX_NEWS_SUMMARY_EACH_TURN
         }
     )
-    logger.info(f"Summarizing cluster with {len(formatted_entries)} entries.")
+    logger.info(f"Summarizing with {len(formatted_entries)} entries.")
     summary_list = (await get_default_client_proxy().generate_content_async(
             prompt=prompt,
             tracker=llm_tracker,
-            output_object=NewsSummaryWithPreferenceAppliedListOutput,
+            output_object=NewsSummaryListOutput,
             max_retry=5,
         ))[0]
     if not summary_list.structured_output:
-        logger.error(f"No summaries generated for the cluster. {summary_list}")
-        raise ValueError(
-            "Internal Error. No summaries generated for the cluster."
-        )
+        logger.error(f"No summaries generated. {summary_list}")
     else :
-        logger.info(f"Generated {len(summary_list.structured_output.summaries)} summaries for the cluster.")
+        logger.info(f"Generated {len(summary_list.structured_output.summaries)} summaries.")
         for summary in summary_list.structured_output.summaries:
-            logger.debug(summary.model_dump_json(indent=2))
-    await __expand_news_if_necessary(summary_list.structured_output.summaries, llm_tracker)
+            logger.info(summary.model_dump_json(indent=2))
     return summary_list.structured_output.summaries
 
-__raw_summary_prompt = "Summarize the following news into less than 100 words. The news is crawled from web. {content}"
+async def __save_and_return_summary_entry(
+    summary_list: list[NewsSummaryOutput],
+    user_id: int,
+    start_date: date,
+    end_date: date,
+    target_period_type: NewsSummaryPeriod,
+    subscribed_feed_id_list: list[int],
+    news_preference_experiment: NewsPreferenceApplicationExperiment,
+    news_chunking_experiment: NewsChunkingExperiment,
+    session: Session = None,
+    ) -> list[NewsSummaryEntry]:
+    """
+    Save the generated summary entry to the database and return it.
+    This function is a placeholder and should be implemented based on your database logic.
+    """
+    # Implement your logic to save the summary entry to the database
+    # and return the saved entry or entries.
+    
+    # Process results and prepare for expansion if needed
+    if summary_list:
+        for summary in summary_list:
+            logger.info(summary.model_dump_json(indent=2))
+        added_summaries = []
+        sorted_summaries = sorted(
+            summary_list,
+            key=lambda x: x.importance_score,
+            reverse=True,
+        )
+        # Create NewsSummaryEntry objects and save to database
+        for order, summary in enumerate(sorted_summaries):
+            summary_entry = NewsSummaryEntry(
+                user_id=user_id,
+                start_date=start_date,
+                period_type=target_period_type,
+                news_chunking_experiment=news_chunking_experiment,
+                news_preference_application_experiment=news_preference_experiment,
+                category=summary.category,
+                title=summary.title,
+                content=summary.content,
+                reference_urls=summary.reference_urls,
+                clicked=False,  # Default to False, can be updated later
+                display_order_within_period=order,
+            )
+            added_summaries.append(summary_entry)
+            session.add(summary_entry)
+
+        # Commit the transaction to save to database
+        session.commit()
+        return __get_existing_news_summary_entries(
+            session,
+            user_id,
+            start_date,
+            end_date,
+            target_period_type,
+            subscribed_feed_id_list,
+            news_preference_experiment,
+            news_chunking_experiment,
+            delete_if_outdated=False,
+        )
+    return []
 
 __web_search_prompt = """
-        Summarize the content in the urls into less than 100 words.
-        {url}
-        If you can't fetch content from the above urls, then search the news content on the web based on given title {title} 
+        Search the news content on the web based on given title {title} and summarize it.
     """
 
-__header = {"User-Agent": ua.random}
-
-MAX_NEWS_SUMMARY_TO_EXPAND = 10
 
 async def __expand_single_news_summary(
-    news_summary: NewsSummaryWithPreferenceAppliedOutput | NewsSummaryEntry,
+    news_summary: NewsSummaryEntry,
     llm_tracker: LlmTracker,
 ):
     """
     Expand a single news summary if necessary.
     """
     if news_summary.reference_urls:
-        for url in news_summary.reference_urls:
-            try:
-                # summarize the content
-                summary = await crawl_and_summarize_url(url, llm_tracker)
+        try:
+            # summarize the content
+            summary = await crawl_and_summarize_url(news_summary.reference_urls, llm_tracker)
 
-                if summary:
-                    # update the content of the news summary
-                    news_summary.expanded_content = summary
-                    break
-            except Exception as e:
-                logger.warning(f"Failed to crawl and summarize {url}: {e}")
+            if summary:
+                # update the content of the news summary
+                news_summary.expanded_content = summary
+        except Exception as e:
+            logger.warning(f"Failed to crawl and summarize {news_summary.reference_urls}: {e}")
     if not news_summary.expanded_content:
         try:
             search_result = (await get_default_client_proxy().generate_content_async(
                     prompt=__web_search_prompt.format_map(
                         {
-                            "title": news_summary.title,
                             "url": news_summary.reference_urls,
                         }
                     ),
@@ -696,29 +641,6 @@ async def __expand_single_news_summary(
             news_summary.expanded_content = search_result
         except Exception as e:
             logger.warning(f"Failed to search for {news_summary.title}: {e}")
-
-
-
-async def __expand_news_if_necessary(
-    news_summary_list: list[NewsSummaryWithPreferenceAppliedOutput],
-    llm_tracker: LlmTracker,
-):
-    # If llm decide to expand the summary but fail to crawl it, we will crawl the reference urls and ask llm to summarize them
-    # If we also fail to crawl the reference urls, we will just ask llm to search the title on the web and summarize the content
-    # make sure headers contain correct user agent value
-    expanded_news_count = 0
-    logger.info(
-        f"Expanding news summaries if necessary. Total summaries to expand: {len(news_summary_list)}"
-    )
-    for news_summary in news_summary_list:
-        if expanded_news_count >= MAX_NEWS_SUMMARY_TO_EXPAND:
-            break
-        if news_summary.should_expand:
-            expanded_news_count += 1
-            if not news_summary.expanded_content:
-                await __expand_single_news_summary(
-                    news_summary, llm_tracker
-                )
 
 async def expand_news_summary(
     summary_entry: NewsSummaryEntry

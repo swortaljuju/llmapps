@@ -13,7 +13,7 @@ import {
     NewsSummaryLikeDislikeRequest,
     NewsSummaryLikeDislikeAction,
 } from './store';
-import { start } from 'repl';
+import ReactMarkdown from 'react-markdown';
 
 interface SummaryContentProps {
     latestSummary: NewsSummaryItem[] | undefined;
@@ -47,9 +47,41 @@ interface UiNewsSummaryItem extends NewsSummaryItem {
     isLoading: boolean;
 }
 
-function createUiNewsSummaryItem(item: NewsSummaryItem): UiNewsSummaryItem {
+interface UiNewsSummaryItemPerCategory {
+    category: string;
+    items: UiNewsSummaryItem[];
+}
+
+function createUiNewsSummaryItemPerCategory(newsSummaryItemList: NewsSummaryItem[]): UiNewsSummaryItemPerCategory[] {
+    const uiItemsByCategory: { [category: string]: UiNewsSummaryItem[] } = {};
+
+    newsSummaryItemList.forEach(item => {
+        const uiItem: UiNewsSummaryItem = createUiNewsSummaryItem(item);
+        if (!uiItemsByCategory[item.category]) {
+            uiItemsByCategory[item.category] = [];
+        }
+        uiItemsByCategory[item.category].push(uiItem);
+    });
+
+    // Convert the object to an array of UiNewsSummaryItemPerCategory
+    const uiItemsPerCategoryArray: UiNewsSummaryItemPerCategory[] = Object.entries(uiItemsByCategory).map(([category, items]) => ({
+        category: category,
+        items: items,
+    }));
+
+    // Sort the array based on the display_order of the first item in each category
+    uiItemsPerCategoryArray.sort((a, b) => {
+        return a.items[0].display_order - b.items[0].display_order;
+    });
+    uiItemsPerCategoryArray.forEach(category => {
+        category.items.sort((a, b) => a.display_order - b.display_order);
+    });
+    return uiItemsPerCategoryArray;
+}
+
+function createUiNewsSummaryItem(newsSummaryItem: NewsSummaryItem): UiNewsSummaryItem {
     return {
-        ...item,
+        ...newsSummaryItem,
         expandSummaryCalled: false,
         expandedContentShown: false,
         isLoading: false,
@@ -63,9 +95,7 @@ const TODAY_STR = getTodayStr();
 
 
 export default function SummaryContent({ latestSummary, defaultOptions, startDateList }: SummaryContentProps) {
-    const [summaryItems, setSummaryItems] = useState<UiNewsSummaryItem[]>(latestSummary?.map((item) => {
-        return createUiNewsSummaryItem(item);
-    }) || []);
+    const [summaryItems, setSummaryItems] = useState<UiNewsSummaryItemPerCategory[]>(latestSummary ? createUiNewsSummaryItemPerCategory(latestSummary) : []);
     const [isSummaryEntryLoading, setIsSummaryEntryLoading] = useState<boolean>(false);
     const [selectedOptions, setSelectedOptions] = useState<NewsSummaryOptions>(defaultOptions || {
         news_chunking_experiment: NewsChunkingExperiment.AGGREGATE_DAILY,
@@ -111,9 +141,7 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
 
     const [summaryLoadingError, setSummaryLoadingError] = useState<string | null>(null);
     useEffect(() => {
-        setSummaryItems(latestSummary?.map((item) => {
-            return createUiNewsSummaryItem(item);
-        }) || []);
+        setSummaryItems(latestSummary ? createUiNewsSummaryItemPerCategory(latestSummary) : []);
         setPeriodStartDate(availableStartDateList[0]);
     }, [latestSummary]);
 
@@ -155,9 +183,7 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
         try {
             setIsSummaryEntryLoading(true);
             const newSummary = await getNewsSummary(getNewsSummaryRequest);
-            setSummaryItems(newSummary?.map((item) => {
-                return createUiNewsSummaryItem(item);
-            }) || []);
+            setSummaryItems(newSummary ? createUiNewsSummaryItemPerCategory(newSummary) : []);
         } catch (error: any) {
             setSummaryLoadingError(error.message);
             console.error("Failed to get news summary:", error.message);
@@ -191,20 +217,39 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
 
     const callExpandSummaryApi = async (selectedItem: UiNewsSummaryItem) => {
         setSummaryItems(prev =>
-            prev.map(item => (item.id === selectedItem.id ? { ...item, isLoading: true } : item))
+            {
+                return prev.map(category => ({
+                    ...category,
+                    items: category.items.map(item =>
+                        item.id === selectedItem.id ? { ...item,  isLoading: true  } : item
+                    )
+                }));
+            }
         );
 
         try {
             const expandedItem = await expandSummary(selectedItem.id);
-            setSummaryItems(prev =>
-                prev.map(item => (item.id === selectedItem.id ? { ...expandedItem, expandedContentShown: true, expandSummaryCalled: true, isLoading: false } : item))
-            );
+            setSummaryItems(prev => {
+                return prev.map(category => ({
+                    ...category,
+                    items: category.items.map(item =>
+                        item.id === selectedItem.id ? { ...item, ...expandedItem, expandedContentShown: true, expandSummaryCalled: true, isLoading: false } : item
+                    )
+                }));
+            });
         } catch (error: any) {
             console.error("Failed to expand summary:", error.message);
             throw error;
         } finally {
             setSummaryItems(prev =>
-                prev.map(item => (item.id === selectedItem.id ? { ...item, isLoading: false } : item))
+                {
+                    return prev.map(category => ({
+                        ...category,
+                        items: category.items.map(item =>
+                            item.id === selectedItem.id ? { ...item,  isLoading: false  } : item
+                        )
+                    }));
+                }
             );
         }
     };
@@ -213,12 +258,26 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
         if (selectedItem.expandedContentShown) {
             // If already expanded, collapse it
             setSummaryItems(prev =>
-                prev.map(i => (i.id === selectedItem.id ? { ...i, expandedContentShown: false } : i))
+                {
+                    return prev.map(category => ({
+                        ...category,
+                        items: category.items.map(item =>
+                            item.id === selectedItem.id ? { ...item,  expandedContentShown: false  } : item
+                        )
+                    }));
+                }
             );
         } else {
             if (selectedItem.expandSummaryCalled) {
                 setSummaryItems(prev =>
-                    prev.map(i => (i.id === selectedItem.id ? { ...i, expandedContentShown: true } : i))
+                    {
+                        return prev.map(category => ({
+                            ...category,
+                            items: category.items.map(item =>
+                                item.id === selectedItem.id ? { ...item,  expandedContentShown: true  } : item
+                            )
+                        }));
+                    }
                 );
             } else {
                 callExpandSummaryApi(selectedItem)
@@ -242,40 +301,50 @@ export default function SummaryContent({ latestSummary, defaultOptions, startDat
                 ) : summaryItems.length === 0 ? (
                     <p>No news summaries available.</p>
                 ) : (
-                    summaryItems.map(item => (
-                        <div key={item.id} className="mb-4 p-4 border rounded-md">
-                            <h3
-                                className="text-lg font-semibold cursor-pointer"
-                                title='Click to expand/collapse summary'
-                                onClick={() => onSummaryItemClicked(item)}
-                            >
-                                {item.title}
-                                {item.content &&  <div className='text-md font-light'>{item.content}</div>}
-                            </h3>
-                            {item.reference_urls && (
-                                <div className="mt-2">
-                                    {item.reference_urls.map((url, index) => (
-                                        <a
-                                            key={index}
-                                            href={url}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="text-blue-500 hover:underline mr-2"
+                    summaryItems.map(category => (
+                        <div key={category.category} className="mb-8">
+                            <h2 className="text-xl font-bold mb-2">{category.category}</h2>
+                            {category.items.map(item => (
+                                <div key={item.id} className="mb-4 p-4 border rounded-md">
+                                    <div onClick={() => onSummaryItemClicked(item)}>
+                                        <h3
+                                            className="text-lg font-semibold cursor-pointer"
+                                            title='Click to expand/collapse summary'
+                                            
                                         >
-                                            Ref {index + 1}
-                                        </a>
-                                    ))}
+                                            {item.title}
+                                            {item.isLoading ? ' ⏳' : item.expandedContentShown ? ' ▲' : ' ▼'}
+
+                                        </h3>
+                                        {item.content && <ReactMarkdown>{item.content}</ReactMarkdown>}
+
+                                    </div>
+                                    {item.reference_urls && (
+                                        <div className="mt-2">
+                                            {item.reference_urls.map((url, index) => (
+                                                <a
+                                                    key={index}
+                                                    href={url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-blue-500 hover:underline mr-2"
+                                                >
+                                                    Ref {index + 1}
+                                                </a>
+                                            ))}
+                                        </div>
+                                    )}
+                                    {item.isLoading ? (
+                                        <div className="flex justify-center items-center">
+                                            <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"></div>
+                                        </div>
+                                    ) : (
+                                        <div className={`mt-2 overflow-hidden transition-all duration-500 ease-in-out ${item.expandedContentShown ? 'max-h-96' : 'max-h-0'}`}>
+                                            {item.expanded_content && <ReactMarkdown>{item.expanded_content}</ReactMarkdown>}
+                                        </div>
+                                    )}
                                 </div>
-                            )}
-                            {item.isLoading ? (
-                                <div className="flex justify-center items-center">
-                                    <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"></div>
-                                </div>
-                            ) : (
-                                <div className={`mt-2 overflow-hidden transition-all duration-500 ease-in-out ${item.expandedContentShown ? 'max-h-96' : 'max-h-0'}`}>
-                                    {item.expanded_content && <p className="text-lg">{item.expanded_content}</p>}
-                                </div>
-                            )}
+                            ))}
                         </div>
                     ))
                 )}

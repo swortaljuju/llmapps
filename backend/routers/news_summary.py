@@ -60,6 +60,7 @@ class NewsSummaryUiMode(Enum):
 class ApiNewsSummaryEntry(BaseModel):
     id: int
     title: str
+    category: str
     content: Optional[str] = None
     expanded_content: Optional[str] = None
     reference_urls: list[str] = []
@@ -98,6 +99,7 @@ def __convert_to_api_news_summary_entry(
 ) -> ApiNewsSummaryEntry:
     return ApiNewsSummaryEntry(
         id=news_summary_entry.id,
+        category=news_summary_entry.category,
         title=news_summary_entry.title,
         content=news_summary_entry.content,
         expanded_content=news_summary_entry.expanded_content,
