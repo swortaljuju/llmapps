@@ -234,7 +234,10 @@ def get_subscribed_feed_ids():
 
     limited_user_subscribed_feed_ids = (
         sql_session.query(User.subscribed_rss_feeds_id)
-        .filter(User.email.not_in(UNLIMITED_USER_EMAILS))
+        .filter(
+            User.email.not_in(UNLIMITED_USER_EMAILS),
+            User.subscribed_rss_feeds_id.is_not(None),
+            )
         .order_by(func.random())
         .limit(LIMITED_USER_SIZE)
         .all()
