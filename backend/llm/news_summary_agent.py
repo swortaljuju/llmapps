@@ -291,8 +291,8 @@ async def __chunk_and_summarize_news_per_period(
             # Format entries for the LLM
             for entry in chunk_entries:
                 entry_data = {
-                    "title": entry.title or "",
-                    "content": ";".join([entry.description or "", entry.content or ""]),
+                    "title": entry.title and entry.title.strip() or "",
+                    "content": ";".join([entry.description and entry.description.strip() or "", entry.content and entry.content.strip() or ""]),
                     "reference url": entry.entry_url,
                     "pub_time": entry.pub_time.isoformat() if entry.pub_time else "",
                 }
@@ -516,9 +516,9 @@ async def __summarize_single_cluster(
     formatted_entries = []
     for entry in cluster_entries:
         entry_data = {
-            "title": entry.title,
+            "title": entry.title and entry.title.strip(),
             "content": ";".join(
-                [entry.description or "", entry.content or ""]
+                [entry.description and entry.description.strip() or "", entry.content and entry.content.strip() or ""]
             ),
             "reference url": entry.entry_url,
         }
