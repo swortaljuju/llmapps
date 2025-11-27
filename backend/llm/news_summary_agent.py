@@ -303,7 +303,8 @@ async def __chunk_and_summarize_news_per_period(
                 session.query(NewsSummaryEntry)
                 .filter(
                     NewsSummaryEntry.user_id == user_id,
-                    NewsSummaryEntry.start_date == start_date,
+                    NewsSummaryEntry.start_date >= start_date,
+                    NewsSummaryEntry.start_date < end_date, 
                     NewsSummaryEntry.period_type == BASE_CHUNK_PERIOD,
                     NewsSummaryEntry.news_chunking_experiment
                     == NewsChunkingExperiment.AGGREGATE_DAILY,
