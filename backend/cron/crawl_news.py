@@ -104,7 +104,7 @@ def _parse_doc(
         news_entry = NewsEntry(rss_feed_id=rss_feed.id, crawl_time=datetime.now())
         title = item.find(tag_modifier("title"))
         if _element_has_text(title):
-            news_entry.title = title.text
+            news_entry.title = title.text.strip()
         else:
             logger.warning("Error: rss item with no title")
 
@@ -117,7 +117,7 @@ def _parse_doc(
             else item.find(tag_modifier("summary"))
         )
         if _element_has_text(description):
-            news_entry.description = description.text
+            news_entry.description = description.text.strip()
         if doc_type == DocType.ATOM:
             content = item.find(tag_modifier("content"))
             if (
@@ -125,7 +125,7 @@ def _parse_doc(
                 and content.text is not None
                 and content.text.strip() != ""
             ):
-                news_entry.content = content.text
+                news_entry.content = content.text.strip()
         guid = (
             item.find(tag_modifier("guid"))
             if doc_type == DocType.RSS
