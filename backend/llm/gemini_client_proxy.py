@@ -8,7 +8,7 @@ from .tracker import LlmTracker
 from utils.logger import logger
 from .model_utils import flatten_schema_and_remove_defs
 class GeminiClientProxy(LlmClientProxy):
-    __generation_model = "gemini-2.0-flash"
+    __generation_model = "gemini-2.5-flash"
     __embedding_model = "gemini-embedding-001"
 
     def __init__(self):
