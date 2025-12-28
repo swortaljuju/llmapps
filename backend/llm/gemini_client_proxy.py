@@ -190,7 +190,7 @@ class GeminiClientProxy(LlmClientProxy):
 
     def embed_content(self, contents: list[str], task_type: EmbeddingTaskType) -> list[list[float]]:
         response = self.__client.models.embed_content(model=self.__embedding_model, contents=contents,
-                config=types.EmbedContentConfig(task_type=self.__get_embedding_task_type(task_type)))
+                config=types.EmbedContentConfig(task_type=self.__get_embedding_task_type(task_type), output_dimensionality=768))
         return [ embd.values for embd in response.embeddings]
     
     def __get_embedding_task_type(self, task_type: EmbeddingTaskType) -> str:
